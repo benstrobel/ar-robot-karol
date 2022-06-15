@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 public class Parser {
@@ -23,6 +22,8 @@ public class Parser {
         for(Token token: tokenStream){
             System.out.println(token);
         }
+        System.out.println();
+        System.out.println();
         Instruction[] instructions = generateInstructions(Arrays.stream(tokenStream).iterator(), 0);
         InstructionPrintVisitor printer = new InstructionPrintVisitor();
         for(Instruction instruction: instructions) {
@@ -33,22 +34,24 @@ public class Parser {
     private static Token[] getTokenStream(String[] input) {
         List<Token> tokens = new ArrayList<>();
 
+        int lineNo = 1;
         for(String line : input) {
-
             String[] tokenStrings = line
                     .replace(Token.SPACETAB.keyword,"\t")
                     .replace("\t", "\t ")
                     .replace(Token.BODYOPEN.keyword, " " + Token.BODYOPEN.keyword)
                     .split(" ");
-            for(String keyword: tokenStrings){
+            keywords: for(String keyword: tokenStrings){
                 for(Token token: Token.values() ){
                     if(token.keyword.equals(keyword.toLowerCase())) {
                         tokens.add(token);
-                        break;
+                        continue keywords;
                     }
                 }
+                System.err.println("Keyword \""+ keyword +"\" in line " + lineNo + " not found");
             }
             tokens.add(Token.NEWLINE);
+            lineNo += 1;
         }
 
         return tokens.toArray(Token[]::new);
@@ -71,6 +74,7 @@ public class Parser {
                 }
                 continue;
             } else if (tabsPassedThisLine < tabLevel) {
+                errors.forEach(System.err::println);
                 return instructions.toArray(Instruction[]::new);
             } else if (token == Token.NEWLINE){
                 tabsPassedThisLine = 0;
@@ -107,7 +111,7 @@ public class Parser {
             }
         }
 
-        errors.forEach(x -> System.out.println(x));
+        errors.forEach(System.err::println);
         return instructions.toArray(Instruction[]::new);
     }
 
