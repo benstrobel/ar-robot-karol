@@ -1,8 +1,5 @@
-import instructions.Instruction;
 import instructions.expressions.*;
 import instructions.statements.*;
-
-import java.util.function.IntFunction;
 
 public enum Token {
     IF("if"),
