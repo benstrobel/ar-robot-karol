@@ -15,7 +15,7 @@ public enum Token {
     ISNORTH("isnorth", IsNorth.class),
     ISSOUTH("issouth", IsSouth.class),
     ISWEST("iswest", IsWest.class),
-    // NOT("not"),
+    NOT("not"),
     // OR("or"),
     TRUE("true", True.class),
     END("end", End.class),

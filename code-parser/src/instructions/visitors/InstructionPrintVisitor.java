@@ -39,7 +39,9 @@ public class InstructionPrintVisitor implements InstructionVisitor{
 
     @Override
     public void accept(And and) {
-
+        and.getLeft().accept(this);
+        System.out.println("And");
+        and.getRight().accept(this);
     }
 
     @Override
@@ -74,12 +76,15 @@ public class InstructionPrintVisitor implements InstructionVisitor{
 
     @Override
     public void accept(Not not) {
-
+        System.out.println("Not");
+        not.getChild().accept(this);
     }
 
     @Override
     public void accept(Or or) {
-
+        or.getLeft().accept(this);
+        System.out.println("Or");
+        or.getRight().accept(this);
     }
 
     @Override

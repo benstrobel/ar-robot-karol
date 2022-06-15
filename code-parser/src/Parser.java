@@ -131,6 +131,9 @@ public class Parser {
                 return new IsWest();
             case TRUE:
                 return new True();
+            case NOT:
+                Expression expression = findExpression(iterator, errors);
+                return expression == null ? null : new Not(expression);
             default: {
                 errors.add("Expected Expression"); // TODO Line (Tokenstream needs line/position of each token aswell)
                 return null;
