@@ -1,8 +1,16 @@
 package instructions.visitors;
 
 import instructions.expressions.*;
+import world.World;
 
 public class ExpressionEvaulationVisitor implements ExpressionVisitor {
+
+    private World world;
+
+    public ExpressionEvaulationVisitor(World world) {
+        this.world = world;
+    }
+
     @Override
     public boolean accept(And and) {
         return and.getLeft().accept(this) && and.getRight().accept(this);
@@ -10,38 +18,32 @@ public class ExpressionEvaulationVisitor implements ExpressionVisitor {
 
     @Override
     public boolean accept(IsBlock isBlock) {
-        // TODO
-        return false;
+        return world.isBlock();
     }
 
     @Override
     public boolean accept(IsEast isEast) {
-        // TODO
-        return false;
+        return world.isEast();
     }
 
     @Override
     public boolean accept(IsNorth isNorth) {
-        // TODO
-        return false;
+        return world.isNorth();
     }
 
     @Override
     public boolean accept(IsSouth isSouth) {
-        // TODO
-        return false;
+        return world.isSouth();
     }
 
     @Override
     public boolean accept(IsBorder isBorder) {
-        // TODO
-        return false;
+        return world.isBorder();
     }
 
     @Override
     public boolean accept(IsWest isWest) {
-        // TODO
-        return false;
+        return world.isWest();
     }
 
     @Override

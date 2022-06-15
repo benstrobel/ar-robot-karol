@@ -1,34 +1,16 @@
+package interpreter;
+
 import instructions.Instruction;
 import instructions.controlflow.If;
 import instructions.controlflow.While;
 import instructions.expressions.*;
-import instructions.statements.Place;
-import instructions.visitors.InstructionPrintVisitor;
-
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Parser {
 
-    public static void main(String[] args) throws IOException {
-
-        String[] lines = Files.lines(Paths.get(System.getProperty("user.dir") + "\\testinput.txt")).collect(Collectors.toList()).toArray(String[]::new);
-
-        Token[] tokenStream = getTokenStream(lines);
-        for(Token token: tokenStream){
-            System.out.println(token);
-        }
-        System.out.println();
-        System.out.println();
-        Instruction[] instructions = generateInstructions(Arrays.stream(tokenStream).iterator(), 0);
-        InstructionPrintVisitor printer = new InstructionPrintVisitor();
-        for(Instruction instruction: instructions) {
-            instruction.accept(printer);
-        }
+    public static Instruction[] parse(String[] input) {
+        return generateInstructions(Arrays.stream(getTokenStream(input)).iterator(), 0);
     }
 
     private static Token[] getTokenStream(String[] input) {

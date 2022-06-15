@@ -3,25 +3,13 @@ package world;
 public class Entity {
     private Direction facing = Direction.NORTH;
     private Tile tile;
-    private int x;
-    private int y;
 
-    public void updatePosition(Tile tile, int x, int y) {
+    public void updatePosition(Tile tile) {
         this.tile = tile;
-        this.x = x;
-        this.y = y;
     }
 
     public Tile getTile() {
         return tile;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public void leftTurn() {

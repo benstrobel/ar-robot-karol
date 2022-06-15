@@ -10,20 +10,27 @@ public class World {
     private final List<Entity> entities = new ArrayList<>();
     private Entity selectedEntity;
 
+    public World() {
+        for(int x = 0; x < tiles.length; x++) {
+            for(int y = 0; y < tiles[0].length; y++) {
+                tiles[x][y] = new Tile(x,y);
+            }
+        }
+    }
+
     public Entity addEntity(int x, int y){
         if(tiles[x][y].getEntity() != null) return null;
         Entity entity = new Entity();
-        entity.updatePosition(tiles[x][y], x, y);
+        entity.updatePosition(tiles[x][y]);
         tiles[x][y].setEntity(entity);
         return entity;
     }
 
     public boolean step() {
-        Map.Entry<Integer, Integer> facingTileCoords = getFacingTileCoords(selectedEntity);
-        if (facingTileCoords == null) return false;
+        Tile facingTile = getFacingTile(selectedEntity);
+        if (facingTile == null) return false;
         selectedEntity.getTile().setEntity(null);
-        Tile facingTile = tiles[facingTileCoords.getKey()][facingTileCoords.getValue()];
-        selectedEntity.updatePosition(facingTile,facingTileCoords.getKey(),facingTileCoords.getValue());
+        selectedEntity.updatePosition(facingTile);
         facingTile.setEntity(selectedEntity);
         return true;
     }
@@ -78,8 +85,8 @@ public class World {
     }
 
     private Map.Entry<Integer, Integer> getFacingTileCoords(Entity entity) {
-        int currentX = entity.getX();
-        int currentY = entity.getY();
+        int currentX = entity.getTile().getX();
+        int currentY = entity.getTile().getY();
 
         int deltaX = 0, deltaY = 0;
 
@@ -102,4 +109,11 @@ public class World {
         return tiles[facingTileCoords.getKey()][facingTileCoords.getValue()];
     }
 
+    public void setSelectedEntity(Entity selectedEntity) {
+        this.selectedEntity = selectedEntity;
+    }
+
+    public Entity getSelectedEntity() {
+        return selectedEntity;
+    }
 }

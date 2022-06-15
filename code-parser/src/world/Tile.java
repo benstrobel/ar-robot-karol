@@ -7,6 +7,13 @@ public class Tile {
     private Ground ground = Ground.FLOOR;
     private final Deque<Block> blocks = new ArrayDeque<>();
     private Entity entity;
+    private final int x;
+    private final int y;
+
+    public Tile(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public void setEntity(Entity entity) {
         this.entity = entity;
@@ -34,5 +41,13 @@ public class Tile {
 
     public Deque<Block> getBlocks() {
         return blocks;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
