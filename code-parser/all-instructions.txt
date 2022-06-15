@@ -1,0 +1,19 @@
+If
+While
+And                 # Disabled for now
+False
+IsBlock
+IsBorder
+IsEast
+IsNorth
+IsSouth
+IsWest
+Not
+Or                  # Disabled for now
+True
+End
+LeftTurn
+Lift
+Place
+RightTurn
+Step

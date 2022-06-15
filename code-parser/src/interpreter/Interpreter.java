@@ -12,6 +12,7 @@ public class Interpreter {
             System.out.println("Exeuting statement: " + instruction.toString());
             world.printWorld();
             instruction.accept(executeVisitor);
+            if(executeVisitor.isEnd()) break;
         }
     }
 }
