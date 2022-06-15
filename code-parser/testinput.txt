@@ -1,0 +1,13 @@
+while not isborder:
+    step
+    step
+        step
+            step
+leftturn
+leftturn
+step
+leftturn
+leftturn
+place
+place
+place
