@@ -6,11 +6,12 @@ import instructions.controlflow.While;
 import instructions.expressions.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Parser {
 
     public static Instruction[] parse(String[] input) {
-        return generateInstructions(Arrays.stream(getTokenStream(input)).iterator(), 0);
+        return generateInstructions(Arrays.stream(getTokenStream(input)).collect(Collectors.toCollection(ArrayDeque::new)), 0);
     }
 
     private static Token[] getTokenStream(String[] input) {
@@ -41,27 +42,30 @@ public class Parser {
 
     // https://stackoverflow.com/questions/15610183/if-else-statements-in-antlr-using-listeners
 
-    private static Instruction[] generateInstructions(Iterator<Token> iterator, int tabLevel) {
+    private static Instruction[] generateInstructions(Deque<Token> iterator, int tabLevel) {
         List<String> errors = new ArrayList<>();
         List<Instruction> instructions = new ArrayList<>();
         int tabsPassedThisLine = 0;
 
-        while(iterator.hasNext()) {
-            Token token = iterator.next();
+        while(!iterator.isEmpty()) {
+            Token token = iterator.peek();
 
             if(token == Token.TAB){
                 tabsPassedThisLine += 1;
                 if(tabsPassedThisLine > tabLevel) {
                     errors.add("Too many tabs (" + tabsPassedThisLine + " instead of " + tabLevel + ")"); // TODO Line (Tokenstream needs line/position of each token aswell)
                 }
+                iterator.pop();
                 continue;
             } else if (tabsPassedThisLine < tabLevel) {
                 errors.forEach(System.err::println);
                 return instructions.toArray(Instruction[]::new);
             } else if (token == Token.NEWLINE){
                 tabsPassedThisLine = 0;
+                iterator.pop();
                 continue;
             }
+            iterator.pop();
 
             if(token.instructionClass != null) {
                 try {
@@ -97,9 +101,9 @@ public class Parser {
         return instructions.toArray(Instruction[]::new);
     }
 
-    private static Expression findExpression(Iterator<Token> iterator, List<String> errors) {
-        if(!iterator.hasNext()) return null;
-        Token token = iterator.next();
+    private static Expression findExpression(Deque<Token> iterator, List<String> errors) {
+        if(iterator.isEmpty()) return null;
+        Token token = iterator.pop();
         switch(token) {
             case FALSE:
                 return new False();
@@ -127,11 +131,11 @@ public class Parser {
         }
     }
 
-    private static boolean expect(Iterator<Token> iterator, Token expected, List<String> errors) {
-        if(!iterator.hasNext()) {
+    private static boolean expect(Deque<Token> iterator, Token expected, List<String> errors) {
+        if(iterator.isEmpty()) {
             return false;
         }
-        Token next = iterator.next();
+        Token next = iterator.pop();
         if(next != expected) {
             errors.add("Expected " + expected);
             return false;
