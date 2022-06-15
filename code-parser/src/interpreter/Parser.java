@@ -95,6 +95,7 @@ public class Parser {
                     }
                 }
             }
+            tabsPassedThisLine = 0;
         }
 
         errors.forEach(System.err::println);

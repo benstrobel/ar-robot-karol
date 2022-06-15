@@ -1,5 +1,6 @@
 while not isborder:
-    step
+    if not isblock:
+        step
 leftturn
 leftturn
 step
