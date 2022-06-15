@@ -1,3 +1,8 @@
+# General Note: The parser expects pyhton syntax ->
+#   Indention is used for expressing brackets
+#   No brackets allowed for arguments of "if" and "while"
+#   End conditions with ":"
+
 If
 While
 And                 # Disabled for now
