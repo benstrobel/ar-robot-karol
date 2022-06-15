@@ -23,6 +23,7 @@ public class World {
         Entity entity = new Entity();
         entity.updatePosition(tiles[x][y]);
         tiles[x][y].setEntity(entity);
+        entities.add(entity);
         return entity;
     }
 
@@ -99,7 +100,7 @@ public class World {
 
         int facingX = currentX+deltaX, facingY = currentY+deltaY;
 
-        if(tiles.length <= facingX || facingX <= 0 ||tiles[0].length <= facingY || facingY <= 0) return null;
+        if(tiles.length <= facingX || facingX < 0 ||tiles[0].length <= facingY || facingY < 0) return null;
         return Map.entry(facingX, facingY);
     }
 
@@ -115,5 +116,27 @@ public class World {
 
     public Entity getSelectedEntity() {
         return selectedEntity;
+    }
+
+    public void printWorld() {
+        for(int y = tiles.length-1; y >= 0; y--) {
+            System.out.println(" " + "-".repeat(tiles.length*3-1));
+            for(int x = 0; x < tiles[0].length; x++) {
+
+                char entityRepresentation = ' ';
+                if(tiles[x][y].getEntity() != null) {
+                    switch (tiles[x][y].getEntity().getFacing()) {
+                        case EAST -> entityRepresentation = '→';
+                        case SOUTH -> entityRepresentation = '↓';
+                        case WEST -> entityRepresentation = '←';
+                        case NORTH -> entityRepresentation = '↑';
+                    }
+                }
+
+                System.out.print("|" + entityRepresentation + (tiles[x][y].getBlocks().size() > 0?("" + tiles[x][y].getBlocks().size()):" "));
+            }
+            System.out.println("|");
+        }
+        System.out.println(" " + "-".repeat(tiles.length*3-1));
     }
 }

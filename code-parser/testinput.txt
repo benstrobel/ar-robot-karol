@@ -1,8 +1,5 @@
 while not isborder:
     step
-    step
-        step
-            step
 leftturn
 leftturn
 step

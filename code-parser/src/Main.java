@@ -17,6 +17,7 @@ public class Main {
 
         Instruction[] instructions = Parser.parse(lines);
 
+        System.out.println("\n------------------------- Instructions: -------------------------\n");
         InstructionPrintVisitor printer = new InstructionPrintVisitor();
         for(Instruction instruction: instructions) {
             instruction.accept(printer);
@@ -26,7 +27,8 @@ public class Main {
         Entity robot = world.addEntity(0,0);
         world.setSelectedEntity(robot);
 
-        Interpreter.interpret(instructions, world);
 
+        System.out.println("\n------------------------- Execution: -------------------------\n");
+        Interpreter.interpret(instructions, world);
     }
 }

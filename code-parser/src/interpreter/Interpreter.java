@@ -10,6 +10,7 @@ public class Interpreter {
         InstructionExecuteVisitor executeVisitor = new InstructionExecuteVisitor(world);
         for(Instruction instruction: instructions) {
             System.out.println("Exeuting statement: " + instruction.toString());
+            world.printWorld();
             instruction.accept(executeVisitor);
         }
     }
