@@ -34,6 +34,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ArActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.RobotKarolAr"
+        </activity>
+
         <meta-data android:name="com.google.ar.core" android:value="required" />
 
     </application>
