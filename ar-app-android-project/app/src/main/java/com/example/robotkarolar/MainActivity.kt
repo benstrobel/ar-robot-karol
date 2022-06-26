@@ -74,17 +74,18 @@ fun RunButtonBen() {
     Button(onClick = {
         //Example Code for testing
 
-        val testInput: String = "while not isborder:\n" +
-                "    if not isblock:\n" +
-                "        step\n" +
-                "leftturn\n" +
-                "leftturn\n" +
-                "step\n" +
-                "leftturn\n" +
-                "leftturn\n" +
-                "place\n" +
-                "place\n" +
-                "place"
+        val testInput: String =
+            "while not isborder:\n" +
+            "    if not isblock:\n" +
+            "        step\n" +
+            "leftturn\n" +
+            "leftturn\n" +
+            "step\n" +
+            "leftturn\n" +
+            "leftturn\n" +
+            "place\n" +
+            "place\n" +
+            "place"
 
         val instructions = Parser.parse(testInput.split("\n").toTypedArray())
         println("\n------------------------- Instructions: -------------------------\n")
