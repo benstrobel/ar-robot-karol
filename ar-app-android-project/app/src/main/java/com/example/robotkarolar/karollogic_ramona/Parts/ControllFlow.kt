@@ -1,9 +1,9 @@
-package com.example.robotkarolar.karollogic.Parts
+package com.example.robotkarolar.karollogic_ramona.Parts
 
-import com.example.robotkarolar.karollogic.conditions.ConditionPart
-import com.example.robotkarolar.karollogic.enums.CommandType
-import com.example.robotkarolar.karollogic.enums.ControllFlowType
-import com.example.robotkarolar.karollogic.karolWorld.World
+import com.example.robotkarolar.karollogic_ramona.conditions.ConditionPart
+import com.example.robotkarolar.karollogic_ramona.enums.CommandType
+import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
+import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
 class ControllFlow: CodeParts {
     var controllFlowType: ControllFlowType

@@ -1,8 +1,8 @@
-package com.example.robotkarolar.karollogic.conditions
+package com.example.robotkarolar.karollogic_ramona.conditions
 
-import com.example.robotkarolar.karollogic.enums.DirectionTyp
-import com.example.robotkarolar.karollogic.enums.ExpressionTyp
-import com.example.robotkarolar.karollogic.karolWorld.World
+import com.example.robotkarolar.karollogic_ramona.enums.DirectionTyp
+import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
+import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
 class BoolValue: ConditionPart {
 

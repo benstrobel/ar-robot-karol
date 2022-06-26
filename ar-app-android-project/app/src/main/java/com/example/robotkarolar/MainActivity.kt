@@ -11,15 +11,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.robotkarolar.karollogic.Parts.CodeParts
-import com.example.robotkarolar.karollogic.Parts.Command
-import com.example.robotkarolar.karollogic.Parts.ControllFlow
-import com.example.robotkarolar.karollogic.conditions.BoolValue
-import com.example.robotkarolar.karollogic.enums.CommandType
-import com.example.robotkarolar.karollogic.enums.ControllFlowType
-import com.example.robotkarolar.karollogic.enums.ExpressionTyp
-import com.example.robotkarolar.karollogic.Parts.Chain
-import com.example.robotkarolar.karollogic.karolWorld.World
+import com.example.robotkarolar.karollogic_ramona.Parts.CodeParts
+import com.example.robotkarolar.karollogic_ramona.Parts.Command
+import com.example.robotkarolar.karollogic_ramona.Parts.ControllFlow
+import com.example.robotkarolar.karollogic_ramona.conditions.BoolValue
+import com.example.robotkarolar.karollogic_ramona.enums.CommandType
+import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
+import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
+import com.example.robotkarolar.karollogic_ramona.Parts.Chain
+import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 import com.example.robotkarolar.ui.theme.RobotKarolArTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,7 +1,7 @@
-package com.example.robotkarolar.karollogic.conditions
+package com.example.robotkarolar.karollogic_ramona.conditions
 
-import com.example.robotkarolar.karollogic.enums.ConditionTyp
-import com.example.robotkarolar.karollogic.karolWorld.World
+import com.example.robotkarolar.karollogic_ramona.enums.ConditionTyp
+import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
 class Conditions: ConditionPart {
 

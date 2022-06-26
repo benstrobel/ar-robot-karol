@@ -1,8 +1,8 @@
-package com.example.robotkarolar.karollogic.karolWorld
+package com.example.robotkarolar.karollogic_ramona.karolWorld
 
-import com.example.robotkarolar.karollogic.enums.BlockTyp
-import com.example.robotkarolar.karollogic.enums.CommandType
-import com.example.robotkarolar.karollogic.enums.DirectionTyp
+import com.example.robotkarolar.karollogic_ramona.enums.BlockTyp
+import com.example.robotkarolar.karollogic_ramona.enums.CommandType
+import com.example.robotkarolar.karollogic_ramona.enums.DirectionTyp
 
 class World {
     var roboterX: Int = 0

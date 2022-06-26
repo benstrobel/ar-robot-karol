@@ -1,6 +1,6 @@
-package com.example.robotkarolar.karollogic.karolWorld
+package com.example.robotkarolar.karollogic_ramona.karolWorld
 
-import com.example.robotkarolar.karollogic.enums.BlockTyp
+import com.example.robotkarolar.karollogic_ramona.enums.BlockTyp
 
 class Tile {
     var blocks: MutableList<BlockTyp> = mutableListOf()

@@ -1,7 +1,7 @@
-package com.example.robotkarolar.karollogic.Parts
+package com.example.robotkarolar.karollogic_ramona.Parts
 
-import com.example.robotkarolar.karollogic.enums.CommandType
-import com.example.robotkarolar.karollogic.karolWorld.World
+import com.example.robotkarolar.karollogic_ramona.enums.CommandType
+import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
 class Chain: CodeParts {
     var code: MutableList<CodeParts>
