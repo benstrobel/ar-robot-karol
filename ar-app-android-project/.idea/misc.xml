@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/compose-model-1656243770374.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1656126519461.xml" value="1.5285171102661597" />
         <entry key="../../../../layout/compose-model-1656130185219.xml" value="1.0" />
         <entry key="../../../../layout/compose-model-1656149060073.xml" value="0.1" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Repos/ar-robot-karol/ar-app-android-project/app/src/main/res/drawable/close_svg.xml" value="0.1105" />
         <entry key="..\:/Repos/ar-robot-karol/ar-app-android-project/app/src/main/res/layout/ar_view.xml" value="0.5541666666666667" />
         <entry key="..\:/Repos/ar-robot-karol/ar-app-android-project/app/src/main/res/layout/distance_text.xml" value="0.5541666666666667" />
+        <entry key="app/src/main/res/layout/ar_view.xml" value="0.30978260869565216" />
       </map>
     </option>
   </component>

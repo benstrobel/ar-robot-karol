@@ -1,16 +1,20 @@
 package com.example.robotkarolar
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.robotkarolar.karollogic_ben.instructions.visitors.InstructionPrintVisitor
 import com.example.robotkarolar.karollogic_ben.interpreter.Interpreter
@@ -39,10 +43,28 @@ class MainActivity : ComponentActivity() {
                     Column {
                         RunButtonRamona()
                         RunButtonBen()
+                        ArButton()
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ArButton() {
+    val context = LocalContext.current
+    Button(
+        onClick = {
+            val intent = Intent(context, ArActivity::class.java)
+            val bundle = Bundle()
+            bundle.putLong("furnitureId", 2) // pass key to function
+            intent.putExtras(bundle)
+            context.startActivity(intent)
+        },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(text = "Show me in Room", style = MaterialTheme.typography.subtitle1, color = Color(0xFF000000))
     }
 }
 

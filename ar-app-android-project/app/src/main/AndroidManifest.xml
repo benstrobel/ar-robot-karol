@@ -33,7 +33,7 @@
             android:name=".ArActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.RobotKarolAr">
+            android:theme="@style/Theme.InteriorDesigner.NoActionBar">
         </activity>
         <meta-data android:name="com.google.ar.core" android:value="required" />
 
