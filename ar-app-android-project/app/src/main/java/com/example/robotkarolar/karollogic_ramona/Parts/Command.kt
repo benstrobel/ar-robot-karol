@@ -8,6 +8,7 @@ class Command: CodeParts {
     var command: CommandType
 
     override var index = 0
+    override var indexEnd = 0
 
     constructor(commandType: CommandType) {
         this.command = commandType
@@ -50,5 +51,6 @@ class Command: CodeParts {
 
     override fun updateIndex(lastIndex: Int) {
         index = lastIndex + 1
+        indexEnd = index
     }
 }

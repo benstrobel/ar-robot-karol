@@ -8,7 +8,8 @@ import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 class Chain: CodeParts {
     var code: MutableList<CodeParts>
 
-    override var index = -1 //never called
+    override var index = -1
+    override var indexEnd = -1
 
     constructor(code: MutableList<CodeParts>) {
         this.code = code
@@ -49,7 +50,7 @@ class Chain: CodeParts {
 
     override fun insertAt(goalIndex: Int, codeParts: CodeParts) {
         var myIndex = 0
-        if (goalIndex == index + 1) {
+        if (goalIndex == index + 1) { //when adding first of chain
             if (myIndex <= code.size && myIndex >= 0) {
                 code.add(myIndex, codeParts)
             }
@@ -72,6 +73,12 @@ class Chain: CodeParts {
                     is ControllFlow -> {
                         myIndex += 1
                         code[i].insertAt(goalIndex, codeParts)
+
+                        if(goalIndex == code[i].indexEnd + 1) {
+                            if (myIndex <= code.size && myIndex >= 0) {
+                                code.add(myIndex, codeParts)
+                            }
+                        }
                     }
                 }
             }
@@ -93,6 +100,8 @@ class Chain: CodeParts {
 
     override fun updateIndex(lastIndex: Int) {
         index = lastIndex
+        indexEnd = lastIndex
+
         var currentIndex = lastIndex
 
         code.forEach {

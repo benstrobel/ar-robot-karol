@@ -17,7 +17,8 @@ class CodeViewModel: ViewModel() {
     fun addToCode(codeParts: CodeParts) {
         chain.value.insertAt(currentIndex.value, codeParts)
         size.value = chain.value.size()
-        currentIndex.value += 1
+
+        this.next() //goes only up if added was sucssesfull
 
         //Reload State
         val cur = chain.value.code

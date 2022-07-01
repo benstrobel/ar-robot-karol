@@ -6,6 +6,7 @@ import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
 interface CodeParts {
     var index: Int
+    var indexEnd:Int //Needed to add after controllflow
 
     fun returnCommands(world: World): MutableList<CommandType>
 

@@ -16,21 +16,25 @@ import com.example.robotkarolar.uiviews.CodeViewModel
 @Composable
 fun ControllFlowButtons(viewModel: CodeViewModel) {
     Column() {
-        ControllFlowButton(viewModel = viewModel, ControllFlowType.WHILE)
-        ControllFlowButton(viewModel = viewModel, ControllFlowType.IF)
+        ControllFlowButton(viewModel = viewModel, ControllFlow(ControllFlowType.WHILE, BoolValue(
+            ExpressionTyp.ISBOARDER, true), Chain(mutableListOf())))
+        ControllFlowButton(viewModel = viewModel, ControllFlow(ControllFlowType.IF, BoolValue(
+            ExpressionTyp.ISBOARDER, true), Chain(mutableListOf())))
     }
 }
 
 @Composable
-fun ControllFlowButton (viewModel: CodeViewModel, controllFlowType: ControllFlowType) {
+fun ControllFlowButton (viewModel: CodeViewModel, controllFlow: ControllFlow) {
     Button(onClick = {
-        when(controllFlowType) {
+        when(controllFlow.controllFlowType) {
             ControllFlowType.WHILE -> viewModel.addToCode(ControllFlow(ControllFlowType.WHILE, BoolValue(
                 ExpressionTyp.ISBOARDER, true), Chain(mutableListOf()))) //condition should be pickable
             ControllFlowType.IF -> viewModel.addToCode(ControllFlow(ControllFlowType.IF, BoolValue(
                 ExpressionTyp.ISBOARDER, true), Chain(mutableListOf()))) //condition should be pickable
         }
+
+        viewModel.chain.value.printAll() //TODO: DELETE
     }) {
-        Text(text = (controllFlowType.toString()))
+        Text(text = (controllFlow.returnTextValue()))
     }
 }

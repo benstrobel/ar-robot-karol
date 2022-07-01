@@ -13,6 +13,7 @@ class ControllFlow: CodeParts {
     var codeParts: Chain
 
     override var index = 0
+    override var indexEnd = 0
 
     constructor(controllFlowType: ControllFlowType, condition: ConditionPart, codeParts: Chain) {
         this.controllFlowType = controllFlowType
@@ -51,13 +52,15 @@ class ControllFlow: CodeParts {
     }
 
     override fun size(): Int {
-        return codeParts.size() + 1
+        return codeParts.size() + 2
     }
 
     override fun printAll() {
         println(returnTextValue() + " : " + index)
 
         codeParts.printAll()
+
+        println("End " + controllFlowType.toString() + " : " + indexEnd)
     }
 
     override fun insertAt(goalIndex: Int, codeParts: CodeParts) {
@@ -68,5 +71,7 @@ class ControllFlow: CodeParts {
         index = lastIndex + 1
 
         codeParts.updateIndex(index)
+
+        indexEnd = index + codeParts.size() + 1
     }
 }
