@@ -37,7 +37,7 @@ const val TAG = "AR"
 
 class ArActivity : AppCompatActivity(), Scene.OnUpdateListener {
     private lateinit var arFragment: ArFragment
-    private lateinit var measureButton: ImageButton
+    //private lateinit var measureButton: ImageButton
 
     private var measureMode: Boolean = false
 
@@ -68,7 +68,7 @@ class ArActivity : AppCompatActivity(), Scene.OnUpdateListener {
         setContentView(R.layout.ar_view)
         arFragment = this.supportFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment
         arFragment.arSceneView.scene.addOnUpdateListener(this)
-        measureButton = this.findViewById(R.id.measure_button) as ImageButton
+        //measureButton = this.findViewById(R.id.measure_button) as ImageButton
 
         ViewRenderable
             .builder()
@@ -196,12 +196,12 @@ class ArActivity : AppCompatActivity(), Scene.OnUpdateListener {
         }
     }
 
-
+    //Close ARSceene
     fun finishAr(v: View){
         this.finish()
     }
 
-    fun switchMode(v: View) {
+    /*fun switchMode(v: View) {
         if (measureMode) {
             measureMode = false
             measureButton.setColorFilter(Color.toArgb("#515151".toColorInt().toColorLong()))
@@ -211,7 +211,7 @@ class ArActivity : AppCompatActivity(), Scene.OnUpdateListener {
             toastMode()
             measureButton.setColorFilter(Color.toArgb("white".toColorInt().toColorLong()))
         }
-    }
+    }*/
 
     fun clearScene(v: View) {
         for(node in arFragment.arSceneView.scene.children) {
@@ -230,7 +230,7 @@ class ArActivity : AppCompatActivity(), Scene.OnUpdateListener {
         midAnchors.clear()
 
         measureMode = false
-        measureButton.setColorFilter(Color.toArgb("#515151".toColorInt().toColorLong()))
+        //measureButton.setColorFilter(Color.toArgb("#515151".toColorInt().toColorLong()))
     }
 
     private fun addNodeToScene(arFragment: ArFragment, anchor: Anchor, renderable: Renderable, addAnchorNode: Boolean = false) {

@@ -1,10 +1,14 @@
 package com.example.robotkarolar.karollogic_ramona.Parts
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.graphics.Color
 import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
 class Chain: CodeParts {
     var code: MutableList<CodeParts>
+
+    override var index = -1 //never called
 
     constructor(code: MutableList<CodeParts>) {
         this.code = code
@@ -17,4 +21,84 @@ class Chain: CodeParts {
 
         return  returnList
     }
+
+    override fun returnColor(): Color {
+        return Color(0xFFFFFFFF)//"Chain shouldnt be called"
+    }
+
+    override fun returnTextValue(): String {
+        return "Chain shouldnt be called"
+    }
+
+    override fun size(): Int {
+        var returnVal = 0
+
+        code.forEach {
+            returnVal += it.size()
+        }
+
+        return returnVal
+    }
+
+    override fun printAll() {
+        //println("Chaine : " + index)
+        code.forEach {
+            it.printAll()
+        }
+    }
+
+    override fun insertAt(goalIndex: Int, codeParts: CodeParts) {
+        var myIndex = 0
+        if (goalIndex == index + 1) {
+            if (myIndex <= code.size && myIndex >= 0) {
+                code.add(myIndex, codeParts)
+            }
+        } else {
+            for (i in 0 until code.size) {
+                when (code[i]) {
+                    is Command -> {
+                        myIndex += 1
+
+                        if (goalIndex == code[i].index + 1) {
+                            if (myIndex <= code.size && myIndex >= 0) {
+                                code.add(myIndex, codeParts)
+                            }
+                        }
+                    }
+                    is Chain -> {
+                        myIndex += 1
+                        code[i].insertAt(goalIndex, codeParts)
+                    }
+                    is ControllFlow -> {
+                        myIndex += 1
+                        code[i].insertAt(goalIndex, codeParts)
+                    }
+                }
+            }
+        }
+
+        updateIndex(index)
+    }
+
+    /*override fun updateIndex(lastIndex: Int) {
+        index = lastIndex
+        var currentIndex = lastIndex
+
+        code.forEach {
+            it.updateIndex(currentIndex)
+
+            currentIndex += it.size()
+        }
+    }*/
+
+    override fun updateIndex(lastIndex: Int) {
+        index = lastIndex
+        var currentIndex = lastIndex
+
+        code.forEach {
+            it.updateIndex(currentIndex)
+            currentIndex += it.size()
+        }
+    }
+
 }

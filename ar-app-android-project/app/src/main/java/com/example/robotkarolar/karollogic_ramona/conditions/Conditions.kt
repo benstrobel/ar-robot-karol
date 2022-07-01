@@ -23,4 +23,8 @@ class Conditions: ConditionPart {
             return left.isTrue(world) || right.isTrue(world)
         }
     }
+
+    override fun returnTextValue(): String {
+        return (left.returnTextValue() + " " + conditionTyp.toString() + " " + right.returnTextValue())
+    }
 }

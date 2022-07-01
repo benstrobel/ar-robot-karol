@@ -1,5 +1,6 @@
 package com.example.robotkarolar.karollogic_ramona.Parts
 
+import androidx.compose.ui.graphics.Color
 import com.example.robotkarolar.karollogic_ramona.conditions.ConditionPart
 import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
@@ -9,9 +10,11 @@ class ControllFlow: CodeParts {
     var controllFlowType: ControllFlowType
 
     var condition: ConditionPart
-    var codeParts: CodeParts
+    var codeParts: Chain
 
-    constructor(controllFlowType: ControllFlowType, condition: ConditionPart, codeParts: CodeParts) {
+    override var index = 0
+
+    constructor(controllFlowType: ControllFlowType, condition: ConditionPart, codeParts: Chain) {
         this.controllFlowType = controllFlowType
         this.condition = condition
         this.codeParts = codeParts
@@ -29,5 +32,41 @@ class ControllFlow: CodeParts {
         }
 
         return returnList
+    }
+
+    override fun returnColor(): Color {
+        when(controllFlowType) {
+            ControllFlowType.IF -> return Color(0xFF00BCD4)
+            ControllFlowType.WHILE -> return Color(0xFF03A9F4)
+            else -> return Color(0xFFFFFFFF) //"No Controllflow"
+        }
+    }
+
+    override fun returnTextValue(): String {
+        when(controllFlowType) {
+            ControllFlowType.IF -> return ("IF (" + condition.returnTextValue() + ")") //Full text missing
+            ControllFlowType.WHILE -> return ("WHILE (" + condition.returnTextValue() + ")") //Full text missing
+            else -> return "No Controllflow"
+        }
+    }
+
+    override fun size(): Int {
+        return codeParts.size() + 1
+    }
+
+    override fun printAll() {
+        println(returnTextValue() + " : " + index)
+
+        codeParts.printAll()
+    }
+
+    override fun insertAt(goalIndex: Int, codeParts: CodeParts) {
+        this.codeParts.insertAt(goalIndex, codeParts)
+    }
+
+    override fun updateIndex(lastIndex: Int) {
+        index = lastIndex + 1
+
+        codeParts.updateIndex(index)
     }
 }

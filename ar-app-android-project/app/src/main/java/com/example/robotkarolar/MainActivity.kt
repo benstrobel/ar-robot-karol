@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
@@ -27,11 +28,10 @@ import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
 import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
 import com.example.robotkarolar.karollogic_ramona.Parts.Chain
-import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 import com.example.robotkarolar.ui.theme.RobotKarolArTheme
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.stream.Collectors
+import com.example.robotkarolar.uiviews.CodeView
+import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.components.CodeNavigator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +41,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Column {
-                        RunButtonRamona()
-                        RunButtonBen()
-                        ArButton()
+                        //RunButtonRamona()
+                        //RunButtonBen()
+                        //ArButton()
+
+                        val viewModel: CodeViewModel = CodeViewModel()
+                        CodeView(viewModel = viewModel)
                     }
                 }
             }
@@ -68,7 +71,7 @@ fun ArButton() {
     }
 }
 
-@Composable
+/*@Composable
 fun RunButtonRamona() {
     Button(onClick = {
         //Example Code for testing
@@ -80,12 +83,28 @@ fun RunButtonRamona() {
         var chaine: Chain = Chain(mutableListOf(command3))
         var controllFlow: ControllFlow = ControllFlow(ControllFlowType.WHILE, BoolValue(ExpressionTyp.ISBOARDER, true), chaine)
 
-
-        var examplecode: MutableList<CodeParts> = mutableListOf(command1, command2, command4, controllFlow)
+        var command5: Command = Command(CommandType.STEP)
+        var examplecode: MutableList<CodeParts> = mutableListOf(command1, command2, command4, controllFlow, command5)
 
         val karol: Chain = Chain(examplecode)
+        //Test Running
+        //karol.returnCommands(World())
 
-        karol.returnCommands(World())
+        //Test Size
+        //println(karol.size())
+
+        //Test updateIndex
+        karol.updateIndex(-1)
+        karol.printAll()
+
+        //Test insert
+        println("Next:")
+        karol.insertAt(0, Command(CommandType.TURN))
+        karol.printAll()
+        println("Next:")
+        karol.insertAt(6, Command(CommandType.REMOVE))
+        karol.printAll()
+
     }) {
         Text(text = "Run ExampleCode (Ramona)")
     }
@@ -125,7 +144,11 @@ fun RunButtonBen() {
     }
 }
 
-
+@Preview
+@Composable
+fun MainPreview() {
+    MainActivity()
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -136,4 +159,4 @@ fun DefaultPreview() {
             RunButtonBen()
         }
     }
-}
+}*/

@@ -30,4 +30,12 @@ class BoolValue: ConditionPart {
 
         return returnTyp
     }
+
+    override fun returnTextValue(): String {
+        if (not) {
+            return ("! " + value.toString())
+        } else {
+            return (value.toString())
+        }
+    }
 }
