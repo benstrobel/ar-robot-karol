@@ -7,11 +7,36 @@ import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 class BoolValue: ConditionPart {
 
     var value: ExpressionTyp
-    var not: Boolean
+    var not: Boolean = false
 
-    constructor(value: ExpressionTyp, not: Boolean) {
-        this.value = value
-        this.not = not
+    constructor(value: ExpressionTyp) {
+        when(value) {
+            ExpressionTyp.NOTISBLOCK -> {
+                this.value = ExpressionTyp.ISBLOCK
+                not = true
+            }
+            ExpressionTyp.NOTISBOARDER -> {
+                this.value = ExpressionTyp.ISBOARDER
+                not = true
+            }
+            ExpressionTyp.NOTISEAST -> {
+                this.value = ExpressionTyp.ISEAST
+                not = true
+            }
+            ExpressionTyp.NOTISNORTH -> {
+                this.value = ExpressionTyp.ISNORTH
+                not = true
+            }
+            ExpressionTyp.NOTISSOUTH -> {
+                this.value = ExpressionTyp.ISSOUTH
+                not = true
+            }
+            ExpressionTyp.NOTISWEST -> {
+                this.value = ExpressionTyp.ISWEST
+                not = true
+            }
+            else -> this.value = value
+        }
     }
 
     override fun isTrue(world: World): Boolean {

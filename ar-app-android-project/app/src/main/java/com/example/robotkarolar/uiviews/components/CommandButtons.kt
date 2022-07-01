@@ -1,9 +1,12 @@
 package com.example.robotkarolar.uiviews.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.robotkarolar.karollogic_ramona.Parts.Command
 import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.uiviews.CodeViewModel
@@ -24,7 +27,7 @@ fun CommandButtons(viewModel: CodeViewModel) {
 
 @Composable
 fun AddButton(viewModel: CodeViewModel, commandTyp: CommandType) {
-    Button(onClick = {
+    Button( onClick = {
         when(commandTyp) {
             CommandType.REMOVE -> viewModel.addToCode(Command(CommandType.REMOVE))
             CommandType.TURN -> viewModel.addToCode(Command(CommandType.TURN))

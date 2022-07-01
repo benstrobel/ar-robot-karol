@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.robotkarolar.karollogic_ramona.Parts.Chain
@@ -31,33 +32,26 @@ fun ControllFlowButtons(viewModel: CodeViewModel) {
     }
 }
 
+@Preview
 @Composable
-fun ControllFlowButton (viewModel: CodeViewModel, controllFlow: ControllFlow) {
-    Button(onClick = {
-        when(controllFlow.controllFlowType) {
-            ControllFlowType.WHILE -> viewModel.addToCode(ControllFlow(ControllFlowType.WHILE, BoolValue(
-                ExpressionTyp.ISBOARDER, true), Chain(mutableListOf()))) //condition should be pickable
-            ControllFlowType.IF -> viewModel.addToCode(ControllFlow(ControllFlowType.IF, BoolValue(
-                ExpressionTyp.ISBOARDER, true), Chain(mutableListOf()))) //condition should be pickable
-        }
-
-        viewModel.chain.value.printAll() //TODO: DELETE
-    }) {
-        Text(text = (controllFlow.returnTextValue()))
-    }
+fun ControllFlowButtonPrev() {
+    var viewModel = CodeViewModel()
+    ControllFlowButtons(viewModel = viewModel)
 }
 
 @Composable
-fun ControllFlowButton (viewModel: CodeViewModel, controllFlowTyp: ControllFlowType) {
+fun ControllFlowButton(viewModel: CodeViewModel, controllFlowTyp: ControllFlowType) {
 
     var selectedItem = remember {mutableStateOf(ExpressionTyp.ISBLOCK)}
 
-    Button(onClick = {
+    Button(modifier = Modifier
+        .padding(5.dp) ,
+        onClick = {
         when(controllFlowTyp) {
             ControllFlowType.WHILE -> viewModel.addToCode(ControllFlow(ControllFlowType.WHILE, BoolValue(
-                selectedItem.value, false), Chain(mutableListOf()))) //condition should be pickable
+                selectedItem.value), Chain(mutableListOf()))) //condition should be pickable
             ControllFlowType.IF -> viewModel.addToCode(ControllFlow(ControllFlowType.IF, BoolValue(
-                selectedItem.value, false), Chain(mutableListOf()))) //condition should be pickable
+                selectedItem.value), Chain(mutableListOf()))) //condition should be pickable
         }
     }) {
         Row() {

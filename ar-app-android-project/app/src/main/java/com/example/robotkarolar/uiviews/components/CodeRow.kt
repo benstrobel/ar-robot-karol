@@ -86,12 +86,12 @@ fun CodeRowPreview() {
     var chaine: Chain = Chain(mutableListOf(command3))
 
     var condition: Conditions = Conditions(
-        BoolValue(ExpressionTyp.ISBOARDER, true),
-        BoolValue(ExpressionTyp.ISBLOCK, false), ConditionTyp.AND)
+        BoolValue(ExpressionTyp.NOTISBOARDER),
+        BoolValue(ExpressionTyp.ISBLOCK), ConditionTyp.AND)
     var controllFlow2: ControllFlow = ControllFlow(ControllFlowType.IF, condition, chaine)
 
     var chain2: Chain = Chain(mutableListOf(command3, controllFlow2))
-    var controllFlow: ControllFlow = ControllFlow(ControllFlowType.WHILE, BoolValue(ExpressionTyp.ISBOARDER, true), chain2)
+    var controllFlow: ControllFlow = ControllFlow(ControllFlowType.WHILE, BoolValue(ExpressionTyp.ISBOARDER), chain2)
 
     var examplecode: MutableList<CodeParts> = mutableListOf(command1, command2, command4, controllFlow, command1)
     val karol: Chain = Chain(examplecode)
