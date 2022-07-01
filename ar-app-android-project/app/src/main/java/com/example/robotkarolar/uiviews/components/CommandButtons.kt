@@ -39,6 +39,6 @@ fun AddButton(viewModel: CodeViewModel, commandTyp: CommandType) {
 
         viewModel.chain.value.printAll() //TODO: DELETE
     }) {
-        Text(text = ("Add " + commandTyp.toString()))
+        Text(text = (commandTyp.toString()))
     }
 }
