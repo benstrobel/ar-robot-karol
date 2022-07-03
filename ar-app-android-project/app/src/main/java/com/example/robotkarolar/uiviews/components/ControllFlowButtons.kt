@@ -53,6 +53,9 @@ fun ControllFlowButton(viewModel: CodeViewModel, controllFlowTyp: ControllFlowTy
             ControllFlowType.IF -> viewModel.addToCode(ControllFlow(ControllFlowType.IF, BoolValue(
                 selectedItem.value), Chain(mutableListOf()))) //condition should be pickable
         }
+
+            //Testing TODO:REMOVE
+            viewModel.chain.value.printAll()
     }) {
         Row() {
             Text(text = (controllFlowTyp.toString()))

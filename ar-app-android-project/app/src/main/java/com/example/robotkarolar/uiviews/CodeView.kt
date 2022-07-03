@@ -5,15 +5,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import com.example.robotkarolar.karollogic_ramona.Parts.Command
 import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.uiviews.components.CodeNavigator
@@ -24,6 +24,9 @@ import com.example.robotkarolar.uiviews.components.ControllFlowButtons
 @Composable
 fun CodeView(viewModel: CodeViewModel) {
     Column(modifier = Modifier.padding(5.dp)) {
+
+        Text(text = "RoboterCarolAR")
+        
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.65f)
