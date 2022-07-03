@@ -1,6 +1,6 @@
 package com.example.robotkarolar.karollogic_ramona.conditions
 
-import com.example.robotkarolar.karollogic_ramona.enums.DirectionTyp
+import com.example.robotkarolar.karollogic_ramona.enums.DirectionType
 import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
 import com.example.robotkarolar.karollogic_ramona.karolWorld.World
 
@@ -44,10 +44,10 @@ class BoolValue: ConditionPart {
         when (value) {
             ExpressionTyp.ISBLOCK -> {returnTyp = world.isBlock()}
             ExpressionTyp.ISBOARDER -> {returnTyp = world.isBorder()}
-            ExpressionTyp.ISEAST -> {returnTyp = world.isDirection(DirectionTyp.EAST)}
-            ExpressionTyp.ISNORTH -> {returnTyp = world.isDirection(DirectionTyp.NORTH)}
-            ExpressionTyp.ISSOUTH -> {returnTyp = world.isDirection(DirectionTyp.SOUTH)}
-            ExpressionTyp.ISWEST -> {returnTyp = world.isDirection(DirectionTyp.WEST)}
+            ExpressionTyp.ISEAST -> {returnTyp = world.isDirection(DirectionType.EAST)}
+            ExpressionTyp.ISNORTH -> {returnTyp = world.isDirection(DirectionType.NORTH)}
+            ExpressionTyp.ISSOUTH -> {returnTyp = world.isDirection(DirectionType.SOUTH)}
+            ExpressionTyp.ISWEST -> {returnTyp = world.isDirection(DirectionType.WEST)}
             else -> print("Condition not possible")
         }
 

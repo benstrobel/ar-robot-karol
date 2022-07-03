@@ -1,11 +1,11 @@
 package com.example.robotkarolar.karollogic_ramona.karolWorld
 
-import com.example.robotkarolar.karollogic_ramona.enums.BlockTyp
+import com.example.robotkarolar.karollogic_ramona.enums.BlockType
 
 class Tile {
-    var blocks: MutableList<BlockTyp> = mutableListOf()
+    var blocks: MutableList<BlockType> = mutableListOf()
 
-    fun addBlock(blockType: BlockTyp) {
+    fun addBlock(blockType: BlockType) {
         blocks.add(blockType)
     }
 

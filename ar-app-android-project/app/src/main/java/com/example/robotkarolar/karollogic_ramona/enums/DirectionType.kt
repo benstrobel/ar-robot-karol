@@ -1,6 +1,6 @@
 package com.example.robotkarolar.karollogic_ramona.enums
 
-enum class DirectionTyp {
+enum class DirectionType {
     NORTH,
     EAST,
     SOUTH,

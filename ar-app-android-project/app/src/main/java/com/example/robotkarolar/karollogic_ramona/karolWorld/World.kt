@@ -1,13 +1,13 @@
 package com.example.robotkarolar.karollogic_ramona.karolWorld
 
-import com.example.robotkarolar.karollogic_ramona.enums.BlockTyp
+import com.example.robotkarolar.karollogic_ramona.enums.BlockType
 import com.example.robotkarolar.karollogic_ramona.enums.CommandType
-import com.example.robotkarolar.karollogic_ramona.enums.DirectionTyp
+import com.example.robotkarolar.karollogic_ramona.enums.DirectionType
 
 class World {
     var roboterX: Int = 0
     var roboterY: Int = 0
-    var roboterRotation: DirectionTyp = DirectionTyp.SOUTH
+    var roboterRotation: DirectionType = DirectionType.SOUTH
 
     var matrix: Array<Array<Tile>>
 
@@ -32,9 +32,9 @@ class World {
             CommandType.TURNLEFT -> turnLeft()
             CommandType.TURNRIGHT -> turnRight()
             CommandType.TURN -> turn()
-            CommandType.PLACEGRAS -> place(BlockTyp.GRAS)
-            CommandType.PLACESTONE -> place(BlockTyp.STONE)
-            CommandType.PLACEWATER -> place(BlockTyp.WATER)
+            CommandType.PLACEGRAS -> place(BlockType.GRAS)
+            CommandType.PLACESTONE -> place(BlockType.STONE)
+            CommandType.PLACEWATER -> place(BlockType.WATER)
             CommandType.REMOVE -> remove()
             else -> print("Unknown Command")
         }
@@ -56,48 +56,48 @@ class World {
 
     private fun step() {
         when(roboterRotation) {
-            DirectionTyp.SOUTH -> {roboterY += 1}
-            DirectionTyp.NORTH -> {roboterY -= 1}
-            DirectionTyp.EAST -> {roboterX +=1}
-            DirectionTyp.WEST -> {roboterX -= 1}
+            DirectionType.SOUTH -> {roboterY += 1}
+            DirectionType.NORTH -> {roboterY -= 1}
+            DirectionType.EAST -> {roboterX +=1}
+            DirectionType.WEST -> {roboterX -= 1}
             else -> print("No Direction")
         }
     }
 
     private fun turnLeft() {
         when(roboterRotation) {
-            DirectionTyp.SOUTH -> {roboterRotation = DirectionTyp.EAST}
-            DirectionTyp.NORTH -> {roboterRotation = DirectionTyp.WEST}
-            DirectionTyp.EAST -> {roboterRotation = DirectionTyp.NORTH}
-            DirectionTyp.WEST -> {roboterRotation = DirectionTyp.SOUTH}
+            DirectionType.SOUTH -> {roboterRotation = DirectionType.EAST}
+            DirectionType.NORTH -> {roboterRotation = DirectionType.WEST}
+            DirectionType.EAST -> {roboterRotation = DirectionType.NORTH}
+            DirectionType.WEST -> {roboterRotation = DirectionType.SOUTH}
             else -> print("No Direction")
         }
     }
 
     private fun turnRight() {
         when(roboterRotation) {
-            DirectionTyp.SOUTH -> {roboterRotation = DirectionTyp.WEST}
-            DirectionTyp.NORTH -> {roboterRotation = DirectionTyp.EAST}
-            DirectionTyp.EAST -> {roboterRotation = DirectionTyp.SOUTH}
-            DirectionTyp.WEST -> {roboterRotation = DirectionTyp.NORTH}
+            DirectionType.SOUTH -> {roboterRotation = DirectionType.WEST}
+            DirectionType.NORTH -> {roboterRotation = DirectionType.EAST}
+            DirectionType.EAST -> {roboterRotation = DirectionType.SOUTH}
+            DirectionType.WEST -> {roboterRotation = DirectionType.NORTH}
             else -> print("No Direction")
         }
     }
 
     private fun turn() {
         when(roboterRotation) {
-            DirectionTyp.SOUTH -> {roboterRotation = DirectionTyp.NORTH}
-            DirectionTyp.NORTH -> {roboterRotation = DirectionTyp.SOUTH}
-            DirectionTyp.EAST -> {roboterRotation = DirectionTyp.WEST}
-            DirectionTyp.WEST -> {roboterRotation = DirectionTyp.EAST}
+            DirectionType.SOUTH -> {roboterRotation = DirectionType.NORTH}
+            DirectionType.NORTH -> {roboterRotation = DirectionType.SOUTH}
+            DirectionType.EAST -> {roboterRotation = DirectionType.WEST}
+            DirectionType.WEST -> {roboterRotation = DirectionType.EAST}
             else -> print("No Direction")
         }
     }
 
-    private fun place(blockTyp: BlockTyp) {
+    private fun place(blockType: BlockType) {
         //check if karol is in array
         if (roboterX > -1 && roboterX < 10 && roboterY > -1 && roboterY < 10 ) {
-            matrix[roboterY][roboterX].addBlock(blockTyp)
+            matrix[roboterY][roboterX].addBlock(blockType)
         } else {
             println("Karol is not in the field")
         }
@@ -116,10 +116,10 @@ class World {
         var returnValue = true
 
         when(roboterRotation) {
-            DirectionTyp.EAST -> {returnValue = !matrix[roboterY][roboterX+1].isEmpty()}
-            DirectionTyp.NORTH -> {returnValue = !matrix[roboterY-1][roboterX].isEmpty()}
-            DirectionTyp.SOUTH -> {returnValue = !matrix[roboterY+1][roboterX].isEmpty()}
-            DirectionTyp.WEST -> {returnValue = !matrix[roboterY][roboterX-1].isEmpty()}
+            DirectionType.EAST -> {returnValue = !matrix[roboterY][roboterX+1].isEmpty()}
+            DirectionType.NORTH -> {returnValue = !matrix[roboterY-1][roboterX].isEmpty()}
+            DirectionType.SOUTH -> {returnValue = !matrix[roboterY+1][roboterX].isEmpty()}
+            DirectionType.WEST -> {returnValue = !matrix[roboterY][roboterX-1].isEmpty()}
             else -> println("block problems")
         }
 
@@ -130,17 +130,17 @@ class World {
         var returnValue = true
 
         when(roboterRotation) {
-            DirectionTyp.EAST -> {returnValue = (roboterX == 9)}
-            DirectionTyp.NORTH -> {returnValue = (roboterY == 0)}
-            DirectionTyp.SOUTH -> {returnValue = (roboterY == 9)}
-            DirectionTyp.WEST -> {returnValue = (roboterX == 0)}
+            DirectionType.EAST -> {returnValue = (roboterX == 9)}
+            DirectionType.NORTH -> {returnValue = (roboterY == 0)}
+            DirectionType.SOUTH -> {returnValue = (roboterY == 9)}
+            DirectionType.WEST -> {returnValue = (roboterX == 0)}
             else -> println("boarder problems")
         }
 
         return returnValue
     }
 
-    fun isDirection(directions: DirectionTyp): Boolean {
+    fun isDirection(directions: DirectionType): Boolean {
         return (roboterRotation == directions)
     }
 }

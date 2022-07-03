@@ -1,7 +1,6 @@
 package com.example.robotkarolar.karollogic_ramona.enums
 
-enum class BlockTyp {
-    GRAS,
-    WATER,
-    STONE
+enum class ConditionType {
+    AND,
+    OR
 }
