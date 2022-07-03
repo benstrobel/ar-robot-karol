@@ -53,9 +53,13 @@ class Chain: CodeParts {
         if (goalIndex == index + 1) { //when adding first of chain
             if (myIndex <= code.size && myIndex >= 0) {
                 code.add(myIndex, codeParts)
+
+                //TODO:Remove testing
+                println("Erste schleife called")
             }
         } else {
             for (i in 0 until code.size) {
+
                 when (code[i]) {
                     is Command -> {
                         myIndex += 1
@@ -63,9 +67,15 @@ class Chain: CodeParts {
                         if (goalIndex == code[i].index + 1) {
                             if (myIndex <= code.size && myIndex >= 0) {
                                 code.add(myIndex, codeParts)
+
+                                //TODO:Remove testing
+                                println("zweite schleife called: " + myIndex)
+
+                                break
                             }
                         }
                     }
+
                     is Chain -> {
                         myIndex += 1
                         code[i].insertAt(goalIndex, codeParts)

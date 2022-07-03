@@ -41,7 +41,8 @@ fun AddButton(viewModel: CodeViewModel, commandTyp: CommandType) {
             else -> "Error while adding"
         }
 
-        viewModel.chain.value.printAll() //TODO: DELETE
+        //Testing TODO:REMOVE
+        viewModel.chain.value.printAll()
     }) {
         Text(text = (commandTyp.toString()))
     }
