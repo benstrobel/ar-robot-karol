@@ -102,7 +102,7 @@ public class InstructionPrintVisitor implements InstructionVisitor{
         System.out.println("If");
         controlFlowIf.getCondition().accept(this);
         System.out.println("{");
-        for (Instruction instruction : controlFlowIf.getInstructions()) {
+        for (Instruction instruction : controlFlowIf.getCodeBlock().getInstructions()) {
             instruction.accept(this);
         }
         System.out.println("}");
@@ -113,7 +113,7 @@ public class InstructionPrintVisitor implements InstructionVisitor{
         System.out.println("While");
         controlFlowWhile.getCondition().accept(this);
         System.out.println("{");
-        for (Instruction instruction : controlFlowWhile.getInstructions()) {
+        for (Instruction instruction : controlFlowWhile.getCodeBlock().getInstructions()) {
             instruction.accept(this);
         }
         System.out.println("}");

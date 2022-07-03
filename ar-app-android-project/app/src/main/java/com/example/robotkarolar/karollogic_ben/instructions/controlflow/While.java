@@ -7,19 +7,19 @@ import com.example.robotkarolar.karollogic_ben.instructions.expressions.Expressi
 public class While extends Instruction {
 
     private final Expression condition;
-    private final Instruction[] instructions;
+    private final CodeBlock codeBlock;
 
-    public While(Expression condition, Instruction[] instructions) {
+    public While(Expression condition, CodeBlock codeBlock) {
         this.condition = condition;
-        this.instructions = instructions;
+        this.codeBlock = codeBlock;
     }
 
     public Expression getCondition() {
         return condition;
     }
 
-    public Instruction[] getInstructions() {
-        return instructions;
+    public CodeBlock getCodeBlock() {
+        return codeBlock;
     }
 
     @Override

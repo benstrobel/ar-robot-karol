@@ -4,7 +4,7 @@ import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While;
 import com.example.robotkarolar.karollogic_ben.instructions.expressions.*;
 import com.example.robotkarolar.karollogic_ben.instructions.statements.*;
-import com.example.robotkarolar.karollogic_ben.interpreter.Interpreter;
+import com.example.robotkarolar.karollogic_ben.Interpreter;
 import com.example.robotkarolar.karollogic_ben.world.World;
 
 public class InstructionExecuteVisitor implements InstructionVisitor{
@@ -110,7 +110,7 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     public void accept(If controlFlowIf) {
         ExpressionEvaulationVisitor evaulationVisitor = new ExpressionEvaulationVisitor(world);
         if(controlFlowIf.getCondition().accept(evaulationVisitor)){
-            Interpreter.interpret(controlFlowIf.getInstructions(), world);
+            Interpreter.interpret(controlFlowIf.getCodeBlock(), world);
         }
     }
 
@@ -118,7 +118,7 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     public void accept(While controlFlowWhile) {
         ExpressionEvaulationVisitor evaulationVisitor = new ExpressionEvaulationVisitor(world);
         while(controlFlowWhile.getCondition().accept(evaulationVisitor)){
-            Interpreter.interpret(controlFlowWhile.getInstructions(), world);
+            Interpreter.interpret(controlFlowWhile.getCodeBlock(), world);
         }
     }
 }

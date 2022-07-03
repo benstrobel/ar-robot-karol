@@ -7,19 +7,19 @@ import com.example.robotkarolar.karollogic_ben.instructions.expressions.Expressi
 public class If extends Instruction {
 
     private final Expression condition;
-    private final Instruction[] instructions;
+    private final CodeBlock codeblock;
 
-    public If(Expression condition, Instruction[] instructions) {
+    public If(Expression condition, CodeBlock codeblock) {
         this.condition = condition;
-        this.instructions = instructions;
+        this.codeblock = codeblock;
     }
 
     public Expression getCondition() {
         return condition;
     }
 
-    public Instruction[] getInstructions() {
-        return instructions;
+    public CodeBlock getCodeBlock() {
+        return codeblock;
     }
 
     @Override
