@@ -4,7 +4,7 @@ enum class CommandType {
     STEP,
     TURNLEFT,
     TURNRIGHT,
-    TURN,
+    TURN, // TODO What does this do?
     PLACEGRAS,
     PLACEWATER,
     PLACESTONE,

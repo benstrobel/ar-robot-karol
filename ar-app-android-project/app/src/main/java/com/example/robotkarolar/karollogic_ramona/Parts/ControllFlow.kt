@@ -27,7 +27,7 @@ class ControllFlow: CodeParts {
         if (condition.isTrue(world)) { //check if codition is true
             returnList += codeParts.returnCommands(world) //run once throu the Coming parts
 
-            if (controllFlowType == ControllFlowType.WHILE) { //if while repeat
+            if (controllFlowType == ControllFlowType.WHILE) { //if while repeat // TODO This can't work, this tries to calculate the runtime condition at compile time
                 returnList += this.returnCommands(world)
             }
         }
