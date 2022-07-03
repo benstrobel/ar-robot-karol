@@ -12,11 +12,9 @@ class CodeViewModel: ViewModel() {
     //States
     val currentIndex = mutableStateOf<Int>(0)
     var chain =  mutableStateOf<Chain>(Chain(mutableListOf()))
-    val size = mutableStateOf<Int>(0)
 
     fun addToCode(codeParts: CodeParts) {
         chain.value.insertAt(currentIndex.value, codeParts)
-        size.value = chain.value.size()
 
         this.next() //goes only up if added was sucssesfull
 
@@ -25,11 +23,11 @@ class CodeViewModel: ViewModel() {
         chain.value = Chain(cur)
 
         println("CurrentIndex: " + currentIndex.value)
-        println("Size: " + size.value)
+        println("Size: " + chain.value.size())
     }
 
     fun next() {
-        if(currentIndex.value < size.value) {
+        if(currentIndex.value < chain.value.size()) {
             currentIndex.value += 1
             println("CurrentIndex: " + currentIndex.value)
         }
@@ -45,6 +43,5 @@ class CodeViewModel: ViewModel() {
     fun clear() {
         chain.value = Chain(mutableListOf())
         currentIndex.value = 0
-        size.value = 0
     }
 }
