@@ -1,5 +1,6 @@
 package com.example.robotkarolar.karollogic_ben.instructions.visitors;
 
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While;
 import com.example.robotkarolar.karollogic_ben.instructions.expressions.*;
@@ -31,4 +32,5 @@ public interface InstructionVisitor {
     // Control Flow
     void accept(If controlFlowIf);
     void accept(While controlFlowWhile);
+    void accept(CodeBlock codeBlock);
 }

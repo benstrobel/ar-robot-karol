@@ -26,8 +26,4 @@ public class If extends Instruction {
     public void accept(InstructionVisitor visitor) {
         visitor.accept(this);
     }
-
-    public static String getKeyword() {
-        return "if";
-    }
 }

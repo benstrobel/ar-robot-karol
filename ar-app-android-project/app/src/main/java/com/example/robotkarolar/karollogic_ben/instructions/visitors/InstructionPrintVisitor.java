@@ -1,6 +1,7 @@
 package com.example.robotkarolar.karollogic_ben.instructions.visitors;
 
 import com.example.robotkarolar.karollogic_ben.instructions.Instruction;
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While;
 import com.example.robotkarolar.karollogic_ben.instructions.expressions.*;
@@ -117,5 +118,12 @@ public class InstructionPrintVisitor implements InstructionVisitor{
             instruction.accept(this);
         }
         System.out.println("}");
+    }
+
+    @Override
+    public void accept(CodeBlock codeBlock) {
+        for(Instruction instruction: codeBlock.getInstructions()) {
+            instruction.accept(this);
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
@@ -13,22 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.robotkarolar.karollogic_ben.instructions.visitors.InstructionPrintVisitor
-import com.example.robotkarolar.karollogic_ben.interpreter.Interpreter
-import com.example.robotkarolar.karollogic_ben.interpreter.Parser
-import com.example.robotkarolar.karollogic_ramona.Parts.CodeParts
-import com.example.robotkarolar.karollogic_ramona.Parts.Command
-import com.example.robotkarolar.karollogic_ramona.Parts.ControllFlow
-import com.example.robotkarolar.karollogic_ramona.conditions.BoolValue
-import com.example.robotkarolar.karollogic_ramona.enums.CommandType
-import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
-import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
-import com.example.robotkarolar.karollogic_ramona.Parts.Chain
 import com.example.robotkarolar.ui.theme.RobotKarolArTheme
 import com.example.robotkarolar.uiviews.CodeView
 import com.example.robotkarolar.uiviews.CodeViewModel
-import com.example.robotkarolar.uiviews.components.CodeNavigator
 
 class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi

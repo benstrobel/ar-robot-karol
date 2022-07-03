@@ -1,5 +1,7 @@
 package com.example.robotkarolar.karollogic_ben.instructions.visitors;
 
+import com.example.robotkarolar.karollogic_ben.instructions.Instruction;
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If;
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While;
 import com.example.robotkarolar.karollogic_ben.instructions.expressions.*;
@@ -119,6 +121,13 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
         ExpressionEvaulationVisitor evaulationVisitor = new ExpressionEvaulationVisitor(world);
         while(controlFlowWhile.getCondition().accept(evaulationVisitor)){
             Interpreter.interpret(controlFlowWhile.getCodeBlock(), world);
+        }
+    }
+
+    @Override
+    public void accept(CodeBlock codeBlock) {
+        for(Instruction instruction: codeBlock.getInstructions()) {
+            instruction.accept(this);
         }
     }
 }
