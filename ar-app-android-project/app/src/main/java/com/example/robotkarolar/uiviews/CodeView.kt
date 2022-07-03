@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.example.robotkarolar.uiviews.components.CommandButtons
 import com.example.robotkarolar.uiviews.components.ControllFlowButtons
 
 @Composable
+@ExperimentalMaterialApi
 fun CodeView(viewModel: CodeViewModel) {
     Column(modifier = Modifier.padding(5.dp)) {
         Box(modifier = Modifier
@@ -62,6 +64,7 @@ fun CodeView(viewModel: CodeViewModel) {
 
 @Preview
 @Composable
+@ExperimentalMaterialApi
 fun CodeViewPreview() {
     var viewModel = CodeViewModel()
     viewModel.addToCode(Command(CommandType.TURNRIGHT))
