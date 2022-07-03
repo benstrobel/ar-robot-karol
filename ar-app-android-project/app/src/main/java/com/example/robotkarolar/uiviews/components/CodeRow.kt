@@ -21,31 +21,44 @@ import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.karollogic_ramona.enums.ConditionTyp
 import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
 import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
+import com.example.robotkarolar.uiviews.CodeCursorModel
 
 @Composable
-fun CodeRow(codeParts: CodeParts) {
+fun CodeRow(codeParts: CodeParts, codeCursorModel: CodeCursorModel) {
     Column {
         when(codeParts) {
             is Command -> CodeSnipit(codeParts = codeParts)
             is Chain -> {
+                if(codeParts.code.size == 0 && codeCursorModel.cursorIndex == codeCursorModel.currentIndex) {
+                    CodeCursor()
+                }
                 codeParts.code.forEach {
-                    CodeRow(codeParts = it)
+                    if (codeCursorModel.cursorIndex == codeCursorModel.currentIndex) {
+                        CodeCursor()
+                    }
+                    CodeRow(codeParts = it, codeCursorModel)
+                    codeCursorModel.pushCursor()
+                }
+                if (codeParts.code.size != 0 && codeCursorModel.cursorIndex == codeCursorModel.currentIndex) {
+                    CodeCursor()
                 }
             }
             is ControllFlow -> {
                 when(codeParts.controllFlowType) {
                     ControllFlowType.IF -> {
                         CodeSnipit(codeParts = codeParts)
+                        codeCursorModel.pushCursor()
                         Row {
                             Spacer(modifier = Modifier.padding(15.dp))
-                            CodeRow(codeParts = codeParts.codeParts)
+                            CodeRow(codeParts = codeParts.codeParts, codeCursorModel)
                         }
                     }
                     ControllFlowType.WHILE -> {
                         CodeSnipit(codeParts = codeParts)
+                        codeCursorModel.pushCursor()
                         Row {
                             Spacer(modifier = Modifier.padding(15.dp))
-                            CodeRow(codeParts = codeParts.codeParts)
+                            CodeRow(codeParts = codeParts.codeParts, codeCursorModel)
                         }
                     }
                 }
@@ -96,6 +109,6 @@ fun CodeRowPreview() {
     var examplecode: MutableList<CodeParts> = mutableListOf(command1, command2, command4, controllFlow, command1)
     val karol: Chain = Chain(examplecode)
 
-    CodeRow(codeParts = karol)
+    CodeRow(codeParts = karol, CodeCursorModel(10))
     //CodeRow(codeParts = Command(CommandType.STEP))
 }

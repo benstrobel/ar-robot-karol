@@ -1,23 +1,21 @@
 package com.example.robotkarolar.uiviews.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.robotkarolar.ArButton
-import com.example.robotkarolar.karollogic_ramona.Parts.Command
-import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.uiviews.CodeViewModel
 
 @Composable
 fun CodeNavigator(viewModel: CodeViewModel) {
-    Row {
+    Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
         NextButton(viewModel = viewModel)
-        BeforButton(viewModel = viewModel)
+        BeforeButton(viewModel = viewModel)
         //IndexButton(viewModel = viewModel)
         ClearButton(viewModel = viewModel)
     }
@@ -39,17 +37,17 @@ fun NextButton(viewModel: CodeViewModel) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.next()
-    }) {
+    }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
         Text(text = "Next")
     }
 }
 
 @Composable
-fun BeforButton(viewModel: CodeViewModel) {
+fun BeforeButton(viewModel: CodeViewModel) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.before()
-    }) {
+    }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
         Text(text = "Before")
     }
 }
@@ -60,7 +58,7 @@ fun ClearButton(viewModel: CodeViewModel) {
         //Example Code for Testing
         viewModel.clear()
         viewModel.chain.value.printAll()
-    }) {
+    }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
         Text(text = "Clear")
     }
 }
