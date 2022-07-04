@@ -13,11 +13,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.robotkarolar.karollogic_ben.instructions.statements.LeftTurn
-import com.example.robotkarolar.karollogic_ben.instructions.statements.Place
-import com.example.robotkarolar.karollogic_ben.instructions.statements.Step
-import com.example.robotkarolar.karollogic_ramona.Parts.Command
-import com.example.robotkarolar.karollogic_ramona.enums.CommandType
+import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn
+import com.example.robotkarolar.karollogic.instructions.statements.Place
+import com.example.robotkarolar.karollogic.instructions.statements.Step
 import com.example.robotkarolar.uiviews.components.CodeNavigator
 import com.example.robotkarolar.uiviews.components.CodeRow
 import com.example.robotkarolar.uiviews.components.StatementButtons
@@ -25,7 +23,7 @@ import com.example.robotkarolar.uiviews.components.ControllFlowButtons
 
 @Composable
 @ExperimentalMaterialApi
-fun CodeView(viewModel: CodeViewModel2) {
+fun CodeView(viewModel: CodeViewModel) {
     Column(modifier = Modifier.padding(5.dp)) {
 
         Text(text = "RoboterCarolAR")
@@ -70,7 +68,7 @@ fun CodeView(viewModel: CodeViewModel2) {
 @Composable
 @ExperimentalMaterialApi
 fun CodeViewPreview() {
-    var viewModel = CodeViewModel2()
+    var viewModel = CodeViewModel()
     viewModel.addInstruction(LeftTurn())
     viewModel.addInstruction(Place())
     viewModel.addInstruction(Step())

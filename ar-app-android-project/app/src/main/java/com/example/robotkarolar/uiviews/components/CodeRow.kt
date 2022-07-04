@@ -10,15 +10,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.robotkarolar.karollogic_ben.instructions.Instruction
-import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock
-import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If
-import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While
-import com.example.robotkarolar.karollogic_ben.instructions.expressions.And
-import com.example.robotkarolar.karollogic_ben.instructions.expressions.IsBlock
-import com.example.robotkarolar.karollogic_ben.instructions.expressions.IsBorder
-import com.example.robotkarolar.karollogic_ben.instructions.expressions.Not
-import com.example.robotkarolar.karollogic_ben.instructions.statements.*
+import com.example.robotkarolar.karollogic.instructions.Instruction
+import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic.instructions.controlflow.If
+import com.example.robotkarolar.karollogic.instructions.controlflow.While
+import com.example.robotkarolar.karollogic.instructions.expressions.And
+import com.example.robotkarolar.karollogic.instructions.expressions.IsBlock
+import com.example.robotkarolar.karollogic.instructions.expressions.IsBorder
+import com.example.robotkarolar.karollogic.instructions.expressions.Not
+import com.example.robotkarolar.karollogic.instructions.statements.*
 
 @Composable
 @ExperimentalMaterialApi

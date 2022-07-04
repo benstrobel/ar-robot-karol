@@ -10,10 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.robotkarolar.uiviews.CodeViewModel
-import com.example.robotkarolar.uiviews.CodeViewModel2
 
 @Composable
-fun CodeNavigator(viewModel: CodeViewModel2) {
+fun CodeNavigator(viewModel: CodeViewModel) {
     Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
         NextButton(viewModel = viewModel)
         BeforeButton(viewModel = viewModel)
@@ -23,7 +22,7 @@ fun CodeNavigator(viewModel: CodeViewModel2) {
 }
 
 @Composable
-fun NextButton(viewModel: CodeViewModel2) {
+fun NextButton(viewModel: CodeViewModel) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.next()
@@ -33,7 +32,7 @@ fun NextButton(viewModel: CodeViewModel2) {
 }
 
 @Composable
-fun BeforeButton(viewModel: CodeViewModel2) {
+fun BeforeButton(viewModel: CodeViewModel) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.previous()
@@ -43,7 +42,7 @@ fun BeforeButton(viewModel: CodeViewModel2) {
 }
 
 @Composable
-fun ClearButton(viewModel: CodeViewModel2) {
+fun ClearButton(viewModel: CodeViewModel) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.clear()

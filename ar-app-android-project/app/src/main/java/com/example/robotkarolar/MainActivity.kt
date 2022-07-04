@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.robotkarolar.ui.theme.RobotKarolArTheme
 import com.example.robotkarolar.uiviews.CodeView
 import com.example.robotkarolar.uiviews.CodeViewModel
-import com.example.robotkarolar.uiviews.CodeViewModel2
 
 class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi
@@ -30,7 +29,7 @@ class MainActivity : ComponentActivity() {
                         //RunButtonBen()
                         //ArButton()
 
-                        val viewModel: CodeViewModel2 = CodeViewModel2()
+                        val viewModel: CodeViewModel = CodeViewModel()
                         CodeView(viewModel = viewModel)
                     }
                 }

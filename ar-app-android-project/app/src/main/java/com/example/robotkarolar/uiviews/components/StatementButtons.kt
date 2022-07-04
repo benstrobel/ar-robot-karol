@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.example.robotkarolar.karollogic_ben.instructions.statements.*
-import com.example.robotkarolar.uiviews.CodeViewModel2
+import com.example.robotkarolar.karollogic.instructions.statements.*
+import com.example.robotkarolar.uiviews.CodeViewModel
 
 @Composable
-fun StatementButtons(viewModel: CodeViewModel2) {
+fun StatementButtons(viewModel: CodeViewModel) {
     Column() {
         AddButton({ viewModel.addInstruction(Step()) }, "STEP")
         AddButton({ viewModel.addInstruction(Place()) }, "PLACE")

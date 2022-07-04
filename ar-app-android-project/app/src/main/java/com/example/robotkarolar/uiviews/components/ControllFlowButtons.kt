@@ -14,14 +14,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock
-import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If
-import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While
-import com.example.robotkarolar.karollogic_ben.instructions.expressions.*
-import com.example.robotkarolar.karollogic_ben.instructions.statements.Noop
-import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
-import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTypHandler
-import com.example.robotkarolar.uiviews.CodeViewModel2
+import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic.instructions.controlflow.If
+import com.example.robotkarolar.karollogic.instructions.controlflow.While
+import com.example.robotkarolar.karollogic.instructions.expressions.*
+import com.example.robotkarolar.karollogic.instructions.statements.Noop
+import com.example.robotkarolar.uiviews.CodeViewModel
 
 val expressionMap = mapOf(
     "TRUE" to { True() },
@@ -42,7 +40,7 @@ private fun newCodeBlock(): CodeBlock {
 }
 
 @Composable
-fun ControllFlowButtons(viewModel: CodeViewModel2) {
+fun ControllFlowButtons(viewModel: CodeViewModel) {
     Column() {
         ControllFlowButton({expr -> val block = newCodeBlock(); val cf = If(expr, block); viewModel.addInstruction(cf); block.parent = cf}, "IF")
         ControllFlowButton({expr -> val block = newCodeBlock(); val cf = While(expr, block); viewModel.addInstruction(cf); block.parent = cf}, "WHILE")
@@ -52,7 +50,7 @@ fun ControllFlowButtons(viewModel: CodeViewModel2) {
 @Preview
 @Composable
 fun ControllFlowButtonPrev() {
-    var viewModel = CodeViewModel2()
+    var viewModel = CodeViewModel()
     ControllFlowButtons(viewModel = viewModel)
 }
 
@@ -68,15 +66,13 @@ fun ControllFlowButton(lambda: (Expression) -> Unit, buttonName: String) {
             Text(text = (buttonName))
 
             //Dropdown
-            val listEnums = enumValues<ExpressionTyp>().toList()
-            val list = listEnums.map { ExpressionTypHandler().toString(it) }
-            dropDownMenu(list,selectedExpression)
+            dropDownMenu(selectedExpression)
         }
     }
 }
 
 @Composable
-fun dropDownMenu(list: List<String>, selectedExpression: MutableState<Expression>) {
+fun dropDownMenu(selectedExpression: MutableState<Expression>) {
     var expanded by remember { mutableStateOf(false) }
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
