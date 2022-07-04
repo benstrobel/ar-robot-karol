@@ -41,41 +41,55 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                     when(parent) {
                         is If -> {
                             parent.condition = instruction
+                            instruction.parent = parent
+                            cursor.value = instruction
                             next()
                         }
                         is While -> {
                             parent.condition = instruction
+                            instruction.parent = parent
+                            cursor.value = instruction
                             next()
                         }
                         is Not -> {
                             parent.child = instruction
+                            instruction.parent = parent
+                            cursor.value = instruction
                             next()
                         }
                         is And -> {
                             if(parent.left == currentCursor) {
                                 parent.left = instruction
+                                instruction.parent = parent
+                                cursor.value = instruction
                             } else {
                                 parent.right = instruction
+                                instruction.parent = parent
+                                cursor.value = instruction
                             }
                             next()
                         }
                         is Or -> {
                             if(parent.left == currentCursor) {
                                 parent.left = instruction
+                                instruction.parent = parent
+                                cursor.value = instruction
                             } else {
                                 parent.right = instruction
+                                instruction.parent = parent
+                                cursor.value = instruction
                             }
                             next()
                         }
                     }
-                }
-
-                if(currentCursor.parent == null) { // The only element without parent is the root codeBlock
-                    (currentCursor as CodeBlock).addInstruction(instruction)
-                    cursor.value = instruction
-                } else { // The cursor always points to the element after which the next instruction should be inserted (but in the same scope as the element pointed to)
-                    addInstruction(instruction, currentCursor.parent, currentCursor)
-                    return
+                } else {
+                    if(currentCursor.parent == null) { // The only element without parent is the root codeBlock
+                        (currentCursor as CodeBlock).addInstruction(instruction)
+                        cursor.value = instruction
+                    } else { // The cursor always points to the element after which the next instruction should be inserted (but in the same scope as the element pointed to)
+                        addInstruction(instruction, currentCursor.parent, currentCursor)
+                        return
+                    }
                 }
             }
 

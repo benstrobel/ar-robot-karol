@@ -13,13 +13,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.robotkarolar.karollogic.instructions.expressions.EmptyExpression
 import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn
 import com.example.robotkarolar.karollogic.instructions.statements.Place
 import com.example.robotkarolar.karollogic.instructions.statements.Step
-import com.example.robotkarolar.uiviews.components.CodeNavigator
-import com.example.robotkarolar.uiviews.components.CodeRow
-import com.example.robotkarolar.uiviews.components.StatementButtons
-import com.example.robotkarolar.uiviews.components.ControllFlowButtons
+import com.example.robotkarolar.uiviews.components.*
 
 @Composable
 @ExperimentalMaterialApi
@@ -57,8 +55,13 @@ fun CodeView(viewModel: CodeViewModel) {
             .verticalScroll(rememberScrollState())
         ) {
             Column() {
-                StatementButtons(viewModel = viewModel)
-                ControllFlowButtons(viewModel = viewModel)
+                if(viewModel.cursor.value is EmptyExpression) {
+                    ExpressionButtons(viewModel = viewModel)
+                } else {
+                    StatementButtons(viewModel = viewModel)
+                    ControllFlowButtons(viewModel = viewModel)
+                }
+
             }
         }
     }
