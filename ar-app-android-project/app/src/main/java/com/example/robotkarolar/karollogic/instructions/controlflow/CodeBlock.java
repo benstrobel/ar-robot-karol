@@ -45,7 +45,7 @@ public class CodeBlock extends ControlFlow {
          if(getParent() == null) {
              return null;
          } else {
-             return getParent().getParent().getCodeBlock().getNextAfter(getParent());
+             return getParent();
          }
         }
 
