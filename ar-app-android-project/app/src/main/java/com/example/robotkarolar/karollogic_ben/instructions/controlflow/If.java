@@ -4,7 +4,7 @@ import com.example.robotkarolar.karollogic_ben.instructions.Instruction;
 import com.example.robotkarolar.karollogic_ben.instructions.visitors.InstructionVisitor;
 import com.example.robotkarolar.karollogic_ben.instructions.expressions.Expression;
 
-public class If extends Instruction {
+public class If extends ControlFlow {
 
     private final Expression condition;
     private final CodeBlock codeblock;

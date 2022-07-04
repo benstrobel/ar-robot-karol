@@ -54,6 +54,11 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     }
 
     @Override
+    public void accept(Noop noop) {
+
+    }
+
+    @Override
     public void accept(And and) {
 
     }

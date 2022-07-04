@@ -7,24 +7,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.robotkarolar.karollogic_ben.instructions.statements.LeftTurn
+import com.example.robotkarolar.karollogic_ben.instructions.statements.Place
+import com.example.robotkarolar.karollogic_ben.instructions.statements.Step
 import com.example.robotkarolar.karollogic_ramona.Parts.Command
 import com.example.robotkarolar.karollogic_ramona.enums.CommandType
 import com.example.robotkarolar.uiviews.components.CodeNavigator
 import com.example.robotkarolar.uiviews.components.CodeRow
-import com.example.robotkarolar.uiviews.components.CommandButtons
+import com.example.robotkarolar.uiviews.components.StatementButtons
 import com.example.robotkarolar.uiviews.components.ControllFlowButtons
 
 @Composable
 @ExperimentalMaterialApi
-fun CodeView(viewModel: CodeViewModel) {
+fun CodeView(viewModel: CodeViewModel2) {
     Column(modifier = Modifier.padding(5.dp)) {
 
         Text(text = "RoboterCarolAR")
@@ -38,7 +39,7 @@ fun CodeView(viewModel: CodeViewModel) {
             .padding(5.dp)
             .verticalScroll(rememberScrollState())
         ) {
-            CodeRow(codeParts = viewModel.chain.value, CodeCursorModel(viewModel.currentIndex.value))
+            CodeRow(viewModel.codeBlock.value, viewModel.cursor)
         }
 
         Box(modifier = Modifier
@@ -58,7 +59,7 @@ fun CodeView(viewModel: CodeViewModel) {
             .verticalScroll(rememberScrollState())
         ) {
             Column() {
-                CommandButtons(viewModel = viewModel)
+                StatementButtons(viewModel = viewModel)
                 ControllFlowButtons(viewModel = viewModel)
             }
         }
@@ -69,10 +70,10 @@ fun CodeView(viewModel: CodeViewModel) {
 @Composable
 @ExperimentalMaterialApi
 fun CodeViewPreview() {
-    var viewModel = CodeViewModel()
-    viewModel.addToCode(Command(CommandType.TURNRIGHT))
-    viewModel.addToCode(Command(CommandType.TURN))
-    viewModel.addToCode(Command(CommandType.STEP))
+    var viewModel = CodeViewModel2()
+    viewModel.addInstruction(LeftTurn())
+    viewModel.addInstruction(Place())
+    viewModel.addInstruction(Step())
 
     CodeView(viewModel = viewModel)
 }

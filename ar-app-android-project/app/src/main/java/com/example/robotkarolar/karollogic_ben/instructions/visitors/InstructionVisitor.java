@@ -15,6 +15,7 @@ public interface InstructionVisitor {
     void accept(Place place);
     void accept(RightTurn rightTurn);
     void accept(Step step);
+    void accept(Noop noop);
 
     // Expressions
     void accept(And and);

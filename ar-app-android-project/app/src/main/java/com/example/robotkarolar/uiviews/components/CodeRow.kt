@@ -5,88 +5,86 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.robotkarolar.karollogic_ramona.Parts.Chain
-import com.example.robotkarolar.karollogic_ramona.Parts.CodeParts
-import com.example.robotkarolar.karollogic_ramona.Parts.Command
-import com.example.robotkarolar.karollogic_ramona.Parts.ControllFlow
-import com.example.robotkarolar.karollogic_ramona.conditions.BoolValue
-import com.example.robotkarolar.karollogic_ramona.conditions.Conditions
-import com.example.robotkarolar.karollogic_ramona.enums.CommandType
-import com.example.robotkarolar.karollogic_ramona.enums.ConditionType
-import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
-import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
-import com.example.robotkarolar.uiviews.CodeCursorModel
+import com.example.robotkarolar.karollogic_ben.instructions.Instruction
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While
+import com.example.robotkarolar.karollogic_ben.instructions.expressions.And
+import com.example.robotkarolar.karollogic_ben.instructions.expressions.IsBlock
+import com.example.robotkarolar.karollogic_ben.instructions.expressions.IsBorder
+import com.example.robotkarolar.karollogic_ben.instructions.expressions.Not
+import com.example.robotkarolar.karollogic_ben.instructions.statements.*
 
 @Composable
 @ExperimentalMaterialApi
-fun CodeRow(codeParts: CodeParts, codeCursorModel: CodeCursorModel) {
+fun CodeRow(codeBlock: Instruction, cursor: MutableState<Instruction>) {
     Column {
-        when(codeParts) {
-            is Command -> DismissableCodeSnippet(codeParts = codeParts)
-            is Chain -> {
-                if(codeParts.code.size == 0 && codeCursorModel.cursorIndex == codeCursorModel.currentIndex) {
-                    CodeCursor()
-                }
-                codeParts.code.forEach {
-                    if (codeCursorModel.cursorIndex == codeCursorModel.currentIndex) {
+        when(codeBlock) {
+            is CodeBlock -> {
+                (codeBlock as CodeBlock).instructions.forEach {
+                    CodeRow(codeBlock = it, cursor = cursor)
+                    if(codeBlock == cursor.value) {
                         CodeCursor()
                     }
-                    CodeRow(codeParts = it, codeCursorModel)
-                    codeCursorModel.pushCursor()
-                }
-                if (codeParts.code.size != 0 && codeCursorModel.cursorIndex == codeCursorModel.currentIndex) {
-                    CodeCursor()
                 }
             }
-            is ControllFlow -> {
-                when(codeParts.controllFlowType) {
-                    ControllFlowType.IF -> {
-                        DismissableCodeSnippet(codeParts = codeParts)
-                        codeCursorModel.pushCursor()
-                        Row {
-                            Spacer(modifier = Modifier.padding(15.dp))
-                            CodeRow(codeParts = codeParts.codeParts, codeCursorModel)
-                        }
-                    }
-                    ControllFlowType.WHILE -> {
-                        DismissableCodeSnippet(codeParts = codeParts)
-                        codeCursorModel.pushCursor()
-                        Row {
-                            Spacer(modifier = Modifier.padding(15.dp))
-                            CodeRow(codeParts = codeParts.codeParts, codeCursorModel)
-                        }
-                    }
+            is If -> {
+                DismissableCodeSnippet(instruction = codeBlock, cursor)
+                Row {
+                    Spacer(modifier = Modifier.padding(15.dp))
+                    CodeRow(codeBlock = codeBlock.codeBlock, cursor = cursor)
                 }
             }
-            else -> "Error"
+            is While -> {
+                DismissableCodeSnippet(instruction = codeBlock, cursor)
+                Row {
+                    Spacer(modifier = Modifier.padding(15.dp))
+                    CodeRow(codeBlock = codeBlock.codeBlock, cursor = cursor)
+                }
+            }
+            is End, is LeftTurn, is Lift, is Place, is RightTurn, is Step -> {
+                DismissableCodeSnippet(instruction = codeBlock, cursor = cursor)
+            }
+        }
+        if(codeBlock == cursor.value) {
+            CodeCursor()
         }
     }
 }
 
 @Composable
-fun CodeSnippet(codeParts: CodeParts) {
+fun CodeSnippet(instruction: Instruction) {
     Box(modifier = Modifier
         .padding(5.dp)
         .fillMaxWidth()
         .clip(RoundedCornerShape(5.dp))
-        .background(codeParts.returnColor())
+        .background(MaterialTheme.colors.primary)
         .padding(5.dp)
     ) {
-        Text(text = codeParts.returnTextValue())
+        Text(text = instruction::class.java.simpleName.uppercase())
     }
 }
 
 @Composable
 @ExperimentalMaterialApi
-fun DismissableCodeSnippet(codeParts: CodeParts) {
+fun DismissableCodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>) {
     val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange =  {
-        // TODO Call removal function in logic
-        true
+        if(instruction.parent != null) {
+            when(cursor.value.parent) {
+                is CodeBlock -> cursor.value = (instruction.parent as CodeBlock).getPreviousBefore(instruction)
+                is While -> cursor.value = (instruction.parent as While).codeBlock.getPreviousBefore(instruction)
+                is If -> cursor.value = (instruction.parent as If).codeBlock.getPreviousBefore(instruction)
+            }
+        }
+        instruction.delete()
     })
 
     SwipeToDismiss(state = dismissState, directions = setOf(DismissDirection.EndToStart), background = {
@@ -101,14 +99,14 @@ fun DismissableCodeSnippet(codeParts: CodeParts) {
                 .fillMaxSize()
                 .background(color)
         )
-    }, dismissContent = { CodeSnippet(codeParts = codeParts)})
+    }, dismissContent = { CodeSnippet(instruction = instruction)})
 }
 
 
 @Preview
 @Composable
 fun SnippetPreview() {
-    CodeSnippet(codeParts = Command(CommandType.TURN))
+    CodeSnippet(instruction = LeftTurn())
 }
 
 @Preview
@@ -116,24 +114,12 @@ fun SnippetPreview() {
 @ExperimentalMaterialApi
 fun CodeRowPreview() {
     //Example Code for testing
-    var command1: Command = Command(CommandType.STEP)
-    var command2: Command = Command(CommandType.PLACEWATER)
-    var command4: Command = Command(CommandType.TURNLEFT)
 
-    var command3: Command = Command(CommandType.STEP)
-    var chaine: Chain = Chain(mutableListOf(command3))
+    var controlFlow2 = If(And(Not(IsBorder()), IsBlock()), CodeBlock(arrayOf(Step())))
 
-    var condition: Conditions = Conditions(
-        BoolValue(ExpressionTyp.NOTISBOARDER),
-        BoolValue(ExpressionTyp.ISBLOCK), ConditionType.AND)
-    var controllFlow2: ControllFlow = ControllFlow(ControllFlowType.IF, condition, chaine)
+    var controllFlow = While(IsBorder(), CodeBlock(arrayOf(Step(), controlFlow2)))
 
-    var chain2: Chain = Chain(mutableListOf(command3, controllFlow2))
-    var controllFlow: ControllFlow = ControllFlow(ControllFlowType.WHILE, BoolValue(ExpressionTyp.ISBOARDER), chain2)
+    var examplecode = CodeBlock(arrayOf(Step(), Place(), LeftTurn(), controllFlow, Step()))
 
-    var examplecode: MutableList<CodeParts> = mutableListOf(command1, command2, command4, controllFlow, command1)
-    val karol: Chain = Chain(examplecode)
-
-    CodeRow(codeParts = karol, CodeCursorModel(10))
-    //CodeRow(codeParts = Command(CommandType.STEP))
+    CodeRow(examplecode, remember { mutableStateOf(controllFlow) })
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CodeBlock extends Instruction {
+public class CodeBlock extends ControlFlow {
 
     private List<Instruction> instructions;
 
@@ -16,7 +16,8 @@ public class CodeBlock extends Instruction {
     }
 
     public CodeBlock(Instruction [] instructions) {
-        this.instructions = Arrays.asList(instructions);
+        this.instructions = new ArrayList<>();
+        Arrays.stream(instructions).forEach(this::addInstruction);
     }
 
     public Instruction[] getInstructions() {
@@ -25,11 +26,13 @@ public class CodeBlock extends Instruction {
 
     public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
+        instruction.setParent(this);
     }
 
     public void addInstruction(Instruction instruction, Instruction afterInstruction) {
         int foundInstructionIndex = instructions.indexOf(afterInstruction);
         instructions.add(foundInstructionIndex+1, instruction);
+        instruction.setParent(this);
     }
 
     public void removeInstruction(Instruction instruction) {
@@ -38,13 +41,36 @@ public class CodeBlock extends Instruction {
 
     public Instruction getNextAfter(Instruction instruction) {
         int foundInstructionIndex = instructions.indexOf(instruction);
-        if(foundInstructionIndex == -1 || instructions.size() -1 < foundInstructionIndex + 1) return null;
-        return instructions.get(foundInstructionIndex + 1);
+        if(foundInstructionIndex == -1 || instructions.size() -1 < foundInstructionIndex + 1) {
+         if(getParent() == null) {
+             return null;
+         } else {
+             return getParent().getParent().getCodeBlock().getNextAfter(getParent());
+         }
+        }
+
+        Instruction next = instructions.get(foundInstructionIndex + 1);
+        if(next instanceof ControlFlow) {
+            CodeBlock cb = ((ControlFlow)next).getCodeBlock();
+            if(cb.size() > 0) {
+              return cb.getInstructions()[0];
+            } else {
+                return next;
+            }
+        } else {
+            return next;
+        }
     }
 
     public Instruction getPreviousBefore(Instruction instruction) {
         int foundInstructionIndex = instructions.indexOf(instruction);
-        if(foundInstructionIndex == -1 || 0 > foundInstructionIndex - 1) return null;
+        if(foundInstructionIndex == -1 || 0 > foundInstructionIndex - 1){
+            if(getParent() == null) {
+                return null;
+            } else {
+                return getParent().getParent().getCodeBlock().getPreviousBefore(getParent());
+            }
+        }
         return instructions.get(foundInstructionIndex - 1);
     }
 
@@ -55,5 +81,10 @@ public class CodeBlock extends Instruction {
     @Override
     public void accept(InstructionVisitor visitor) {
         visitor.accept(this);
+    }
+
+    @Override
+    public CodeBlock getCodeBlock() {
+        return this;
     }
 }

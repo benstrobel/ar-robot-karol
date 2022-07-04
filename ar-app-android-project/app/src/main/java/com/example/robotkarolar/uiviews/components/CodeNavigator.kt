@@ -10,9 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.CodeViewModel2
 
 @Composable
-fun CodeNavigator(viewModel: CodeViewModel) {
+fun CodeNavigator(viewModel: CodeViewModel2) {
     Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
         NextButton(viewModel = viewModel)
         BeforeButton(viewModel = viewModel)
@@ -22,18 +23,7 @@ fun CodeNavigator(viewModel: CodeViewModel) {
 }
 
 @Composable
-fun IndexButton(viewModel: CodeViewModel) {
-    Button(onClick = {
-        //Example Code for Testing
-        viewModel.chain.value.updateIndex(-1)
-        viewModel.chain.value.printAll()
-    }) {
-        Text(text = "Index")
-    }
-}
-
-@Composable
-fun NextButton(viewModel: CodeViewModel) {
+fun NextButton(viewModel: CodeViewModel2) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.next()
@@ -43,21 +33,20 @@ fun NextButton(viewModel: CodeViewModel) {
 }
 
 @Composable
-fun BeforeButton(viewModel: CodeViewModel) {
+fun BeforeButton(viewModel: CodeViewModel2) {
     Button(onClick = {
         //Example Code for Testing
-        viewModel.before()
+        viewModel.previous()
     }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
         Text(text = "Before")
     }
 }
 
 @Composable
-fun ClearButton(viewModel: CodeViewModel) {
+fun ClearButton(viewModel: CodeViewModel2) {
     Button(onClick = {
         //Example Code for Testing
         viewModel.clear()
-        viewModel.chain.value.printAll()
     }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
         Text(text = "Clear")
     }

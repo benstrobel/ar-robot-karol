@@ -14,64 +14,70 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.example.robotkarolar.karollogic_ramona.Parts.Chain
-import com.example.robotkarolar.karollogic_ramona.Parts.Command
-import com.example.robotkarolar.karollogic_ramona.Parts.ControllFlow
-import com.example.robotkarolar.karollogic_ramona.conditions.BoolValue
-import com.example.robotkarolar.karollogic_ramona.enums.CommandType
-import com.example.robotkarolar.karollogic_ramona.enums.ControllFlowType
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If
+import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While
+import com.example.robotkarolar.karollogic_ben.instructions.expressions.*
+import com.example.robotkarolar.karollogic_ben.instructions.statements.Noop
 import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTyp
 import com.example.robotkarolar.karollogic_ramona.enums.ExpressionTypHandler
-import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.CodeViewModel2
+
+val expressionMap = mapOf(
+    "TRUE" to { True() },
+    "FALSE" to { False() },
+    "ISBLOCK" to { IsBlock() },
+    "ISBORDER" to { IsBorder() },
+    "ISEAST" to { IsEast() },
+    "ISNORTH" to { IsNorth() },
+    "ISSOUTH" to { IsSouth() },
+    "ISWEST" to { IsWest() }
+)
+
+private fun newCodeBlock(): CodeBlock {
+    val noop = Noop()
+    val block = CodeBlock()
+    block.addInstruction(noop)
+    return block
+}
 
 @Composable
-fun ControllFlowButtons(viewModel: CodeViewModel) {
+fun ControllFlowButtons(viewModel: CodeViewModel2) {
     Column() {
-        ControllFlowButton(viewModel = viewModel, controllFlowTyp = ControllFlowType.IF)
-        ControllFlowButton(viewModel = viewModel, controllFlowTyp = ControllFlowType.WHILE)
+        ControllFlowButton({expr -> val block = newCodeBlock(); val cf = If(expr, block); viewModel.addInstruction(cf); block.parent = cf}, "IF")
+        ControllFlowButton({expr -> val block = newCodeBlock(); val cf = While(expr, block); viewModel.addInstruction(cf); block.parent = cf}, "WHILE")
     }
 }
 
 @Preview
 @Composable
 fun ControllFlowButtonPrev() {
-    var viewModel = CodeViewModel()
+    var viewModel = CodeViewModel2()
     ControllFlowButtons(viewModel = viewModel)
 }
 
 @Composable
-fun ControllFlowButton(viewModel: CodeViewModel, controllFlowTyp: ControllFlowType) {
+fun ControllFlowButton(lambda: (Expression) -> Unit, buttonName: String) {
 
-    var selectedItem = remember {mutableStateOf(ExpressionTyp.ISBLOCK)}
+    var selectedExpression: MutableState<Expression> = remember { mutableStateOf(IsBorder())}
 
     Button(modifier = Modifier
         .padding(5.dp) ,
-        onClick = {
-        when(controllFlowTyp) {
-            ControllFlowType.WHILE -> viewModel.addToCode(ControllFlow(ControllFlowType.WHILE, BoolValue(
-                selectedItem.value), Chain(mutableListOf()))) //condition should be pickable
-            ControllFlowType.IF -> viewModel.addToCode(ControllFlow(ControllFlowType.IF, BoolValue(
-                selectedItem.value), Chain(mutableListOf()))) //condition should be pickable
-        }
-
-            //Testing TODO:REMOVE
-            viewModel.chain.value.printAll()
-    }) {
+        onClick = {lambda.invoke(selectedExpression.value)}) {
         Row() {
-            Text(text = (controllFlowTyp.toString()))
+            Text(text = (buttonName))
 
             //Dropdown
             val listEnums = enumValues<ExpressionTyp>().toList()
             val list = listEnums.map { ExpressionTypHandler().toString(it) }
-            dropDownMenu(list,selectedItem)
+            dropDownMenu(list,selectedExpression)
         }
     }
 }
 
 @Composable
-fun dropDownMenu(list: List<String>, selectedItem2: MutableState<ExpressionTyp>) {
+fun dropDownMenu(list: List<String>, selectedExpression: MutableState<Expression>) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf("") }
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -83,10 +89,9 @@ fun dropDownMenu(list: List<String>, selectedItem2: MutableState<ExpressionTyp>)
 
     Column(modifier = Modifier.padding(20.dp)) {
         OutlinedTextField(
-            value = selectedItem,
+            value = selectedExpression.value::class.java.simpleName.uppercase(),
             onValueChange = {
-                selectedItem = it
-                selectedItem2.value = ExpressionTypHandler().fromString(selectedItem)
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,14 +109,14 @@ fun dropDownMenu(list: List<String>, selectedItem2: MutableState<ExpressionTyp>)
             onDismissRequest = { expanded = false },
             modifier = Modifier.width(with(LocalDensity.current){ textFieldSize.width.toDp() })
         ) {
-            list.forEach { label ->
+            expressionMap.toList().forEach { value ->
                 DropdownMenuItem(onClick = {
-                    selectedItem = label
-                    selectedItem2.value = ExpressionTypHandler().fromString(selectedItem)
+                    selectedExpression.value = value.second.invoke()
                     expanded = false
                 }) {
-                    Text(text = label)
+                    Text(text = value.first)
                 }
+
             }
         }
     }

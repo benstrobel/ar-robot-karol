@@ -7,44 +7,53 @@ import com.example.robotkarolar.karollogic_ben.instructions.Instruction
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.If
 import com.example.robotkarolar.karollogic_ben.instructions.controlflow.While
+import com.example.robotkarolar.karollogic_ben.instructions.statements.Noop
 
 class CodeViewModel2: ViewModel(){
-    val codeBlock: MutableState<Instruction> = mutableStateOf(CodeBlock())
-    var cursor: Instruction = codeBlock.value
+    val first = Noop()
+    val root = CodeBlock(arrayOf(first))
+    val codeBlock: MutableState<Instruction> = mutableStateOf(root)
+    var cursor: MutableState<Instruction> = mutableStateOf(first)
 
-    fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor, afterChild: Instruction?) {
+    fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds
             if(afterChild != null) {
                 when(currentCursor) {
                     is CodeBlock -> {
                         currentCursor.addInstruction(instruction, afterChild)
-                        cursor = instruction
-                        cursor.parent = currentCursor
+                        cursor.value = instruction
                     }
                     is If -> {
                         currentCursor.codeBlock.addInstruction(instruction, afterChild)
-                        cursor = instruction
-                        cursor.parent = currentCursor
+                        cursor.value = instruction
                     }
                     is While -> {
                         currentCursor.codeBlock.addInstruction(instruction, afterChild)
-                        cursor = instruction
-                        cursor.parent = currentCursor
+                        cursor.value = instruction
                     }
                 }
             } else {
                 if(currentCursor.parent == null) { // The only element without parent is the root codeBlock
                     (currentCursor as CodeBlock).addInstruction(instruction)
-                    cursor = instruction
-                    cursor.parent = currentCursor
+                    cursor.value = instruction
                 } else { // The cursor always points to the element after which the next instruction should be inserted (but in the same scope as the element pointed to)
                     addInstruction(instruction, currentCursor.parent, currentCursor)
+                    return
+                }
+            }
+
+            when(instruction) {
+                is If -> {
+                    cursor.value = instruction.codeBlock.instructions[0]
+                }
+                is While -> {
+                    cursor.value = instruction.codeBlock.instructions[0]
                 }
             }
         }
     }
 
-    fun next(currentCursor: Instruction = cursor, nextFrom: Instruction? = null) {
+    fun next(currentCursor: Instruction = cursor.value, nextFrom: Instruction? = null) {
         var codeBlock: CodeBlock? = null
 
         if(nextFrom != null) {
@@ -69,10 +78,11 @@ class CodeViewModel2: ViewModel(){
             return
         }
 
-        cursor = codeBlock!!.getNextAfter(nextFrom)
+        val next = codeBlock!!.getNextAfter(nextFrom)
+        if(next != null) cursor.value = next
     }
 
-    fun previous(currentCursor: Instruction = cursor, previousFrom: Instruction? = null) {
+    fun previous(currentCursor: Instruction = cursor.value, previousFrom: Instruction? = null) {
         var codeBlock: CodeBlock? = null
 
         if(previousFrom != null) {
@@ -92,16 +102,17 @@ class CodeViewModel2: ViewModel(){
             }
         } else {
             if(currentCursor.parent != null) {
-                next(currentCursor.parent, currentCursor)
+                previous(currentCursor.parent, currentCursor)
             }
             return
         }
 
-        cursor = codeBlock!!.getPreviousBefore(previousFrom)
+        val previous = codeBlock!!.getPreviousBefore(previousFrom)
+        if(previous != null)  cursor.value = previous
     }
 
     fun clear() {
         codeBlock.value = CodeBlock()
-        cursor = codeBlock.value
+        cursor.value = codeBlock.value
     }
 }

@@ -39,6 +39,11 @@ public class InstructionPrintVisitor implements InstructionVisitor{
     }
 
     @Override
+    public void accept(Noop noop) {
+        System.out.println("Noop");
+    }
+
+    @Override
     public void accept(And and) {
         and.getLeft().accept(this);
         System.out.println("And");
