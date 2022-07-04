@@ -14,11 +14,9 @@ import com.example.robotkarolar.karollogic.instructions.Instruction
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
-import com.example.robotkarolar.karollogic.instructions.expressions.And
-import com.example.robotkarolar.karollogic.instructions.expressions.IsBlock
-import com.example.robotkarolar.karollogic.instructions.expressions.IsBorder
-import com.example.robotkarolar.karollogic.instructions.expressions.Not
+import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
+import com.example.robotkarolar.karollogic.instructions.visitors.ExpressionNameRenderVisitor
 
 @Composable
 @ExperimentalMaterialApi
@@ -58,15 +56,59 @@ fun CodeRow(codeBlock: Instruction, cursor: MutableState<Instruction>) {
 }
 
 @Composable
-fun CodeSnippet(instruction: Instruction) {
-    Box(modifier = Modifier
-        .padding(5.dp)
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(5.dp))
-        .background(MaterialTheme.colors.primary)
-        .padding(5.dp)
-    ) {
-        Text(text = instruction::class.java.simpleName.uppercase())
+fun CodeSnippet(instruction: Instruction, expression: Boolean = false) {
+
+    var modifier = if (expression)
+        Modifier
+            .clip(RoundedCornerShape(5.dp))
+            .background(MaterialTheme.colors.secondary)
+    else
+        Modifier
+            .padding(5.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(5.dp))
+            .background(MaterialTheme.colors.primary)
+            .padding(5.dp)
+
+    Box(modifier = modifier) {
+        Row(){
+            when(instruction) {
+                is If -> {
+                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text= " ( ")
+                    CodeSnippet(instruction = instruction.condition, true)
+                    Text(text= " ) ")
+                }
+                is While -> {
+                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text= " ( ")
+                    CodeSnippet(instruction = instruction.condition, true)
+                    Text(text= " ) ")
+                }
+                is And -> {
+                    CodeSnippet(instruction = instruction.left, true)
+                    Text(text= " ")
+                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text= " ")
+                    CodeSnippet(instruction = instruction.right, true)
+                }
+                is Or -> {
+                    CodeSnippet(instruction = instruction.left, true)
+                    Text(text= " ")
+                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text= " ")
+                    CodeSnippet(instruction = instruction.right, true)
+                }
+                is Not -> {
+                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text= " ")
+                    CodeSnippet(instruction = instruction.child, true)
+                }
+                else -> {
+                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                }
+            }
+        }
     }
 }
 
