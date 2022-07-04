@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -37,21 +34,21 @@ fun CodeRow(codeBlock: Instruction, cursor: MutableState<Instruction>) {
                 }
             }
             is If -> {
-                DismissableCodeSnippet(instruction = codeBlock, cursor)
+                key(codeBlock.id) { DismissableCodeSnippet(instruction = codeBlock, cursor) }
                 Row {
                     Spacer(modifier = Modifier.padding(15.dp))
                     CodeRow(codeBlock = codeBlock.codeBlock, cursor = cursor)
                 }
             }
             is While -> {
-                DismissableCodeSnippet(instruction = codeBlock, cursor)
+                key(codeBlock.id) { DismissableCodeSnippet(instruction = codeBlock, cursor) }
                 Row {
                     Spacer(modifier = Modifier.padding(15.dp))
                     CodeRow(codeBlock = codeBlock.codeBlock, cursor = cursor)
                 }
             }
             is End, is LeftTurn, is Lift, is Place, is RightTurn, is Step -> {
-                DismissableCodeSnippet(instruction = codeBlock, cursor = cursor)
+                key(codeBlock.id) { DismissableCodeSnippet(instruction = codeBlock, cursor) }
             }
         }
         if(codeBlock == cursor.value) {

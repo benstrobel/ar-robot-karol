@@ -8,6 +8,13 @@ import com.example.robotkarolar.karollogic_ben.instructions.visitors.Instruction
 
 public abstract class Instruction {
 
+    private static long nextId = 0;
+    private final long id;
+
+    public Instruction() {
+        id = nextId++;
+    }
+
     private ControlFlow parent;
 
     public void setParent(ControlFlow parent) {
@@ -19,6 +26,10 @@ public abstract class Instruction {
     }
 
     public abstract void accept(InstructionVisitor visitor);
+
+    public long getId() {
+        return id;
+    }
 
     public boolean delete() {
         if(parent == null) return false;
