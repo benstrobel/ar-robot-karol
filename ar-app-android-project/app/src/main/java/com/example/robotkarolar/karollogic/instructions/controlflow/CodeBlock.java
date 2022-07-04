@@ -63,12 +63,26 @@ public class CodeBlock extends ControlFlow {
     }
 
     public Instruction getPreviousBefore(Instruction instruction) {
+        return getPreviousBefore(instruction, false);
+    }
+
+    public Instruction getPreviousBefore(Instruction instruction, boolean hasSteppedOut) {
+
+        if(instruction instanceof ControlFlow && !hasSteppedOut) {
+            CodeBlock cb = ((ControlFlow)instruction).getCodeBlock();
+            if(cb.size() <= 1) { // Noop is always in codeblock
+                return instruction;
+            } else {
+                return cb.instructions.get(cb.size()-1);
+            }
+        }
+
         int foundInstructionIndex = instructions.indexOf(instruction);
         if(foundInstructionIndex == -1 || 0 > foundInstructionIndex - 1){
             if(getParent() == null) {
                 return null;
             } else {
-                return getParent().getParent().getCodeBlock().getPreviousBefore(getParent());
+                return getParent().getParent().getCodeBlock().getPreviousBefore(getParent(), true);
             }
         }
         return instructions.get(foundInstructionIndex - 1);
