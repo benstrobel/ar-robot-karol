@@ -1,6 +1,10 @@
 package com.example.robotkarolar.karollogic.instructions;
 
 import com.example.robotkarolar.karollogic.instructions.controlflow.ControlFlow;
+import com.example.robotkarolar.karollogic.instructions.expressions.And;
+import com.example.robotkarolar.karollogic.instructions.expressions.EmptyExpression;
+import com.example.robotkarolar.karollogic.instructions.expressions.Not;
+import com.example.robotkarolar.karollogic.instructions.expressions.Or;
 import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisitor;
 
 public abstract class Instruction {
@@ -12,13 +16,13 @@ public abstract class Instruction {
         id = nextId++;
     }
 
-    private ControlFlow parent;
+    private Instruction parent;
 
-    public void setParent(ControlFlow parent) {
+    public void setParent(Instruction parent) {
         this.parent = parent;
     }
 
-    public ControlFlow getParent() {
+    public Instruction getParent() {
         return parent;
     }
 
@@ -30,7 +34,31 @@ public abstract class Instruction {
 
     public boolean delete() {
         if(parent == null) return false;
-        parent.getCodeBlock().removeInstruction(this);
+
+        if(parent instanceof ControlFlow) {
+            ((ControlFlow)parent).getCodeBlock().removeInstruction(this);
+        } else if (parent instanceof Not) {
+            ((Not) parent).setChild(new EmptyExpression());
+        } else if (parent instanceof And) {
+            And and = ((And)parent);
+            if(and.getLeft() == this) {
+                and.setLeft(new EmptyExpression());
+            } else if (and.getRight() == this) {
+                and.setRight(new EmptyExpression());
+            } else {
+                return false;
+            }
+        } else if (parent instanceof Or) {
+            Or or = ((Or)parent);
+            if(or.getLeft() == this) {
+                or.setLeft(new EmptyExpression());
+            } else if (or.getRight() == this) {
+                or.setRight(new EmptyExpression());
+            } else {
+                return false;
+            }
+        }
+
         return true;
     }
 }

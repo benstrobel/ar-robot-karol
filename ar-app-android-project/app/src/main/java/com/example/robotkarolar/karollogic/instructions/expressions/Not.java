@@ -4,9 +4,13 @@ import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisi
 
 public class Not extends Expression {
 
-    private final Expression child;
+    private Expression child;
 
     public Not(Expression child) {
+        this.child = child;
+    }
+
+    public void setChild(Expression child) {
         this.child = child;
     }
 

@@ -16,7 +16,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
-import com.example.robotkarolar.karollogic.instructions.visitors.ExpressionNameRenderVisitor
+import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 
 @Composable
 @ExperimentalMaterialApi
@@ -56,7 +56,7 @@ fun CodeRow(codeBlock: Instruction, cursor: MutableState<Instruction>) {
 }
 
 @Composable
-fun CodeSnippet(instruction: Instruction, expression: Boolean = false) {
+fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, expression: Boolean = false) {
 
     var modifier = if (expression)
         Modifier
@@ -74,38 +74,75 @@ fun CodeSnippet(instruction: Instruction, expression: Boolean = false) {
         Row(){
             when(instruction) {
                 is If -> {
-                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text = NameRenderVisitor(
+                        instruction
+                    ).get())
                     Text(text= " ( ")
-                    CodeSnippet(instruction = instruction.condition, true)
+                    if(instruction.condition == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.condition, cursor, true)
                     Text(text= " ) ")
                 }
                 is While -> {
-                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text = NameRenderVisitor(
+                        instruction
+                    ).get())
                     Text(text= " ( ")
-                    CodeSnippet(instruction = instruction.condition, true)
+                    if(instruction.condition == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.condition, cursor, true)
                     Text(text= " ) ")
                 }
                 is And -> {
-                    CodeSnippet(instruction = instruction.left, true)
+                    Text(text= " ( ")
+                    if(instruction.left == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.left, cursor, true)
                     Text(text= " ")
-                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text = NameRenderVisitor(
+                        instruction
+                    ).get())
                     Text(text= " ")
-                    CodeSnippet(instruction = instruction.right, true)
+                    if(instruction.right == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.right, cursor, true)
+                    Text(text= " ) ")
                 }
                 is Or -> {
-                    CodeSnippet(instruction = instruction.left, true)
+                    Text(text= " ( ")
+                    if(instruction.left == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.left, cursor, true)
                     Text(text= " ")
-                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text = NameRenderVisitor(
+                        instruction
+                    ).get())
                     Text(text= " ")
-                    CodeSnippet(instruction = instruction.right, true)
+                    if(instruction.right == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.right, cursor, true)
+                    Text(text= " ) ")
                 }
                 is Not -> {
-                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text = NameRenderVisitor(
+                        instruction
+                    ).get())
                     Text(text= " ")
-                    CodeSnippet(instruction = instruction.child, true)
+                    if(instruction.child == cursor.value) {
+                        CodeCursor()
+                    }
+                    CodeSnippet(instruction = instruction.child, cursor, true)
                 }
                 else -> {
-                    Text(text = ExpressionNameRenderVisitor(instruction).get())
+                    Text(text = NameRenderVisitor(
+                        instruction
+                    ).get())
                 }
             }
         }
@@ -138,14 +175,15 @@ fun DismissableCodeSnippet(instruction: Instruction, cursor: MutableState<Instru
                 .fillMaxSize()
                 .background(color)
         )
-    }, dismissContent = { CodeSnippet(instruction = instruction)})
+    }, dismissContent = { CodeSnippet(instruction = instruction, cursor)})
 }
 
 
 @Preview
 @Composable
 fun SnippetPreview() {
-    CodeSnippet(instruction = LeftTurn())
+    val instruction = LeftTurn()
+    CodeSnippet(instruction = instruction, remember { mutableStateOf(instruction) })
 }
 
 @Preview

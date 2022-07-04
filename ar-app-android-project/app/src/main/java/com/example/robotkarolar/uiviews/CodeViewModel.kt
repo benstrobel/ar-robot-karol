@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.robotkarolar.karollogic.instructions.Instruction
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic.instructions.controlflow.ControlFlow
 import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
+import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.Noop
+import kotlin.math.exp
 
 class CodeViewModel: ViewModel(){
     val first = Noop()
@@ -33,6 +36,40 @@ class CodeViewModel: ViewModel(){
                     }
                 }
             } else {
+                if(currentCursor is EmptyExpression && instruction is Expression) {
+                    val parent = currentCursor.parent
+                    when(parent) {
+                        is If -> {
+                            parent.condition = instruction
+                            next()
+                        }
+                        is While -> {
+                            parent.condition = instruction
+                            next()
+                        }
+                        is Not -> {
+                            parent.child = instruction
+                            next()
+                        }
+                        is And -> {
+                            if(parent.left == currentCursor) {
+                                parent.left = instruction
+                            } else {
+                                parent.right = instruction
+                            }
+                            next()
+                        }
+                        is Or -> {
+                            if(parent.left == currentCursor) {
+                                parent.left = instruction
+                            } else {
+                                parent.right = instruction
+                            }
+                            next()
+                        }
+                    }
+                }
+
                 if(currentCursor.parent == null) { // The only element without parent is the root codeBlock
                     (currentCursor as CodeBlock).addInstruction(instruction)
                     cursor.value = instruction
@@ -44,13 +81,62 @@ class CodeViewModel: ViewModel(){
 
             when(instruction) {
                 is If -> {
-                    cursor.value = instruction.codeBlock.instructions[0]
+                    cursor.value = instruction.condition
                 }
                 is While -> {
-                    cursor.value = instruction.codeBlock.instructions[0]
+                    cursor.value = instruction.condition
                 }
             }
         }
+    }
+
+    private fun nextEmptyExpressionDown(expression: Expression): Expression? {
+        when(expression) {
+            is Not -> {
+                return nextEmptyExpressionDown(expression.child)
+            }
+            is And -> {
+                val expr = nextEmptyExpressionDown(expression.left)
+                if(expr != null) return expr;
+                return nextEmptyExpressionDown(expression.right)
+            }
+            is Or -> {
+                val expr = nextEmptyExpressionDown(expression.left)
+                if(expr != null) return expr;
+                return nextEmptyExpressionDown(expression.right)
+            }
+            is EmptyExpression -> {
+                return expression
+            }
+            else -> {
+                return null
+            }
+        }
+    }
+
+    private fun nextEmptyExpressionOrParentInstruction(expression: Expression): Instruction {
+        if(expression.parent is Expression) {
+            when(expression.parent) {
+                is Not -> {
+                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                }
+                is And -> {
+                    if((expression.parent as And).left == expression) {
+                        val expr = nextEmptyExpressionDown(expression)
+                        if(expr != null) return expr
+                    }
+                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                }
+                is Or -> {
+                    if((expression.parent as Or).left == expression) {
+                        val expr = nextEmptyExpressionDown(expression)
+                        if(expr != null) return expr
+                    }
+                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                }
+            }
+        }
+        return (expression.parent as ControlFlow).codeBlock.instructions[0]
     }
 
     fun next(currentCursor: Instruction = cursor.value, nextFrom: Instruction? = null) {
@@ -68,18 +154,71 @@ class CodeViewModel: ViewModel(){
                     codeBlock = currentCursor.codeBlock
                 }
                 else -> {
-                    throw Exception("Invariant broken, Instructions must always have control flow as parents")
+                    throw Exception("Invariant broken, Instructions must always have control flow or \"not/or/and\" as parents")
                 }
             }
-        } else {
-            if(currentCursor.parent != null) {
-                next(currentCursor.parent, currentCursor)
-            }
+
+            val next = codeBlock!!.getNextAfter(nextFrom)
+            if(next != null) cursor.value = next
             return
         }
 
-        val next = codeBlock!!.getNextAfter(nextFrom)
-        if(next != null) cursor.value = next
+        if(currentCursor.parent != null) {
+            if(currentCursor is Expression) {
+                cursor.value = nextEmptyExpressionOrParentInstruction(currentCursor)
+            } else {
+                next(currentCursor.parent, currentCursor)
+            }
+        }
+    }
+
+    private fun previousEmptyExpressionDown(expression: Expression): Expression? {
+        when(expression) {
+            is Not -> {
+                return previousEmptyExpressionDown(expression.child)
+            }
+            is And -> {
+                val expr = previousEmptyExpressionDown(expression.right)
+                if(expr != null) return expr;
+                return previousEmptyExpressionDown(expression.left)
+            }
+            is Or -> {
+                val expr = previousEmptyExpressionDown(expression.right)
+                if(expr != null) return expr;
+                return previousEmptyExpressionDown(expression.left)
+            }
+            is EmptyExpression -> {
+                return expression
+            }
+            else -> {
+                return null
+            }
+        }
+    }
+
+    private fun previousEmptyExpressionOrParentInstruction(expression: Expression): Instruction {
+        if(expression.parent is Expression) {
+            when(expression.parent) {
+                is Not -> {
+                    return previousEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                }
+                is And -> {
+                    if((expression.parent as And).right == expression) {
+                        val expr = previousEmptyExpressionDown(expression)
+                        if(expr != null) return expr
+                    }
+                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                }
+                is Or -> {
+                    if((expression.parent as Or).right == expression) {
+                        val expr = previousEmptyExpressionDown(expression)
+                        if(expr != null) return expr
+                    }
+                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                }
+            }
+        }
+        return (expression.parent as ControlFlow).codeBlock.instructions[0]
     }
 
     fun previous(currentCursor: Instruction = cursor.value, previousFrom: Instruction? = null) {
@@ -97,18 +236,22 @@ class CodeViewModel: ViewModel(){
                     codeBlock = currentCursor.codeBlock
                 }
                 else -> {
-                    throw Exception("Invariant broken, Instructions must always have control flow as parents")
+                    throw Exception("Invariant broken, Instructions must always have control flow or \"not/or/and\" as parents")
                 }
             }
-        } else {
-            if(currentCursor.parent != null) {
-                previous(currentCursor.parent, currentCursor)
-            }
+
+            val previous = codeBlock!!.getPreviousBefore(previousFrom)
+            if(previous != null)  cursor.value = previous
             return
         }
 
-        val previous = codeBlock!!.getPreviousBefore(previousFrom)
-        if(previous != null)  cursor.value = previous
+        if(currentCursor.parent != null) {
+            if(currentCursor is Expression) {
+                cursor.value = previousEmptyExpressionOrParentInstruction(currentCursor)
+            } else {
+                previous(currentCursor.parent, currentCursor)
+            }
+        }
     }
 
     fun clear() {

@@ -5,12 +5,16 @@ import com.example.robotkarolar.karollogic.instructions.expressions.Expression;
 
 public class While extends ControlFlow {
 
-    private final Expression condition;
+    private Expression condition;
     private final CodeBlock codeBlock;
 
     public While(Expression condition, CodeBlock codeBlock) {
         this.condition = condition;
         this.codeBlock = codeBlock;
+    }
+
+    public void setCondition(Expression condition) {
+        this.condition = condition;
     }
 
     public Expression getCondition() {

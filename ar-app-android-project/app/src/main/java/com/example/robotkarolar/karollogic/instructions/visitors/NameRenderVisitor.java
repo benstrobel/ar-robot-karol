@@ -25,11 +25,11 @@ import com.example.robotkarolar.karollogic.instructions.statements.Place;
 import com.example.robotkarolar.karollogic.instructions.statements.RightTurn;
 import com.example.robotkarolar.karollogic.instructions.statements.Step;
 
-public class ExpressionNameRenderVisitor implements InstructionVisitor {
+public class NameRenderVisitor implements InstructionVisitor {
 
     String renderedName;
 
-    public ExpressionNameRenderVisitor(Instruction expression) {
+    public NameRenderVisitor(Instruction expression) {
         expression.accept(this);
     }
 
@@ -39,37 +39,37 @@ public class ExpressionNameRenderVisitor implements InstructionVisitor {
 
     @Override
     public void accept(End end) {
-
+        renderedName = "END";
     }
 
     @Override
     public void accept(LeftTurn leftTurn) {
-
+        renderedName = "LEFTTURN";
     }
 
     @Override
     public void accept(Lift lift) {
-
+        renderedName = "LIFT";
     }
 
     @Override
     public void accept(Place place) {
-
+        renderedName = "PLACE";
     }
 
     @Override
     public void accept(RightTurn rightTurn) {
-
+        renderedName = "RIGHTTURN";
     }
 
     @Override
     public void accept(Step step) {
-
+        renderedName = "STEP";
     }
 
     @Override
     public void accept(Noop noop) {
-
+        renderedName = "";
     }
 
     @Override
@@ -144,6 +144,6 @@ public class ExpressionNameRenderVisitor implements InstructionVisitor {
 
     @Override
     public void accept(CodeBlock codeBlock) {
-
+        renderedName = "";
     }
 }

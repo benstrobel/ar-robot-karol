@@ -1,104 +1,99 @@
-package com.example.robotkarolar.karollogic.instructions.controlflow;
+package com.example.robotkarolar.karollogic.instructions.controlflow
 
-import com.example.robotkarolar.karollogic.instructions.Instruction;
-import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisitor;
+import com.example.robotkarolar.karollogic.instructions.Instruction
+import com.example.robotkarolar.karollogic.instructions.controlflow.ControlFlow
+import com.example.robotkarolar.karollogic.instructions.controlflow.While
+import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisitor
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+class CodeBlock : ControlFlow {
+    private var instructions: MutableList<Instruction>
 
-public class CodeBlock extends ControlFlow {
-
-    private List<Instruction> instructions;
-
-    public CodeBlock() {
-        this.instructions = new ArrayList<>();
+    constructor() {
+        instructions = ArrayList()
     }
 
-    public CodeBlock(Instruction [] instructions) {
-        this.instructions = new ArrayList<>();
-        Arrays.stream(instructions).forEach(this::addInstruction);
+    constructor(instructions: Array<Instruction>?) {
+        this.instructions = ArrayList()
+        Arrays.stream(instructions)
+            .forEach { instruction: Instruction -> this.addInstruction(instruction) }
     }
 
-    public Instruction[] getInstructions() {
-        return instructions.toArray(new Instruction[]{});
+    fun getInstructions(): Array<Instruction> {
+        return instructions.toArray<Instruction>(arrayOf<Instruction>())
     }
 
-    public void addInstruction(Instruction instruction) {
-        instructions.add(instruction);
-        instruction.setParent(this);
+    fun addInstruction(instruction: Instruction) {
+        instructions.add(instruction)
+        instruction.parent = this
     }
 
-    public void addInstruction(Instruction instruction, Instruction afterInstruction) {
-        int foundInstructionIndex = instructions.indexOf(afterInstruction);
-        instructions.add(foundInstructionIndex+1, instruction);
-        instruction.setParent(this);
+    fun addInstruction(instruction: Instruction, afterInstruction: Instruction) {
+        val foundInstructionIndex = instructions.indexOf(afterInstruction)
+        instructions.add(foundInstructionIndex + 1, instruction)
+        instruction.parent = this
     }
 
-    public void removeInstruction(Instruction instruction) {
-        instructions.remove(instruction);
+    fun removeInstruction(instruction: Instruction) {
+        instructions.remove(instruction)
     }
 
-    public Instruction getNextAfter(Instruction instruction) {
-        int foundInstructionIndex = instructions.indexOf(instruction);
-        if(foundInstructionIndex == -1 || instructions.size() -1 < foundInstructionIndex + 1) {
-         if(getParent() == null) {
-             return null;
-         } else {
-             return getParent();
-         }
-        }
-
-        Instruction next = instructions.get(foundInstructionIndex + 1);
-        if(next instanceof ControlFlow) {
-            CodeBlock cb = ((ControlFlow)next).getCodeBlock();
-            if(cb.size() > 0) {
-              return cb.getInstructions()[0];
+    fun getNextAfter(instruction: Instruction): Instruction? {
+        val foundInstructionIndex = instructions.indexOf(instruction)
+        if (foundInstructionIndex == -1 || instructions.size - 1 < foundInstructionIndex + 1) {
+            return if (parent == null) {
+                null
             } else {
-                return next;
+                parent
+            }
+        }
+        val next = instructions[foundInstructionIndex + 1]
+        return if (next is ControlFlow) {
+            if (next is If) {
+                val condition =
+                    next.condition
+            } else if (next is While) {
+            }
+            val cb = next.codeBlock
+            if (cb.size() > 0) {
+                cb.instructions[0]
+            } else {
+                next
             }
         } else {
-            return next;
+            next
         }
     }
 
-    public Instruction getPreviousBefore(Instruction instruction) {
-        return getPreviousBefore(instruction, false);
+    fun getPreviousBefore(instruction: Instruction): Instruction? {
+        return getPreviousBefore(instruction, false)
     }
 
-    public Instruction getPreviousBefore(Instruction instruction, boolean hasSteppedOut) {
-
-        if(instruction instanceof ControlFlow && !hasSteppedOut) {
-            CodeBlock cb = ((ControlFlow)instruction).getCodeBlock();
-            if(cb.size() <= 1) { // Noop is always in codeblock
-                return instruction;
+    fun getPreviousBefore(instruction: Instruction, hasSteppedOut: Boolean): Instruction? {
+        if (instruction is ControlFlow && !hasSteppedOut) {
+            val cb = instruction.codeBlock
+            return cb.instructions[cb.size() - 1]
+        }
+        val foundInstructionIndex = instructions.indexOf(instruction)
+        return if (foundInstructionIndex == -1 || 0 > foundInstructionIndex - 1) {
+            if (parent == null) {
+                null
             } else {
-                return cb.instructions.get(cb.size()-1);
+                (parent.parent as ControlFlow).codeBlock.getPreviousBefore(parent, true)
             }
-        }
-
-        int foundInstructionIndex = instructions.indexOf(instruction);
-        if(foundInstructionIndex == -1 || 0 > foundInstructionIndex - 1){
-            if(getParent() == null) {
-                return null;
-            } else {
-                return getParent().getParent().getCodeBlock().getPreviousBefore(getParent(), true);
-            }
-        }
-        return instructions.get(foundInstructionIndex - 1);
+        } else instructions[foundInstructionIndex - 1]
     }
 
-    public int size() {
-        return instructions.size();
+    fun size(): Int {
+        return instructions.size
     }
 
-    @Override
-    public void accept(InstructionVisitor visitor) {
-        visitor.accept(this);
+    override fun accept(visitor: InstructionVisitor) {
+        visitor.accept(this)
     }
 
-    @Override
-    public CodeBlock getCodeBlock() {
-        return this;
+    override fun getCodeBlock(): CodeBlock {
+        return this
     }
 }

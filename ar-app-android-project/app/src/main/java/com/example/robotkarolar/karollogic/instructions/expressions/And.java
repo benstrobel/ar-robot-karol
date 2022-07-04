@@ -4,11 +4,19 @@ import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisi
 
 public class And extends Expression {
 
-    private final Expression left;
-    private final Expression right;
+    private Expression left;
+    private Expression right;
 
     public And(Expression left, Expression right) {
         this.left = left;
+        this.right = right;
+    }
+
+    public void setLeft(Expression left) {
+        this.left = left;
+    }
+
+    public void setRight(Expression right) {
         this.right = right;
     }
 
