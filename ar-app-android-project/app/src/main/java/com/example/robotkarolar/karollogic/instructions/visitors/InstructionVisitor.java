@@ -29,6 +29,7 @@ public interface InstructionVisitor {
     void accept(Or or);
     void accept(True expressionTrue);
     void accept(False expressionFalse);
+    void accept(EmptyExpression emptyExpression);
 
     // Control Flow
     void accept(If controlFlowIf);

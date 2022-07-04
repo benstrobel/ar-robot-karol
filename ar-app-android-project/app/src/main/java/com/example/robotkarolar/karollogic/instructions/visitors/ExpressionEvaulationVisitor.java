@@ -65,4 +65,9 @@ public class ExpressionEvaulationVisitor implements ExpressionVisitor {
     public boolean accept(False expressionFalse) {
         return false;
     }
+
+    @Override
+    public boolean accept(EmptyExpression emptyExpression) {
+        return false;
+    }
 }

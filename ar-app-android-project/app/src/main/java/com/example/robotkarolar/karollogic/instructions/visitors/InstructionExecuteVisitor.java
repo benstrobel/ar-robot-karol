@@ -114,6 +114,11 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     }
 
     @Override
+    public void accept(EmptyExpression emptyExpression) {
+
+    }
+
+    @Override
     public void accept(If controlFlowIf) {
         ExpressionEvaulationVisitor evaulationVisitor = new ExpressionEvaulationVisitor(world);
         if(controlFlowIf.getCondition().accept(evaulationVisitor)){

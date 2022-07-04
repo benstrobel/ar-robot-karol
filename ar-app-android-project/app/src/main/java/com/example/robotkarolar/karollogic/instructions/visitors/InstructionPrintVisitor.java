@@ -104,6 +104,11 @@ public class InstructionPrintVisitor implements InstructionVisitor{
     }
 
     @Override
+    public void accept(EmptyExpression emptyExpression) {
+        System.out.println("EmptyExpression");
+    }
+
+    @Override
     public void accept(If controlFlowIf) {
         System.out.println("If");
         controlFlowIf.getCondition().accept(this);

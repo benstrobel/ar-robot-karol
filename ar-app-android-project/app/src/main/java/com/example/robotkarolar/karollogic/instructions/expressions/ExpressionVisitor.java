@@ -13,5 +13,5 @@ public interface ExpressionVisitor {
     boolean accept(Or or);
     boolean accept(True expressionTrue);
     boolean accept(False expressionFalse);
-
+    boolean accept(EmptyExpression emptyExpression);
 }
