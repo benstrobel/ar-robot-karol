@@ -61,7 +61,7 @@ fun CodeSnippet(instruction: Instruction, expression: Boolean = false) {
     var modifier = if (expression)
         Modifier
             .clip(RoundedCornerShape(5.dp))
-            .background(MaterialTheme.colors.secondary)
+            .background(MaterialTheme.colors.primary)
     else
         Modifier
             .padding(5.dp)
