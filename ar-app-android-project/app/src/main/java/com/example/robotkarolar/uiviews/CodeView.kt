@@ -37,7 +37,7 @@ fun CodeView(viewModel: CodeViewModel) {
             .padding(5.dp)
             .verticalScroll(rememberScrollState())
         ) {
-            CodeRow(viewModel.codeBlock.value, viewModel.cursor)
+            CodeRow(viewModel.root, viewModel)
         }
 
         Box(modifier = Modifier

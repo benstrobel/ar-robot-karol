@@ -17,39 +17,40 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
 import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
+import com.example.robotkarolar.uiviews.CodeViewModel
 
 @Composable
 @ExperimentalMaterialApi
-fun CodeRow(codeBlock: Instruction, cursor: MutableState<Instruction>) {
+fun CodeRow(codeBlock: Instruction, viewModel: CodeViewModel) {
     Column {
         when(codeBlock) {
             is CodeBlock -> {
                 (codeBlock as CodeBlock).instructions.forEach {
-                    CodeRow(codeBlock = it, cursor = cursor)
-                    if(codeBlock == cursor.value) {
+                    CodeRow(it, viewModel)
+                    if(codeBlock == viewModel.cursor.value) {
                         CodeCursor()
                     }
                 }
             }
             is If -> {
-                key(codeBlock.id) { DismissableCodeSnippet(instruction = codeBlock, cursor) }
+                key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
                 Row {
                     Spacer(modifier = Modifier.padding(15.dp))
-                    CodeRow(codeBlock = codeBlock.codeBlock, cursor = cursor)
+                    CodeRow(codeBlock.codeBlock, viewModel)
                 }
             }
             is While -> {
-                key(codeBlock.id) { DismissableCodeSnippet(instruction = codeBlock, cursor) }
+                key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
                 Row {
                     Spacer(modifier = Modifier.padding(15.dp))
-                    CodeRow(codeBlock = codeBlock.codeBlock, cursor = cursor)
+                    CodeRow(codeBlock.codeBlock, viewModel)
                 }
             }
             is End, is LeftTurn, is Lift, is Place, is RightTurn, is Step -> {
-                key(codeBlock.id) { DismissableCodeSnippet(instruction = codeBlock, cursor) }
+                key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
             }
         }
-        if(codeBlock == cursor.value) {
+        if(codeBlock == viewModel.cursor.value) {
             CodeCursor()
         }
     }
@@ -151,13 +152,13 @@ fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, exp
 
 @Composable
 @ExperimentalMaterialApi
-fun DismissableCodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>) {
+fun DismissableCodeSnippet(instruction: Instruction, viewModel: CodeViewModel) {
     val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange =  {
         if(instruction.parent != null) {
-            when(cursor.value.parent) {
-                is CodeBlock -> cursor.value = (instruction.parent as CodeBlock).getPreviousBefore(instruction)
-                is While -> cursor.value = (instruction.parent as While).codeBlock.getPreviousBefore(instruction)
-                is If -> cursor.value = (instruction.parent as If).codeBlock.getPreviousBefore(instruction)
+            when(viewModel.cursor.value.parent) {
+                is CodeBlock -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as CodeBlock), instruction)!!
+                is While -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as While).codeBlock, instruction)!!
+                is If -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as If).codeBlock, instruction)!!
             }
         }
         instruction.delete()
@@ -175,7 +176,7 @@ fun DismissableCodeSnippet(instruction: Instruction, cursor: MutableState<Instru
                 .fillMaxSize()
                 .background(color)
         )
-    }, dismissContent = { CodeSnippet(instruction = instruction, cursor)})
+    }, dismissContent = { CodeSnippet(instruction = instruction, viewModel.cursor)})
 }
 
 
@@ -198,5 +199,7 @@ fun CodeRowPreview() {
 
     var examplecode = CodeBlock(arrayOf(Step(), Place(), LeftTurn(), controllFlow, Step()))
 
-    CodeRow(examplecode, remember { mutableStateOf(controllFlow) })
+    val model = CodeViewModel(examplecode)
+
+    CodeRow(examplecode, model)
 }

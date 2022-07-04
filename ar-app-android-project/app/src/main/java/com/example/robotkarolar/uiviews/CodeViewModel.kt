@@ -12,9 +12,9 @@ import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.Noop
 import kotlin.math.exp
 
-class CodeViewModel: ViewModel(){
+class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val first = Noop()
-    val root = CodeBlock(arrayOf(first))
+    val root = codeBlock ?: CodeBlock(arrayOf(first))
     val codeBlock: MutableState<Instruction> = mutableStateOf(root)
     var cursor: MutableState<Instruction> = mutableStateOf(first)
 
@@ -158,7 +158,7 @@ class CodeViewModel: ViewModel(){
                 }
             }
 
-            val next = codeBlock!!.getNextAfter(nextFrom)
+            val next = getNextAfter(codeBlock!!, nextFrom)
             if(next != null) cursor.value = next
             return
         }
@@ -218,7 +218,7 @@ class CodeViewModel: ViewModel(){
                 }
             }
         }
-        return (expression.parent as ControlFlow).codeBlock.instructions[0]
+        return (expression.parent as ControlFlow)
     }
 
     fun previous(currentCursor: Instruction = cursor.value, previousFrom: Instruction? = null) {
@@ -240,14 +240,41 @@ class CodeViewModel: ViewModel(){
                 }
             }
 
-            val previous = codeBlock!!.getPreviousBefore(previousFrom)
+            if(codeBlock!!.parent != null) {
+                if(codeBlock.parent is If) {
+                    if(previousFrom == codeBlock.instructions[0]) {
+                        val expr = previousEmptyExpressionDown((codeBlock.parent as If).condition)
+                        if (expr != null){
+                            cursor.value = expr
+                            return
+                        }
+                    }
+                }
+                if(codeBlock.parent is While) {
+                    if(previousFrom == codeBlock.instructions[0]) {
+                        val expr = previousEmptyExpressionDown((codeBlock.parent as While).condition)
+                        if (expr != null){
+                            cursor.value = expr
+                            return
+                        }
+                    }
+                }
+            }
+
+            val previous = getPreviousBefore(codeBlock, previousFrom)
             if(previous != null)  cursor.value = previous
             return
         }
 
         if(currentCursor.parent != null) {
             if(currentCursor is Expression) {
-                cursor.value = previousEmptyExpressionOrParentInstruction(currentCursor)
+                val previous = previousEmptyExpressionOrParentInstruction(currentCursor)
+                if(previous is Expression) {
+                    cursor.value = previous
+                } else {
+                    val p = getPreviousBefore((previous as ControlFlow).codeBlock,(previous.parent as ControlFlow).codeBlock.instructions[0])
+                    if (p != null) cursor.value = p
+                }
             } else {
                 previous(currentCursor.parent, currentCursor)
             }
@@ -257,5 +284,49 @@ class CodeViewModel: ViewModel(){
     fun clear() {
         codeBlock.value = CodeBlock()
         cursor.value = codeBlock.value
+    }
+
+    private fun getNextAfter(codeBlock: CodeBlock, instruction: Instruction): Instruction? {
+        val foundInstructionIndex = codeBlock.instructions.indexOf(instruction)
+        if (foundInstructionIndex == -1 || codeBlock.instructions.size - 1 < foundInstructionIndex + 1) {
+            return if (codeBlock.parent == null) {
+                null
+            } else {
+                codeBlock.parent
+            }
+        }
+        val next = codeBlock.instructions[foundInstructionIndex + 1]
+        return if (next is ControlFlow) {
+            if (next is If) {
+                val nextEmptyExpression = nextEmptyExpressionDown(next.condition)
+                if(nextEmptyExpression != null) return nextEmptyExpression
+            } else if (next is While) {
+                val nextEmptyExpression = nextEmptyExpressionDown(next.condition)
+                if(nextEmptyExpression != null) return nextEmptyExpression
+            }
+            val cb = next.codeBlock
+            if (cb.size() > 0) {
+                cb.instructions[0]
+            } else {
+                next
+            }
+        } else {
+            next
+        }
+    }
+
+    fun getPreviousBefore(codeBlock: CodeBlock, instruction: Instruction, hasSteppedOut: Boolean = false): Instruction? {
+        if (instruction is ControlFlow && !hasSteppedOut) {
+            val cb = instruction.codeBlock
+            return cb.instructions[cb.size() - 1]
+        }
+        val foundInstructionIndex = codeBlock.instructions.indexOf(instruction)
+        return if (foundInstructionIndex == -1 || 0 > foundInstructionIndex - 1) {
+            if (codeBlock.parent == null) {
+                null
+            } else {
+                getPreviousBefore((codeBlock.parent.parent as ControlFlow).codeBlock, codeBlock.parent, true)
+            }
+        } else codeBlock.instructions[foundInstructionIndex - 1]
     }
 }
