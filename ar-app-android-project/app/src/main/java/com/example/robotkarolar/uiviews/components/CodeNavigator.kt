@@ -1,23 +1,27 @@
 package com.example.robotkarolar.uiviews.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.ui.unit.sp
 import com.example.robotkarolar.uiviews.CodeViewModel
 
 @Composable
 fun CodeNavigator(viewModel: CodeViewModel) {
-    Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-        NextButton(viewModel = viewModel)
+    Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+        Spacer(modifier = Modifier.weight(1f))
         BeforeButton(viewModel = viewModel)
-        //IndexButton(viewModel = viewModel)
-        ClearButton(viewModel = viewModel)
+        Spacer(modifier = Modifier.weight(0.4f))
+        NextButton(viewModel = viewModel)
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -27,7 +31,7 @@ fun NextButton(viewModel: CodeViewModel) {
         //Example Code for Testing
         viewModel.next()
     }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
-        Text(text = "Next")
+        Icon(Icons.Filled.ArrowDownward, "next")
     }
 }
 
@@ -37,16 +41,6 @@ fun BeforeButton(viewModel: CodeViewModel) {
         //Example Code for Testing
         viewModel.previous()
     }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
-        Text(text = "Before")
-    }
-}
-
-@Composable
-fun ClearButton(viewModel: CodeViewModel) {
-    Button(onClick = {
-        //Example Code for Testing
-        viewModel.clear()
-    }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)) {
-        Text(text = "Clear")
+        Icon(Icons.Filled.ArrowUpward, "next")
     }
 }

@@ -304,11 +304,6 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
         }
     }
 
-    fun clear() {
-        codeBlock.value = CodeBlock()
-        cursor.value = codeBlock.value
-    }
-
     private fun getNextAfter(codeBlock: CodeBlock, instruction: Instruction): Instruction? {
         val foundInstructionIndex = codeBlock.instructions.indexOf(instruction)
         if (foundInstructionIndex == -1 || codeBlock.instructions.size - 1 < foundInstructionIndex + 1) {

@@ -40,7 +40,7 @@ fun CodeView(viewModel: CodeViewModel) {
 
         Box(modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(0.dp)
         ) {
             CodeNavigator(viewModel = viewModel)
         }
