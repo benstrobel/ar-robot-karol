@@ -43,19 +43,16 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                             parent.condition = instruction
                             instruction.parent = parent
                             cursor.value = instruction
-                            next()
                         }
                         is While -> {
                             parent.condition = instruction
                             instruction.parent = parent
                             cursor.value = instruction
-                            next()
                         }
                         is Not -> {
                             parent.child = instruction
                             instruction.parent = parent
                             cursor.value = instruction
-                            next()
                         }
                         is And -> {
                             if(parent.left == currentCursor) {
@@ -67,7 +64,6 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                                 instruction.parent = parent
                                 cursor.value = instruction
                             }
-                            next()
                         }
                         is Or -> {
                             if(parent.left == currentCursor) {
@@ -79,6 +75,19 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                                 instruction.parent = parent
                                 cursor.value = instruction
                             }
+                        }
+                    }
+                    when(instruction) {
+                        is Not -> {
+                            cursor.value = instruction.child
+                        }
+                        is And -> {
+                            cursor.value = instruction.left
+                        }
+                        is Or -> {
+                            cursor.value = instruction.left
+                        }
+                        else -> {
                             next()
                         }
                     }

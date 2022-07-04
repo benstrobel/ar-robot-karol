@@ -134,11 +134,14 @@ fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, exp
                     Text(text = NameRenderVisitor(
                         instruction
                     ).get())
+                    Text(text= " ( ")
                     Text(text= " ")
                     if(instruction.child == cursor.value) {
                         CodeCursor()
                     }
                     CodeSnippet(instruction = instruction.child, cursor, true)
+                    Text(text= " ")
+                    Text(text= " ) ")
                 }
                 else -> {
                     Text(text = NameRenderVisitor(
