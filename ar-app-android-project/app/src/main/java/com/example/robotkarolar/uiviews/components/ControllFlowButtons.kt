@@ -1,6 +1,9 @@
 package com.example.robotkarolar.uiviews.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
@@ -8,7 +11,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
-import com.example.robotkarolar.karollogic.instructions.statements.Noop
+import com.example.robotkarolar.karollogic.instructions.statements.*
 import com.example.robotkarolar.uiviews.CodeViewModel
 
 private fun newCodeBlock(): CodeBlock {
@@ -18,10 +21,13 @@ private fun newCodeBlock(): CodeBlock {
     return block
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ControllFlowButtons(viewModel: CodeViewModel) {
-    Column() {
-        ControllFlowButton(
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(4)
+    ) {
+        item { ControllFlowButton(
             {
                 val block = newCodeBlock()
                 val expr = EmptyExpression()
@@ -29,8 +35,8 @@ fun ControllFlowButtons(viewModel: CodeViewModel) {
                 expr.parent = cf
                 viewModel.addInstruction(cf)
                 block.parent = cf
-           }, "IF")
-        ControllFlowButton(
+            }, "IF") }
+        item { ControllFlowButton(
             {
                 val block = newCodeBlock()
                 val expr = EmptyExpression()
@@ -38,7 +44,7 @@ fun ControllFlowButtons(viewModel: CodeViewModel) {
                 expr.parent = cf
                 viewModel.addInstruction(cf)
                 block.parent = cf
-            }, "WHILE")
+            }, "WHILE") }
     }
 }
 

@@ -52,7 +52,6 @@ fun CodeView(viewModel: CodeViewModel) {
             .clip(RoundedCornerShape(5.dp))
             .background(Color(0xBE9FA9B3))
             .padding(5.dp)
-            .verticalScroll(rememberScrollState())
         ) {
             Column() {
                 if(viewModel.cursor.value is EmptyExpression) {
