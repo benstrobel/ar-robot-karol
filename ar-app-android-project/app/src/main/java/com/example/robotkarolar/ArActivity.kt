@@ -57,6 +57,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         ) {
             isLoading = false
         }.apply {
+            instantAnchor = true
+            sceneView.planeRenderer.isVisible = false
             placementMode = PlacementMode.BEST_AVAILABLE
             /*onPoseChanged = { node, _ ->
                 actionButton.isGone = !node.isTracking
