@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.robotkarolar.ArButton
 import com.example.robotkarolar.karollogic.instructions.expressions.EmptyExpression
 import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn
 import com.example.robotkarolar.karollogic.instructions.statements.Place
@@ -25,6 +26,9 @@ fun CodeView(viewModel: CodeViewModel) {
     Column(modifier = Modifier.padding(5.dp)) {
 
         Text(text = "RoboterCarolAR")
+
+        ArButton()
+
         
         Box(modifier = Modifier
             .fillMaxWidth()
