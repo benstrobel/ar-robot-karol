@@ -3,20 +3,20 @@ package com.example.robotkarolar
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
-import dev.romainguy.kotlin.math.scale
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
-import io.github.sceneview.ar.node.EditableTransform
 import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 import io.github.sceneview.math.Rotation
-import io.github.sceneview.math.Scale
 import io.github.sceneview.utils.setFullScreen
 
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
-    lateinit var sceneView: ArSceneView
+    private lateinit var sceneView: ArSceneView
+    private lateinit var placeButton: ExtendedFloatingActionButton
+    private val modelScale = 0.15f
+    private var karolCreated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +29,17 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         )
 
         sceneView = findViewById(R.id.sceneView)
+        sceneView.planeRenderer.isVisible = false
+        placeButton = findViewById<ExtendedFloatingActionButton>(R.id.placeModelButton).apply {
+            setOnClickListener{ debug() }
+        }
 
-        createKarol(Position(x= 0.0f, y = 0.0f, z = 0.0f))
-        rotateKarol()
+        sceneView.onArFrame = {
+            if(!karolCreated && it.isTrackingPlane) {
+                createKarol()
+                karolCreated = true
+            }
+        }
 
         //TODO: Testing remove
         //createGrasBlock(Position(y = -0.0f, x = -2.0f, z = -0.0f))
@@ -39,23 +47,26 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         //createWaterBlock(Position(y = -0.0f, x = -4.0f, z = -0.0f))
     }
 
-    fun createKarol(position: Position){
-        var karolNode = ArModelNode(
-            context = this,
-            lifecycle = lifecycle,
-            modelFileLocation = "model_steve/steveSmall.glb",
-            autoAnimate = true,
-            autoScale = false,
-            centerOrigin = position
-        ).apply {
+    private fun debug() {
+        createGrasBlock(Position(1.0f, 0.0f, 0.0f))
+    }
+
+    private fun createKarol(){
+        var context = this;
+        var karolNode = ArModelNode(PlacementMode.PLANE_HORIZONTAL).apply {
+            loadModelAsync(
+                context = context,
+                lifecycle = lifecycle,
+                glbFileLocation = "model_steve/steveSmall.glb",
+                autoScale = true
+            )
             name = "Karol"
-            scale = Scale(0.2f)
-            instantAnchor = true //anchored from beginning
-            sceneView.planeRenderer.isVisible = false //removes Plant detection
+            instantAnchor = true
+            position = Position(0.0f, 0.0f, 0.0f)
+            scale = scale.times(this@ArActivity.modelScale)
         }
         sceneView.apply {
             addChild(karolNode)
-            karolNode.anchor() //anchors the block
         }
     }
 
@@ -63,59 +74,35 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         sceneView.children.first { it.name == "Karol" }.rotation = Rotation(y = 180.0f) //TODO: Change rotation due to North, East, West, South
     }
 
-    fun createGrasBlock(position: Position){
-        var grasBlock = ArModelNode(
-            context = this,
-            lifecycle = lifecycle,
-            modelFileLocation = "model_grasblock/gras.glb",
-            autoAnimate = true,
-            autoScale = false,
-            centerOrigin = position
-        ).apply {
-            instantAnchor = true //anchored from beginning
-            //sceneView.planeRenderer.isVisible = false //removes Plant detection
+    fun createBlock(pos: Position, fileLocation: String) {
+        var context = this;
+        var block = ArModelNode(PlacementMode.PLANE_HORIZONTAL).apply {
+            loadModelAsync(
+                context = context,
+                lifecycle = lifecycle,
+                glbFileLocation = fileLocation,
+                autoScale = true,
+            )
+            name = "Karol"
+            instantAnchor = true
+            position = pos
+            scale = scale.times(this@ArActivity.modelScale /2)
         }
         sceneView.apply {
-            addChild(grasBlock)
-            grasBlock.anchor() //anchors the block
+            addChild(block)
         }
     }
 
-    fun createStoneBlock(position: Position){
-        var stoneBlock = ArModelNode(
-            context = this,
-            lifecycle = lifecycle,
-            modelFileLocation = "model_stoneblock/stone.glb", //something wrong with the glb file
-            autoAnimate = true,
-            autoScale = false,
-            centerOrigin = position
-        ).apply {
-            instantAnchor = true //anchored from beginning
-            //sceneView.planeRenderer.isVisible = false //removes Plant detection
-        }
-        sceneView.apply {
-            addChild(stoneBlock)
-            stoneBlock.anchor() //anchors the block
-        }
+    fun createGrasBlock(pos: Position){
+        createBlock(pos, "model_grasblock/gras.glb")
     }
 
-    fun createWaterBlock(position: Position){
-        var waterBlock = ArModelNode(
-            context = this,
-            lifecycle = lifecycle,
-            modelFileLocation = "model_waterblock/water.glb",
-            autoAnimate = true,
-            autoScale = false,
-            // Place the model origin at the bottom center
-            centerOrigin = position
-        ).apply {
-            instantAnchor = true //anchored from beginning
-            //sceneView.planeRenderer.isVisible = false //removes Plant detection
-        }
-        sceneView.apply {
-            addChild(waterBlock)
-            waterBlock.anchor() //anchors the block
-        }
+    fun createStoneBlock(pos: Position){
+        createBlock(pos, "model_stoneblock/stone.glb")
+    }
+
+    fun createWaterBlock(pos: Position){
+        createBlock(pos, "model_waterblock/water.glb")
     }
 
     fun finishAr(v: View){
