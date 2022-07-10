@@ -5,7 +5,7 @@ fun placeBlock(x: Int, y: Int, h: Int, blockType: BlockType): ArCommand {
 }
 
 fun removeBlock(x: Int, y: Int, h: Int): ArCommand {
-    return ArCommand(ArCommandType.PLACEBLOCK, x, y, h)
+    return ArCommand(ArCommandType.REMOVEBLOCK, x, y, h)
 }
 
 fun moveTo(x: Int, y: Int, h: Int): ArCommand {
