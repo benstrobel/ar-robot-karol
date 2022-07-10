@@ -11,6 +11,7 @@ import java.util.List;
 public class CodeBlock extends ControlFlow {
 
     private List<Instruction> instructions;
+    private int pointer = 0;
 
     public CodeBlock() {
         this.instructions = new ArrayList<>();
@@ -42,6 +43,18 @@ public class CodeBlock extends ControlFlow {
 
     public int size() {
         return instructions.size();
+    }
+
+    public int getPointer() {
+        return pointer;
+    }
+
+    public void resetPointer() {
+        this.pointer = 0;
+    }
+
+    public void incrementPointer() {
+        this.pointer++;
     }
 
     @Override

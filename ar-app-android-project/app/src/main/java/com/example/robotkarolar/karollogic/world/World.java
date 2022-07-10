@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.Triple;
+
 public class World {
 
     private final Tile[][] tiles = new Tile[10][10];
@@ -27,28 +29,29 @@ public class World {
         return entity;
     }
 
-    public boolean step() {
+    public Triple<Integer, Integer, Integer> step() {
         Tile facingTile = getFacingTile(selectedEntity);
-        if (facingTile == null) return false;
+        if (facingTile == null) return null;
         selectedEntity.getTile().setEntity(null);
         selectedEntity.updatePosition(facingTile);
         facingTile.setEntity(selectedEntity);
-        return true;
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()+1);
     }
 
-    public boolean place() {
+    public Triple<Integer, Integer, Integer> place() {
         Tile facingTile = getFacingTile(selectedEntity);
-        if (facingTile == null) return false;
+        if (facingTile == null) return null;
         facingTile.placeBlock(Block.RED);
-        return true;
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
     }
 
-    public boolean lift() {
+    public Triple<Integer, Integer, Integer> lift() {
         Tile facingTile = getFacingTile(selectedEntity);
-        if (facingTile == null) return false;
-        if(facingTile.getBlocks().isEmpty()) return false;
+        if (facingTile == null) return null;
+        if(facingTile.getBlocks().isEmpty()) return null;
+        Triple<Integer, Integer, Integer> r = new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
         facingTile.liftBlock();
-        return true;
+        return r;
     }
 
     public boolean isNorth() {

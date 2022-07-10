@@ -11,7 +11,7 @@ import com.example.robotkarolar.karollogic.world.World;
 
 public class InstructionExecuteVisitor implements InstructionVisitor{
 
-    private World world;
+    private final World world;
 
     public InstructionExecuteVisitor(World world) {
         this.world = world;
@@ -122,22 +122,24 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     public void accept(If controlFlowIf) {
         ExpressionEvaulationVisitor evaulationVisitor = new ExpressionEvaulationVisitor(world);
         if(controlFlowIf.getCondition().accept(evaulationVisitor)){
-            Interpreter.interpret(controlFlowIf.getCodeBlock(), world);
+            controlFlowIf.getCodeBlock().accept(this);
         }
     }
 
     @Override
     public void accept(While controlFlowWhile) {
         ExpressionEvaulationVisitor evaulationVisitor = new ExpressionEvaulationVisitor(world);
-        while(controlFlowWhile.getCondition().accept(evaulationVisitor)){
-            Interpreter.interpret(controlFlowWhile.getCodeBlock(), world);
+        while(!end && controlFlowWhile.getCondition().accept(evaulationVisitor)){
+            controlFlowWhile.getCodeBlock().accept(this);
         }
     }
 
     @Override
     public void accept(CodeBlock codeBlock) {
         for(Instruction instruction: codeBlock.getInstructions()) {
-            instruction.accept(this);
+            if(!end) {
+                instruction.accept(this);
+            }
         }
     }
 }

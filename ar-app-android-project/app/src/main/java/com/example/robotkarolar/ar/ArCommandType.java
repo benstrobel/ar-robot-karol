@@ -1,5 +1,5 @@
 package com.example.robotkarolar.ar;
 
 public enum ArCommandType {
-    PLACEBLOCK, MOVETO, ROTATELEFT, ROTATERIGHT, LIFT;
+    PLACEBLOCK, REMOVEBLOCK, MOVETO, ROTATELEFT, ROTATERIGHT, LIFT, END;
 }
