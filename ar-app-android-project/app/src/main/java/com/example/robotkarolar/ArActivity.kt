@@ -7,7 +7,11 @@ import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
 import com.example.robotkarolar.ar.BlockType
 import com.example.robotkarolar.ar.placeBlock
+import com.example.robotkarolar.karollogic.Interpreter
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
+import com.example.robotkarolar.karollogic.instructions.statements.Noop
+import com.example.robotkarolar.karollogic.world.World
+import com.google.ar.core.Anchor
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.EditableTransform
@@ -20,8 +24,12 @@ import kotlinx.coroutines.delay
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var sceneView: ArSceneView
-    private var arrayCommand: ArrayList<ArCommand>? = null
-    private var indexInCommands: Int = 0
+    //private var arrayCommand: ArrayList<ArCommand>? = null
+    //private var indexInCommands: Int = 0
+    private var karolCreated = false
+    private lateinit var codeBlock: CodeBlock
+    private lateinit var interpreter: Interpreter
+    private lateinit var firstAnchor: Anchor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,57 +42,46 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         )
 
         val bundle = intent.extras
-        var test : CodeBlock?
+        var bundleCodeBlock: CodeBlock? = null
         if (bundle != null) {
-            test = bundle.getParcelable("test")
-            // arrayCommand = bundle.getParcelableArrayList<ArCommand>("array")
-        } //TODO:stürzt ab weil es nicht eingelesen werden kann
+            bundleCodeBlock = bundle.getParcelable<CodeBlock>("codeBlock")
+        }
+        codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock(mutableListOf(Noop()))
+
+        interpreter = Interpreter(codeBlock, World())
 
         sceneView = findViewById(R.id.sceneView)
 
-        //TODO: Testing Remove later
-        arrayCommand = arrayListOf(ArCommand(ArCommandType.PLACEBLOCK, 0,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 1,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 2,0,0,BlockType.WATER))
-
-        /*createKarol(0, 0, 0)
-        //createBlock(0,0,0, BlockType.GRASS)
-        createBlock(1,0,0, BlockType.WATER)
-        createBlock(2,0,0, BlockType.WATER)
-        createBlock(2,0,1, BlockType.STONE)
-        deleteBlock(1,0,0)
-        createBlock(1,0,0, BlockType.WATER)
-        createBlock(2,1,0, BlockType.GRASS)
-
-        rotateKarol(ArCommandType.ROTATELEFT) //doesnt rerender yet */
-
-        //runAll()
-    }
-
-    fun runNext(v: View) {
-        if (arrayCommand != null) {
-            val command: ArCommand? = arrayCommand?.get(indexInCommands)
-            if (command != null) {
-                executeCommand(command)
-
-                incIndex()
+        sceneView.onArFrame = {
+            if(!karolCreated && it.isTrackingPlane) {
+                createKarol(0,0,0)
+                karolCreated = true
             }
         }
     }
 
+    private fun debug() {
+        createBlock(1, 0,0, BlockType.GRASS)
+    }
+
+    fun runNext(v: View) {
+        var command = interpreter.nextStep()
+
+        if (command != null) {
+            executeCommand(command)
+        }
+    }
+
     fun runAll(v: View) {
-        arrayCommand?.forEach {
-            executeCommand(it)
+        var command = interpreter.nextStep()
+        while (command != null && command.commandType != ArCommandType.END) {
+            executeCommand(command)
+            command = interpreter.nextStep()
         }
     }
 
     fun finishAr(v: View){
         this.finish()
-    }
-
-    private fun incIndex() {
-        val size = if (arrayCommand != null) arrayCommand?.size as Int else 0
-        if (size > indexInCommands + 1) {
-            indexInCommands += 1
-        }
     }
 
     private fun executeCommand(command: ArCommand) {
@@ -140,34 +137,22 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun createKarol(x: Int, y: Int, h: Int) {
         //check if karol exists
-        var karolExists = false
-        sceneView.children.forEach{
-            if (it.name == "Karol") {
-                karolExists = true
-            }
-        }
-
-        if (!karolExists) {
-            var blockNode = ArModelNode(
+        if (!karolCreated) {
+            var karolNode = ArModelNode(
                 context = this,
                 lifecycle = lifecycle,
                 modelFileLocation = "model_steve/steveScaled.glb",
-                autoAnimate = true,
                 autoScale = false,
-                // Place the model origin at the bottom center
-                centerOrigin = Position(x = x.toFloat(), y = h.toFloat(), z = y.toFloat()) //TODO: TRANSFORM POSITION
+                // Place the model origin at horizontal and vertical middle
+                centerOrigin = Position(0.0f, 0.0f , 0.0f)
             ).apply {
                 name = "Karol"
-                placementMode = PlacementMode.BEST_AVAILABLE
-                /*onPoseChanged = { node, _ ->
-                    actionButton.isGone = !node.isTracking
-                }*/
-                editableTransforms = EditableTransform.ALL
+                instantAnchor = true
+                position = Position(x.toFloat(), y.toFloat(), h.toFloat())
             }
             sceneView.apply {
-                addChild(blockNode)
-                // Select the model node by default (the model node is also selected on tap)
-                //gestureDetector.selectedNode = modelNode
+                addChild(karolNode)
+                planeRenderer.isVisible = false
             }
         }
     }
@@ -193,22 +178,18 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 context = this,
                 lifecycle = lifecycle,
                 modelFileLocation = modelString,
-                autoAnimate = true,
+                //autoAnimate = true,
                 autoScale = false,
                 // Place the model origin at the bottom center
-                centerOrigin = Position(x = -2 * x.toFloat(), y = -2 * h.toFloat(), z = -2 * y.toFloat())
+                centerOrigin = Position(0.0f, 0.0f , 0.0f)
             ).apply {
                 name = "Block$x$y$h"
-                placementMode = PlacementMode.BEST_AVAILABLE
-                /*onPoseChanged = { node, _ ->
-                    actionButton.isGone = !node.isTracking
-                }*/
-                editableTransforms = EditableTransform.ALL
+
+                instantAnchor = true
+                position = Position(x.toFloat(), y.toFloat(), h.toFloat())
             }
             sceneView.apply {
                 addChild(blockNode)
-                // Select the model node by default (the model node is also selected on tap)
-                //gestureDetector.selectedNode = modelNode
             }
         }
     }
