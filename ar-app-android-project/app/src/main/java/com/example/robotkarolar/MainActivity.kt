@@ -25,10 +25,6 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Column {
-                        //RunButtonRamona()
-                        //RunButtonBen()
-                        //ArButton()
-
                         val viewModel: CodeViewModel = CodeViewModel()
                         CodeView(viewModel = viewModel)
                     }
@@ -71,23 +67,6 @@ fun ArButton() {
         Text(text = "Show me in Room", style = MaterialTheme.typography.subtitle1, color = Color(0xFF000000))
     }
 }*/
-
-@Composable
-fun ArButton() {
-    val context = LocalContext.current
-    Button(
-        onClick = {
-            val intent = Intent(context, ArActivity::class.java)
-            val bundle = Bundle()
-            bundle.putLong("furnitureId", 2) // pass key to function
-            intent.putExtras(bundle)
-            context.startActivity(intent)
-        },
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(text = "Show me in Room", style = MaterialTheme.typography.subtitle1, color = Color(0xFF000000))
-    }
-}
 
 /*@Composable
 fun RunButtonRamona() {

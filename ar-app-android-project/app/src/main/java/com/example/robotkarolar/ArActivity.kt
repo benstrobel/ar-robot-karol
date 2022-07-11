@@ -18,6 +18,8 @@ import io.github.sceneview.utils.setFullScreen
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var sceneView: ArSceneView
+    private var arrayCommand: ArrayList<ArCommand>? = null
+    private var indexInCommands: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +30,12 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             hideSystemBars = false,
             fitsSystemWindows = false
         )
+
+        val bundle = intent.extras
+
+        if (bundle != null) {
+            arrayCommand = bundle.getParcelableArrayList<ArCommand>("array")
+        }
 
         sceneView = findViewById(R.id.sceneView)
 
