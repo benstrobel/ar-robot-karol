@@ -54,26 +54,21 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
         rotateKarol(ArCommandType.ROTATELEFT) //doesnt rerender yet */
 
-        runAll()
+        //runAll()
     }
 
-    fun runNext() {
+    fun runNext(v: View) {
         if (arrayCommand != null) {
             val command: ArCommand? = arrayCommand?.get(indexInCommands)
             if (command != null) {
                 executeCommand(command)
 
-                /*println("Blocks")
-                sceneView.children.forEach{
-                    println(it.name)
-                }*/
-                
                 incIndex()
             }
         }
     }
 
-    fun runAll() {
+    fun runAll(v: View) {
         arrayCommand?.forEach {
             executeCommand(it)
         }
