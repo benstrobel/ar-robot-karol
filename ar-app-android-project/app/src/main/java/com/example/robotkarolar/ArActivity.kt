@@ -14,6 +14,7 @@ import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 import io.github.sceneview.math.Rotation
 import io.github.sceneview.utils.setFullScreen
+import kotlinx.coroutines.delay
 
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -33,14 +34,16 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
         val bundle = intent.extras
 
-        if (bundle != null) {
+        /*if (bundle != null) {
             arrayCommand = bundle.getParcelableArrayList<ArCommand>("array")
-        }
+        }*/ //TODO:stürzt ab weil es nicht eingelesen werden kann
 
         sceneView = findViewById(R.id.sceneView)
 
         //TODO: Testing Remove later
-        createKarol(0, 0, 0)
+        arrayCommand = arrayListOf(ArCommand(ArCommandType.PLACEBLOCK, 0,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 1,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 2,0,0,BlockType.WATER))
+
+        /*createKarol(0, 0, 0)
         //createBlock(0,0,0, BlockType.GRASS)
         createBlock(1,0,0, BlockType.WATER)
         createBlock(2,0,0, BlockType.WATER)
@@ -49,15 +52,42 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         createBlock(1,0,0, BlockType.WATER)
         createBlock(2,1,0, BlockType.GRASS)
 
-        rotateKarol(ArCommandType.ROTATELEFT) //doesnt rerender yet
+        rotateKarol(ArCommandType.ROTATELEFT) //doesnt rerender yet */
+
+        runAll()
     }
 
     fun runNext() {
+        if (arrayCommand != null) {
+            val command: ArCommand? = arrayCommand?.get(indexInCommands)
+            if (command != null) {
+                executeCommand(command)
 
+                /*println("Blocks")
+                sceneView.children.forEach{
+                    println(it.name)
+                }*/
+                
+                incIndex()
+            }
+        }
     }
 
     fun runAll() {
+        arrayCommand?.forEach {
+            executeCommand(it)
+        }
+    }
 
+    fun finishAr(v: View){
+        this.finish()
+    }
+
+    private fun incIndex() {
+        val size = if (arrayCommand != null) arrayCommand?.size as Int else 0
+        if (size > indexInCommands + 1) {
+            indexInCommands += 1
+        }
     }
 
     private fun executeCommand(command: ArCommand) {
@@ -70,7 +100,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         when(command.commandType) {
             ArCommandType.REMOVEBLOCK -> deleteBlock(x, y, h)
             ArCommandType.MOVETO -> moveKarol(x, y, h)
-            ArCommandType.PLACEBLOCK -> placeBlock(x, y, h, blockType)
+            ArCommandType.PLACEBLOCK -> createBlock(x, y, h, blockType)
             ArCommandType.ROTATELEFT -> rotateKarol(command.commandType)
             ArCommandType.ROTATERIGHT -> rotateKarol(command.commandType)
             else -> return
@@ -184,9 +214,5 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 //gestureDetector.selectedNode = modelNode
             }
         }
-    }
-
-    fun finishAr(v: View){
-        this.finish()
     }
 }
