@@ -10,6 +10,7 @@ import com.example.robotkarolar.ar.placeBlock
 import com.example.robotkarolar.karollogic.Interpreter
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic.world.World
+import com.google.ar.core.Anchor
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.EditableTransform
@@ -27,6 +28,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private var karolCreated = false
     private lateinit var codeBlock: CodeBlock
     private lateinit var interpreter: Interpreter
+    private lateinit var firstAnchor: Anchor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +42,14 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
         val bundle = intent.extras
 
-        /*if (bundle != null) {
-            arrayCommand = bundle.getParcelableArrayList<ArCommand>("array")
-        }*/ //TODO:stürzt ab weil es nicht eingelesen werden kann
-
-        //TODO: Get codeBlock from bundle instead
+        //TODO: Get codeBlock from bundle instead (not parcable yet)
+        /*val bundleCodeBlock: CodeBlock?
+        if (bundle != null) {
+            bundleCodeBlock = bundle.getParcelable<CodeBlock>("codeBlock")
+        }
+        codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock()*/
         codeBlock = CodeBlock()
+
         interpreter = Interpreter(codeBlock, World())
 
         sceneView = findViewById(R.id.sceneView)
@@ -56,9 +60,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 karolCreated = true
             }
         }
-
-        //TODO: Testing Remove later
-        //arrayCommand = arrayListOf(ArCommand(ArCommandType.PLACEBLOCK, 0,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 1,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 2,0,0,BlockType.WATER))
     }
 
     private fun debug() {
@@ -139,7 +140,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private fun createKarol(x: Int, y: Int, h: Int) {
         //check if karol exists
         if (!karolCreated) {
-            var blockNode = ArModelNode(
+            var karolNode = ArModelNode(
                 context = this,
                 lifecycle = lifecycle,
                 modelFileLocation = "model_steve/steveScaled.glb",
@@ -152,7 +153,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 position = Position(x.toFloat(), y.toFloat(), h.toFloat())
             }
             sceneView.apply {
-                addChild(blockNode)
+                addChild(karolNode)
                 planeRenderer.isVisible = false
             }
         }
