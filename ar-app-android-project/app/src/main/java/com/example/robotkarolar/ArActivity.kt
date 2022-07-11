@@ -3,7 +3,10 @@ package com.example.robotkarolar
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.robotkarolar.ar.ArCommand
+import com.example.robotkarolar.ar.ArCommandType
 import com.example.robotkarolar.ar.BlockType
+import com.example.robotkarolar.ar.placeBlock
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.EditableTransform
@@ -28,6 +31,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
         sceneView = findViewById(R.id.sceneView)
 
+        //TODO: Testing Remove later
         createKarol(0, 0, 0)
         //createBlock(0,0,0, BlockType.GRASS)
         createBlock(1,0,0, BlockType.WATER)
@@ -37,10 +41,32 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         createBlock(1,0,0, BlockType.WATER)
         createBlock(2,1,0, BlockType.GRASS)
 
-        //TODO: Testing remove
-        //createGrasBlock(Position(y = -0.0f, x = -2.0f, z = -0.0f))
-        //createStoneBlock(Position(y = -1.0f, x = -1.0f, z = -1.0f)) //issues with glb file
-        //createWaterBlock(Position(y = -0.0f, x = -4.0f, z = -0.0f))
+        rotateKarol(ArCommandType.ROTATELEFT) //doesnt rerender yet
+    }
+
+    fun runNext() {
+
+    }
+
+    fun runAll() {
+
+    }
+
+    private fun executeCommand(command: ArCommand) {
+        val x: Int = if (command.x != null) command.x as Int else 0
+        val y: Int = if (command.y != null) command.y as Int else 0
+        val h: Int = if (command.h != null) command.h as Int else 0
+        val blockType: BlockType = if (command.blockType != null) command.blockType as BlockType else BlockType.GRASS
+
+
+        when(command.commandType) {
+            ArCommandType.REMOVEBLOCK -> deleteBlock(x, y, h)
+            ArCommandType.MOVETO -> moveKarol(x, y, h)
+            ArCommandType.PLACEBLOCK -> placeBlock(x, y, h, blockType)
+            ArCommandType.ROTATELEFT -> rotateKarol(command.commandType)
+            ArCommandType.ROTATERIGHT -> rotateKarol(command.commandType)
+            else -> return
+        }
     }
 
     private fun deleteBlock(x: Int, y: Int, h: Int) {
@@ -55,6 +81,25 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             val firstWithName = sceneView.children.first { it.name == "Block$x$y$h" }
             firstWithName.isVisible = false
             sceneView.removeChild(firstWithName)
+        }
+    }
+
+    private fun moveKarol(x: Int, y: Int, h: Int) { //TODO: Doesn't rereder yet
+        sceneView.children.first { it.name == "Karol" }.position = Position(x.toFloat() , h.toFloat() , y. toFloat()) //TODO: TRANSFORM POSITION
+    }
+
+    private fun rotateKarol(arCommandType: ArCommandType) { //TODO: Doesn't rereder yet
+        when (arCommandType) {
+
+            ArCommandType.ROTATERIGHT -> {
+                sceneView.children.first { it.name == "Karol" }.rotation = Rotation(y = 180.0f) //TODO: Change rotation due to North, East, West, South
+            }
+
+            ArCommandType.ROTATELEFT -> {
+                sceneView.children.first { it.name == "Karol" }.rotation = Rotation(y = 180.0f) //TODO: Change rotation due to North, East, West, South
+            }
+
+            else -> return
         }
     }
 
@@ -90,10 +135,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 //gestureDetector.selectedNode = modelNode
             }
         }
-    }
-
-    private fun rotateKarol() {
-        sceneView.children.first { it.name == "Karol" }.rotation = Rotation(y = 180.0f) //TODO: Change rotation due to North, East, West, South
     }
 
     private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType) {

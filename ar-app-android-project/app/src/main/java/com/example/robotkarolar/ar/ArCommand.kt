@@ -5,29 +5,41 @@ fun placeBlock(x: Int, y: Int, h: Int, blockType: BlockType): ArCommand {
 }
 
 fun removeBlock(x: Int, y: Int, h: Int): ArCommand {
-    return ArCommand(ArCommandType.REMOVEBLOCK, x, y, h)
+    return ArCommand(ArCommandType.REMOVEBLOCK, x, y, h, null)
 }
 
 fun moveTo(x: Int, y: Int, h: Int): ArCommand {
-    return ArCommand(ArCommandType.MOVETO, x, y, h)
+    return ArCommand(ArCommandType.MOVETO, x, y, h, null)
 }
 
 fun rotateLeft(): ArCommand {
-    return ArCommand(ArCommandType.ROTATELEFT)
+    return ArCommand(ArCommandType.ROTATELEFT, null, null, null, null)
 }
 
 fun rotateRight(): ArCommand {
-    return ArCommand(ArCommandType.ROTATERIGHT)
+    return ArCommand(ArCommandType.ROTATERIGHT, null, null, null, null)
 }
 
-fun lift(x: Int, y: Int, h: Int): ArCommand {
-    return ArCommand(ArCommandType.LIFT, x , y, h)
+fun lift(): ArCommand {
+    return ArCommand(ArCommandType.LIFT,null, null, null, null)
 }
 
 fun end(): ArCommand {
-    return ArCommand(ArCommandType.END)
+    return ArCommand(ArCommandType.END, null, null, null, null)
 }
 
-class ArCommand internal constructor(commandType: ArCommandType, x: Int? = null, y: Int? = null, h: Int? = null, blockType: BlockType? = null) {
+class ArCommand {
+    lateinit var commandType: ArCommandType
+    var x: Int? = null
+    var y: Int? = null
+    var h: Int? = null
+    var blockType: BlockType? = null
 
+    constructor(arCommandType: ArCommandType, x: Int?, y: Int?, h: Int?, blockType: BlockType?) {
+        this.commandType = commandType
+        this.x = x
+        this.y = y
+        this.h = h
+        this.blockType = blockType
+    }
 }
