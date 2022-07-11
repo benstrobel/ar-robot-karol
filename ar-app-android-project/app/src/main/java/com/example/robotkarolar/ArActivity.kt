@@ -21,6 +21,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var sceneView: ArSceneView
     private var arrayCommand: ArrayList<ArCommand>? = null
     private var indexInCommands: Int = 0
+    private var karolCreated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,13 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
         sceneView = findViewById(R.id.sceneView)
 
+        sceneView.onArFrame = {
+            if(!karolCreated && it.isTrackingPlane) {
+                createKarol(0,0,0)
+                karolCreated = true
+            }
+        }
+
         //TODO: Testing Remove later
         arrayCommand = arrayListOf(ArCommand(ArCommandType.PLACEBLOCK, 0,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 1,0,0,BlockType.GRASS), ArCommand(ArCommandType.PLACEBLOCK, 2,0,0,BlockType.WATER))
 
@@ -55,6 +63,10 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         rotateKarol(ArCommandType.ROTATELEFT) //doesnt rerender yet */
 
         //runAll()
+    }
+
+    private fun debug() {
+        createBlock(1, 0,0, BlockType.GRASS)
     }
 
     fun runNext(v: View) {
@@ -138,34 +150,22 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun createKarol(x: Int, y: Int, h: Int) {
         //check if karol exists
-        var karolExists = false
-        sceneView.children.forEach{
-            if (it.name == "Karol") {
-                karolExists = true
-            }
-        }
-
-        if (!karolExists) {
+        if (!karolCreated) {
             var blockNode = ArModelNode(
                 context = this,
                 lifecycle = lifecycle,
                 modelFileLocation = "model_steve/steveScaled.glb",
-                autoAnimate = true,
                 autoScale = false,
-                // Place the model origin at the bottom center
-                centerOrigin = Position(x = x.toFloat(), y = h.toFloat(), z = y.toFloat()) //TODO: TRANSFORM POSITION
+                // Place the model origin at horizontal and vertical middle
+                centerOrigin = Position(0.0f, 0.0f , 0.0f)
             ).apply {
                 name = "Karol"
-                placementMode = PlacementMode.BEST_AVAILABLE
-                /*onPoseChanged = { node, _ ->
-                    actionButton.isGone = !node.isTracking
-                }*/
-                editableTransforms = EditableTransform.ALL
+                instantAnchor = true
+                position = Position(x.toFloat(), y.toFloat(), h.toFloat())
             }
             sceneView.apply {
                 addChild(blockNode)
-                // Select the model node by default (the model node is also selected on tap)
-                //gestureDetector.selectedNode = modelNode
+                planeRenderer.isVisible = false
             }
         }
     }
@@ -191,22 +191,18 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 context = this,
                 lifecycle = lifecycle,
                 modelFileLocation = modelString,
-                autoAnimate = true,
+                //autoAnimate = true,
                 autoScale = false,
                 // Place the model origin at the bottom center
-                centerOrigin = Position(x = -2 * x.toFloat(), y = -2 * h.toFloat(), z = -2 * y.toFloat())
+                centerOrigin = Position(0.0f, 0.0f , 0.0f)
             ).apply {
                 name = "Block$x$y$h"
-                placementMode = PlacementMode.BEST_AVAILABLE
-                /*onPoseChanged = { node, _ ->
-                    actionButton.isGone = !node.isTracking
-                }*/
-                editableTransforms = EditableTransform.ALL
+
+                instantAnchor = true
+                position = Position(x.toFloat(), y.toFloat(), h.toFloat())
             }
             sceneView.apply {
                 addChild(blockNode)
-                // Select the model node by default (the model node is also selected on tap)
-                //gestureDetector.selectedNode = modelNode
             }
         }
     }
