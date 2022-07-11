@@ -20,8 +20,8 @@ fun rotateRight(): ArCommand {
     return ArCommand(ArCommandType.ROTATERIGHT)
 }
 
-fun lift(): ArCommand {
-    return ArCommand(ArCommandType.LIFT)
+fun lift(x: Int, y: Int, h: Int): ArCommand {
+    return ArCommand(ArCommandType.LIFT, x , y, h)
 }
 
 fun end(): ArCommand {

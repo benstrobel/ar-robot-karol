@@ -33,6 +33,9 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         createBlock(1,0,0, BlockType.WATER)
         createBlock(2,0,0, BlockType.WATER)
         createBlock(2,0,1, BlockType.STONE)
+        deleteBlock(1,0,0)
+        createBlock(1,0,0, BlockType.WATER)
+        createBlock(2,1,0, BlockType.GRASS)
 
         //TODO: Testing remove
         //createGrasBlock(Position(y = -0.0f, x = -2.0f, z = -0.0f))
@@ -40,7 +43,22 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         //createWaterBlock(Position(y = -0.0f, x = -4.0f, z = -0.0f))
     }
 
-    private fun createKarol(x: Int, y: Int, h: Int){
+    private fun deleteBlock(x: Int, y: Int, h: Int) {
+        var blockExists = false
+        sceneView.children.forEach{
+            if (it.name == "Block$x$y$h") {
+                blockExists = true
+            }
+        }
+
+        if (blockExists) {
+            val firstWithName = sceneView.children.first { it.name == "Block$x$y$h" }
+            firstWithName.isVisible = false
+            sceneView.removeChild(firstWithName)
+        }
+    }
+
+    private fun createKarol(x: Int, y: Int, h: Int) {
         //check if karol exists
         var karolExists = false
         sceneView.children.forEach{
@@ -74,11 +92,11 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    fun rotateKarol() {
+    private fun rotateKarol() {
         sceneView.children.first { it.name == "Karol" }.rotation = Rotation(y = 180.0f) //TODO: Change rotation due to North, East, West, South
     }
 
-    fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType) {
+    private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType) {
         var modelString: String
         when (blockType) {
             BlockType.GRASS -> modelString = "model_grasblock/gras.glb"
