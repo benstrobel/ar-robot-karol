@@ -42,13 +42,15 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         )
 
         val bundle = intent.extras
-        var bundleCodeBlock: CodeBlock? = null
         if (bundle != null) {
-            bundleCodeBlock = bundle.getParcelable<CodeBlock>("codeBlock")
+            val bundleCodeBlock = bundle.getParcelable<CodeBlock>("codeBlock")
+            codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock(mutableListOf(Noop()))
         }
-        codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock(mutableListOf(Noop()))
 
-        interpreter = Interpreter(codeBlock, World())
+        val world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
+        interpreter = Interpreter(codeBlock, world)
 
         sceneView = findViewById(R.id.sceneView)
 

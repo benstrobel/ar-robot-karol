@@ -27,7 +27,7 @@ public class Interpreter {
     }
 
     public ArCommand nextStep() {
-        if(currentCodeBlock.getInstructions().size() >= currentCodeBlock.getPointer()) {
+        if(currentCodeBlock.getInstructions().size() <= currentCodeBlock.getPointer()) {
 
             if(currentCodeBlock.getParent() == null) {
                 return end();
