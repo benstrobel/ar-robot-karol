@@ -3,7 +3,6 @@ package com.example.robotkarolar.karollogic.instructions.visitors
 import com.example.robotkarolar.ar.*
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic.instructions.controlflow.If
-import com.example.robotkarolar.karollogic.instructions.visitors.InstructionStepperVisitor.StepperResult
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
@@ -30,7 +29,7 @@ class InstructionStepperVisitor constructor(val world: World): InstructionVisito
     override fun accept(place: Place) {
         val placed: Triple<Int, Int, Int>? = world.place()
         if(placed != null) {
-            stepperResult = StepperResult(placeBlock(placed.first,placed.second,placed.third, BlockType.BRICK), null)
+            stepperResult = StepperResult(placeBlock(placed.first,placed.second,placed.third, BlockType.WATER), null)
         }
     }
     override fun accept(rightTurn: RightTurn) {
