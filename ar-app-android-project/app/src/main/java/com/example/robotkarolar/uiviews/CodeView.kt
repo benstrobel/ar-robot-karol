@@ -85,6 +85,7 @@ fun ArButton(viewModel: CodeViewModel) {
             //bundle.putLong("furnitureId", 2) // pass key to function
             val array = arrayListOf<ArCommand>()
             //TODO:Needs to be filled
+            bundle.putParcelable("test", viewModel.codeBlock.value)
             bundle.putParcelableArrayList("array", array)
             intent.putExtras(bundle)
             context.startActivity(intent)

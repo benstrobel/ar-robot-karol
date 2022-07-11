@@ -14,7 +14,7 @@ import kotlin.math.exp
 
 class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val first = Noop()
-    val root = codeBlock ?: CodeBlock(arrayOf(first))
+    val root = codeBlock ?: CodeBlock(mutableListOf(first))
     val codeBlock: MutableState<Instruction> = mutableStateOf(root)
     var cursor: MutableState<Instruction> = mutableStateOf(first)
 
@@ -96,7 +96,7 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                         (currentCursor as CodeBlock).addInstruction(instruction)
                         cursor.value = instruction
                     } else { // The cursor always points to the element after which the next instruction should be inserted (but in the same scope as the element pointed to)
-                        addInstruction(instruction, currentCursor.parent, currentCursor)
+                        addInstruction(instruction, currentCursor.parent!!, currentCursor)
                         return
                     }
                 }
@@ -190,7 +190,7 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
             if(currentCursor is Expression) {
                 cursor.value = nextEmptyExpressionOrParentInstruction(currentCursor)
             } else {
-                next(currentCursor.parent, currentCursor)
+                next(currentCursor.parent!!, currentCursor)
             }
         }
     }
@@ -299,7 +299,7 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                     if (p != null) cursor.value = p
                 }
             } else {
-                previous(currentCursor.parent, currentCursor)
+                previous(currentCursor.parent!!, currentCursor)
             }
         }
     }
@@ -343,7 +343,8 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
             if (codeBlock.parent == null) {
                 null
             } else {
-                getPreviousBefore((codeBlock.parent.parent as ControlFlow).codeBlock, codeBlock.parent, true)
+                getPreviousBefore((codeBlock.parent!!.parent as ControlFlow).codeBlock,
+                    codeBlock.parent!!, true)
             }
         } else codeBlock.instructions[foundInstructionIndex - 1]
     }

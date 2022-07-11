@@ -27,7 +27,7 @@ public class Interpreter {
     }
 
     public ArCommand nextStep() {
-        if(currentCodeBlock.getInstructions().length >= currentCodeBlock.getPointer()) {
+        if(currentCodeBlock.getInstructions().size() >= currentCodeBlock.getPointer()) {
 
             if(currentCodeBlock.getParent() == null) {
                 return end();
@@ -48,7 +48,7 @@ public class Interpreter {
             }
             return nextStep();
         } else {
-            Instruction instruction = currentCodeBlock.getInstructions()[currentCodeBlock.getPointer()];
+            Instruction instruction = currentCodeBlock.getInstructions().get(currentCodeBlock.getPointer());
             InstructionStepperVisitor stepper = new InstructionStepperVisitor(world);
             instruction.accept(stepper);
             InstructionStepperVisitor.StepperResult result = stepper.getStepperResult();

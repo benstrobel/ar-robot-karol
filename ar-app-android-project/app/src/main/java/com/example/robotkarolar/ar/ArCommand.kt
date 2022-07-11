@@ -2,7 +2,7 @@ package com.example.robotkarolar.ar
 
 import android.os.Parcel
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 fun placeBlock(x: Int, y: Int, h: Int, blockType: BlockType): ArCommand {
     return ArCommand(ArCommandType.PLACEBLOCK, x, y, h, blockType)
@@ -33,10 +33,6 @@ fun end(): ArCommand {
 }
 
 @Parcelize
-class ArCommand(var arCommandType: ArCommandType, var xPos: Int?, var yPos: Int?, var hPos: Int?, var block: BlockType?) : Parcelable {
-    var commandType: ArCommandType = arCommandType
-    var x: Int? = xPos
-    var y: Int? = yPos
-    var h: Int? = hPos
-    var blockType: BlockType? = block
+class ArCommand(var commandType: ArCommandType, var x: Int?, var y: Int?, var h: Int?, var blockType: BlockType?) : Parcelable {
+
 }

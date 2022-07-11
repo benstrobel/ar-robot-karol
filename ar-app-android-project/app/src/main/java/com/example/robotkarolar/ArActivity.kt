@@ -7,6 +7,7 @@ import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
 import com.example.robotkarolar.ar.BlockType
 import com.example.robotkarolar.ar.placeBlock
+import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.EditableTransform
@@ -33,10 +34,11 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         )
 
         val bundle = intent.extras
-
-        /*if (bundle != null) {
-            arrayCommand = bundle.getParcelableArrayList<ArCommand>("array")
-        }*/ //TODO:stürzt ab weil es nicht eingelesen werden kann
+        var test : CodeBlock?
+        if (bundle != null) {
+            test = bundle.getParcelable("test")
+            // arrayCommand = bundle.getParcelableArrayList<ArCommand>("array")
+        } //TODO:stürzt ab weil es nicht eingelesen werden kann
 
         sceneView = findViewById(R.id.sceneView)
 

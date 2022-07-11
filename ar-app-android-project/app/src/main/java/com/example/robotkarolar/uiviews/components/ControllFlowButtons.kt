@@ -1,7 +1,6 @@
 package com.example.robotkarolar.uiviews.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.*
@@ -16,9 +15,7 @@ import com.example.robotkarolar.uiviews.CodeViewModel
 
 private fun newCodeBlock(): CodeBlock {
     val noop = Noop()
-    val block = CodeBlock()
-    block.addInstruction(noop)
-    return block
+    return CodeBlock(mutableListOf(noop))
 }
 
 @OptIn(ExperimentalFoundationApi::class)

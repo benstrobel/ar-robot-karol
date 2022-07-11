@@ -196,11 +196,11 @@ fun SnippetPreview() {
 fun CodeRowPreview() {
     //Example Code for testing
 
-    var controlFlow2 = If(And(Not(IsBorder()), IsBlock()), CodeBlock(arrayOf(Step())))
+    var controlFlow2 = If(And(Not(IsBorder()), IsBlock()), CodeBlock(mutableListOf(Step())))
 
-    var controllFlow = While(IsBorder(), CodeBlock(arrayOf(Step(), controlFlow2)))
+    var controllFlow = While(IsBorder(), CodeBlock(mutableListOf(Step(), controlFlow2)))
 
-    var examplecode = CodeBlock(arrayOf(Step(), Place(), LeftTurn(), controllFlow, Step()))
+    var examplecode = CodeBlock(mutableListOf(Step(), Place(), LeftTurn(), controllFlow, Step()))
 
     val model = CodeViewModel(examplecode)
 
