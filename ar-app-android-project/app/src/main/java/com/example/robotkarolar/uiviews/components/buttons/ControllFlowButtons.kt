@@ -45,16 +45,16 @@ fun ControllFlowButtons(viewModel: CodeViewModel) {
     }
 }
 
-@Preview
-@Composable
-fun ControllFlowButtonPrev() {
-    var viewModel = CodeViewModel()
-    ControllFlowButtons(viewModel = viewModel)
-}
-
 @Composable
 fun ControllFlowButton(lambda: () -> Unit, buttonName: String) {
     Button( onClick = lambda) {
         Text(text = buttonName)
     }
+}
+
+@Preview
+@Composable
+fun ControllFlowButtonPrev() {
+    var viewModel = CodeViewModel()
+    ControllFlowButtons(viewModel = viewModel)
 }

@@ -50,6 +50,7 @@ fun CodeRow(codeBlock: Instruction, viewModel: CodeViewModel) {
                 key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
             }
         }
+
         if(codeBlock == viewModel.cursor.value) {
             CodeCursor()
         }
@@ -156,30 +157,40 @@ fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, exp
 @Composable
 @ExperimentalMaterialApi
 fun DismissableCodeSnippet(instruction: Instruction, viewModel: CodeViewModel) {
-    val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange =  {
-        if(instruction.parent != null) {
-            when(viewModel.cursor.value.parent) {
-                is CodeBlock -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as CodeBlock), instruction)!!
-                is While -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as While).codeBlock, instruction)!!
-                is If -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as If).codeBlock, instruction)!!
+    val dismissState = rememberDismissState(
+        initialValue = DismissValue.Default,
+        confirmStateChange =  {
+            if(instruction.parent != null) {
+                when(viewModel.cursor.value.parent) {
+                    is CodeBlock -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as CodeBlock), instruction)!!
+                    is While -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as While).codeBlock, instruction)!!
+                    is If -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as If).codeBlock, instruction)!!
+                }
             }
+            instruction.delete()
         }
-        instruction.delete()
-    })
+    )
 
-    SwipeToDismiss(state = dismissState, directions = setOf(DismissDirection.EndToStart), background = {
-        val color = when (dismissState.dismissDirection) {
-            DismissDirection.StartToEnd -> Color.Transparent
-            DismissDirection.EndToStart -> Color.Red
-            null -> Color.Transparent
+    SwipeToDismiss(
+        state = dismissState,
+        directions = setOf(DismissDirection.EndToStart),
+        background = {
+            val color = when (dismissState.dismissDirection) {
+                DismissDirection.StartToEnd -> Color.Transparent
+                DismissDirection.EndToStart -> Color.Red
+                null -> Color.Transparent
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+            )
+        },
+        dismissContent = {
+            CodeSnippet(instruction = instruction, viewModel.cursor)
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color)
-        )
-    }, dismissContent = { CodeSnippet(instruction = instruction, viewModel.cursor)})
+    )
 }
 
 
