@@ -45,16 +45,18 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onResume() {
         world = World()
-        val karol = worldOrigin.children.first { it.name == "Karol" }
-        karol.isVisible = false
-        worldOrigin.removeChild(karol)
-        worldOrigin.children.forEach {
-            if(it.name?.startsWith("Block") == true) {
-                it.isVisible = false
-                worldOrigin.removeChild(it)
+        if(this::worldOrigin.isInitialized) {
+            val karol = worldOrigin.children.first { it.name == "Karol" }
+            karol.isVisible = false
+            worldOrigin.removeChild(karol)
+            worldOrigin.children.forEach {
+                if(it.name?.startsWith("Block") == true) {
+                    it.isVisible = false
+                    worldOrigin.removeChild(it)
+                }
             }
+            createKarol(0,0,0, worldOrigin)
         }
-        createKarol(0,0,0, worldOrigin)
         super.onResume()
     }
 
