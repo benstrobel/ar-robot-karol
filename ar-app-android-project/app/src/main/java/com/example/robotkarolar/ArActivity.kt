@@ -1,7 +1,6 @@
 package com.example.robotkarolar
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
@@ -12,7 +11,6 @@ import com.example.robotkarolar.karollogic.instructions.statements.Noop
 import com.example.robotkarolar.karollogic.world.World
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.ar.core.Config
-import com.google.ar.sceneform.collision.Box
 import com.google.ar.sceneform.math.Vector3
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
@@ -31,7 +29,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var interpreter: Interpreter
     private lateinit var worldOrigin: ArNode
     private lateinit var placeButton: ExtendedFloatingActionButton
-    private val allModelScale = 1f
+    private val allModelScale = 0.5f
     private var karolRotation = 0
     private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
 
@@ -86,14 +84,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun debug() {
         val karol = worldOrigin.children.first { it.name == "Karol" }
-        when(karolRotation){
-            0 -> {karol.rotation = Rotation(y = 90f); karolRotation = 1}
-            1 -> {karol.rotation = Rotation(y = 180f); karolRotation = 2}
-            2 -> {karol.rotation = Rotation(y = 270f); karolRotation = 3}
-            3 -> {karol.rotation = Rotation(y = 0f); karolRotation = 0}
-        }
-        // createBlock(1f, 0f,0f, BlockType.GRASS, worldOrigin)
-        createBlock(0, 1,0, BlockType.GRASS, worldOrigin)
     }
 
     fun runNext() {
@@ -112,7 +102,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    fun finishAr(){
+    private fun finishAr(){
         this.finish()
     }
 
@@ -134,17 +124,10 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun deleteBlock(x: Int, y: Int, h: Int, parent: ArNode = worldOrigin) {
-        var blockExists = false
-        parent.children.forEach{
-            if (it.name == "Block$x$y$h") {
-                blockExists = true
-            }
-        }
-
-        if (blockExists) {
-            val firstWithName = parent.children.first { it.name == "Block$x$y$h" }
-            firstWithName.isVisible = false
-            parent.removeChild(firstWithName)
+        val block = parent.children.firstOrNull {it.name == "Block$x$y$h"}
+        if(block != null){
+            block.isVisible = false
+            parent.removeChild(block)
         }
     }
 
@@ -230,7 +213,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 )
                 name = "Block$x$y$h"
                 scale = Scale(allModelScale)
-                // (hoch, rechts, vor)
                 position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
                 rotation = Rotation(y = 0f)
             }
