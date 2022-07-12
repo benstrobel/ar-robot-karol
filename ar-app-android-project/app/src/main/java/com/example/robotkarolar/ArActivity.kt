@@ -34,6 +34,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private val allModelScale = 0.25f
     private var karolRotation = 2
     private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
+    lateinit var cursorNode: ArModelNode
     private var world = World()
 
     override fun onBackPressed() {
@@ -73,7 +74,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock(mutableListOf(Noop()))
         }
 
-        val world = World()
         val karol = world.addEntity(0,0)
         world.selectedEntity = karol
         interpreter = Interpreter(codeBlock, world)
@@ -81,7 +81,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         sceneView = findViewById(R.id.sceneView)
 
         placeButton = findViewById<ExtendedFloatingActionButton>(R.id.placeModelButton).apply {
-            setOnClickListener{ debug() }
+            setOnClickListener{ placeBoard() }
         }
 
         sceneView.planeRenderer.isShadowReceiver = false
@@ -91,20 +91,40 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             sceneView.arSession?.configure(config)
         }
 
-        sceneView.onArFrame = {
-            if(!karolCreated && it.isTrackingPlane) {
-                sceneView.planeRenderer.isVisible = false
-                worldOrigin = ArModelNode(PlacementMode.PLANE_HORIZONTAL, instantAnchor = true, followHitPosition = false)
-                sceneView.addChild(worldOrigin)
-                createFloor(world, worldOrigin)
-                createKarol(0,0,0, worldOrigin)
-                karolCreated = true
-            }
+        val context = this
+        sceneView.planeRenderer.isVisible = false
+        cursorNode = ArModelNode(PlacementMode.PLANE_HORIZONTAL, followHitPosition = true).apply {
+            loadModelAsync(
+                context = context,
+                lifecycle = lifecycle,
+                glbFileLocation = "sceneview/models/cursor.glb",
+                autoScale = false
+            )
         }
+        sceneView.addChild(cursorNode)
     }
 
-    private fun debug() {
-        val karol = worldOrigin.children.first { it.name == "Karol" }
+    private fun placeBoard() {
+        if(!karolCreated) {
+            worldOrigin = ArModelNode(
+                PlacementMode.DISABLED,
+                followHitPosition = false,
+                instantAnchor = true,
+            )
+            worldOrigin.apply {
+
+                val xOffSet = if (sceneView.camera.position.x > cursorNode.position.x) cursorNode.position.x + (world.xSize * blockSize.x / 2) else cursorNode.position.x - (world.xSize * blockSize.x / 2)
+                val zOffSet = if (sceneView.camera.position.z > cursorNode.position.z) cursorNode.position.z + (world.ySize * blockSize.z / 2) else cursorNode.position.z - (world.ySize * blockSize.z / 2)
+                position = Position(xOffSet, cursorNode.position.y, zOffSet)
+                rotation = Rotation(y = sceneView.camera.rotation.y)
+            }
+            cursorNode.isVisible = false
+            sceneView.removeChild(cursorNode)
+            sceneView.addChild(worldOrigin)
+            createFloor(world, worldOrigin)
+            createKarol(0,0,0, worldOrigin)
+            karolCreated = true
+        }
     }
 
     fun runNext(v: View) {
