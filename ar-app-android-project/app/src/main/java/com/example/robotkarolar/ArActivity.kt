@@ -188,7 +188,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     lifecycle = lifecycle,
                     glbFileLocation = "model_steve/steveScaled.glb",
                     autoScale = false,
-                    centerOrigin = Position(0f,0f,0f)
+                    centerOrigin = Position(0f,-1f,0f)
                 )
                 position = Position(x, y, h)
                 rotation = Rotation(x= 0f, y = 0f, z = 0f)
@@ -221,7 +221,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     lifecycle = lifecycle,
                     glbFileLocation = modelString,
                     autoScale = false,
-                    centerOrigin = Position(0f,0f,0f)
+                    centerOrigin = Position(0f,-1f,0f)
                 )
                 name = "Block$x$y$h"
                 scale = Scale(allModelScale)
