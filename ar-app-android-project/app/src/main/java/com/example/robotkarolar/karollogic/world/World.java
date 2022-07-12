@@ -35,23 +35,22 @@ public class World {
         selectedEntity.getTile().setEntity(null);
         selectedEntity.updatePosition(facingTile);
         facingTile.setEntity(selectedEntity);
-        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()+1);
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
     }
 
     public Triple<Integer, Integer, Integer> place() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
         facingTile.placeBlock(Block.RED);
-        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
     }
 
     public Triple<Integer, Integer, Integer> lift() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
         if(facingTile.getBlocks().isEmpty()) return null;
-        Triple<Integer, Integer, Integer> r = new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
         facingTile.liftBlock();
-        return r;
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
     }
 
     public boolean isNorth() {
@@ -119,6 +118,15 @@ public class World {
 
     public Entity getSelectedEntity() {
         return selectedEntity;
+    }
+
+    public int getYSize() {
+        return tiles.length;
+    }
+
+    public int getXSize() {
+        if(tiles.length == 0) return 0;
+        return tiles[0].length;
     }
 
     public void printWorld() {

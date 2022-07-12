@@ -1,6 +1,7 @@
 package com.example.robotkarolar
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
@@ -29,7 +30,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var interpreter: Interpreter
     private lateinit var worldOrigin: ArNode
     private lateinit var placeButton: ExtendedFloatingActionButton
-    private val allModelScale = 0.5f
+    private val allModelScale = 0.25f
     private var karolRotation = 2
     private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
 
@@ -72,6 +73,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 sceneView.planeRenderer.isVisible = false
                 worldOrigin = ArModelNode(PlacementMode.PLANE_HORIZONTAL, instantAnchor = true, followHitPosition = false)
                 sceneView.addChild(worldOrigin)
+                createFloor(world, worldOrigin)
                 createKarol(0,0,0, worldOrigin)
                 karolCreated = true
             }
@@ -184,6 +186,31 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         return null
     }
 
+    private fun createFloor(world: World, parent: ArNode = worldOrigin) {
+        var context = this
+        for(y in 0..world.ySize) {
+            for(x in 0..world.xSize) {
+                val node = ArModelNode(
+                    PlacementMode.DISABLED,
+                    followHitPosition = false,
+                    instantAnchor = true,
+                ).apply {
+                    loadModelAsync(
+                        context = context,
+                        lifecycle = lifecycle,
+                        glbFileLocation = "model_floor/floorBlockSize.glb",
+                        autoScale = false,
+                        centerOrigin = Position(0f,1f,0f)
+                    )
+                    scale = Scale(allModelScale)
+                    position = Position(blockSize.x*x, 0f, -blockSize.z*y)
+                    rotation = Rotation(y = 0f)
+                }
+                parent.addChild(node)
+            }
+        }
+    }
+
     private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType, parent: ArNode = worldOrigin):ArModelNode? {
         val context = this
         val modelString = when (blockType) {
@@ -211,9 +238,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
                 rotation = Rotation(y = 0f)
             }
-            parent.apply {
-                addChild(blockNode)
-            }
+            parent.addChild(blockNode)
             return blockNode
         }
         return null
