@@ -178,7 +178,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 loadModelAsync(
                     context = context,
                     lifecycle = lifecycle,
-                    glbFileLocation = "model_steve/steveScaled.glb",
+                    glbFileLocation = "model_steve/steveDouble2.glb",
                     autoScale = false,
                     centerOrigin = Position(0f,-1f,0f)
                 )
@@ -205,7 +205,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     loadModelAsync(
                         context = context,
                         lifecycle = lifecycle,
-                        glbFileLocation = "model_floor/floorBlockSize.glb",
+                        glbFileLocation = "model_floor/floorTest.glb",
                         autoScale = false,
                         centerOrigin = Position(0f,1f,0f)
                     )
