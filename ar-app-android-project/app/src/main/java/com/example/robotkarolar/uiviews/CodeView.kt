@@ -81,6 +81,7 @@ fun ArButton(viewModel: CodeViewModel) {
     Button(
         onClick = {
             val intent = Intent(context, ArActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             val bundle = Bundle()
             bundle.putParcelable("codeBlock", viewModel.codeBlock.value)
             intent.putExtras(bundle)
