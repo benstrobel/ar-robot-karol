@@ -30,12 +30,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var worldOrigin: ArNode
     private lateinit var placeButton: ExtendedFloatingActionButton
     private val allModelScale = 0.5f
-    private var karolRotation = 0
+    private var karolRotation = 2
     private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
-
-    override fun onBackPressed() {
-        finishAr()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +82,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         val karol = worldOrigin.children.first { it.name == "Karol" }
     }
 
-    fun runNext() {
+    fun runNext(v: View) {
         var command = interpreter.nextStep()
 
         if (command != null) {
@@ -94,7 +90,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    fun runAll() {
+    fun runAll(v: View) {
         var command = interpreter.nextStep()
         while (command != null && command.commandType != ArCommandType.END) {
             executeCommand(command)
@@ -102,7 +98,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun finishAr(){
+    private fun finishAr(v: View){
         this.finish()
     }
 
@@ -111,7 +107,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         val y: Int = if (command.y != null) command.y as Int else 0
         val h: Int = if (command.h != null) command.h as Int else 0
         val blockType: BlockType = if (command.blockType != null) command.blockType as BlockType else BlockType.GRASS
-
 
         when(command.commandType) {
             ArCommandType.REMOVEBLOCK -> deleteBlock(x, y, h)
