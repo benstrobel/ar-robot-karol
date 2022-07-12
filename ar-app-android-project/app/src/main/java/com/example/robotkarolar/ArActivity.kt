@@ -34,11 +34,27 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private val allModelScale = 0.25f
     private var karolRotation = 2
     private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
+    private var world = World()
 
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        world = World()
+        val karol = worldOrigin.children.first { it.name == "Karol" }
+        karol.isVisible = false
+        worldOrigin.removeChild(karol)
+        worldOrigin.children.forEach {
+            if(it.name?.startsWith("Block") == true) {
+                it.isVisible = false
+                worldOrigin.removeChild(it)
+            }
+        }
+        createKarol(0,0,0, worldOrigin)
+        super.onResume()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
