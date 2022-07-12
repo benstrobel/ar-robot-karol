@@ -1,6 +1,7 @@
 package com.example.robotkarolar
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
@@ -11,6 +12,8 @@ import com.example.robotkarolar.karollogic.instructions.statements.Noop
 import com.example.robotkarolar.karollogic.world.World
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.ar.core.Config
+import com.google.ar.sceneform.collision.Box
+import com.google.ar.sceneform.math.Vector3
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.ArNode
@@ -28,8 +31,9 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var interpreter: Interpreter
     private lateinit var worldOrigin: ArNode
     private lateinit var placeButton: ExtendedFloatingActionButton
-    private val allModelScale = 0.5f
+    private val allModelScale = 1f
     private var karolRotation = 0
+    private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
 
     override fun onBackPressed() {
         finishAr()
@@ -74,7 +78,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 sceneView.planeRenderer.isVisible = false
                 worldOrigin = ArModelNode(PlacementMode.PLANE_HORIZONTAL, instantAnchor = true, followHitPosition = false)
                 sceneView.addChild(worldOrigin)
-                createKarol(0f,0f,0f, worldOrigin)
+                createKarol(0,0,0, worldOrigin)
                 karolCreated = true
             }
         }
@@ -88,7 +92,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             2 -> {karol.rotation = Rotation(y = 270f); karolRotation = 3}
             3 -> {karol.rotation = Rotation(y = 0f); karolRotation = 0}
         }
-        // createBlock(1, 0,0, BlockType.GRASS, worldOrigin)
+        // createBlock(1f, 0f,0f, BlockType.GRASS, worldOrigin)
+        createBlock(0, 1,0, BlockType.GRASS, worldOrigin)
     }
 
     fun runNext() {
@@ -112,9 +117,9 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun executeCommand(command: ArCommand) {
-        val x: Float = if (command.x != null) (command.x as Int).toFloat() else 0f
-        val y: Float = if (command.y != null) (command.y as Int).toFloat() else 0f
-        val h: Float = if (command.h != null) (command.h as Int).toFloat() else 0f
+        val x: Int = if (command.x != null) command.x as Int else 0
+        val y: Int = if (command.y != null) command.y as Int else 0
+        val h: Int = if (command.h != null) command.h as Int else 0
         val blockType: BlockType = if (command.blockType != null) command.blockType as BlockType else BlockType.GRASS
 
 
@@ -128,7 +133,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun deleteBlock(x: Float, y: Float, h: Float, parent: ArNode = worldOrigin) {
+    private fun deleteBlock(x: Int, y: Int, h: Int, parent: ArNode = worldOrigin) {
         var blockExists = false
         parent.children.forEach{
             if (it.name == "Block$x$y$h") {
@@ -143,8 +148,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun moveKarol(x: Float, y: Float, h: Float, parent: ArNode = worldOrigin) { //TODO: Doesn't rereder yet
-        parent.children.first { it.name == "Karol" }.position = Position(x.toFloat() , h.toFloat() , y. toFloat()) //TODO: TRANSFORM POSITION
+    private fun moveKarol(x: Int, y: Int, h: Int, parent: ArNode = worldOrigin) {
+        parent.children.first { it.name == "Karol" }.position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
     }
 
     private fun rotateKarol(arCommandType: ArCommandType, parent: ArNode = worldOrigin) {
@@ -174,7 +179,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun createKarol(x: Float, y: Float, h: Float, parent: ArNode = worldOrigin):ArModelNode? {
+    private fun createKarol(x: Int, y: Int, h: Int, parent: ArNode = worldOrigin):ArModelNode? {
         //check if karol exists
         val context = this
         if (!karolCreated) {
@@ -190,8 +195,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     autoScale = false,
                     centerOrigin = Position(0f,-1f,0f)
                 )
-                position = Position(x, y, h)
-                rotation = Rotation(x= 0f, y = 0f, z = 0f)
+                position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
+                rotation = Rotation(x= 0f, y = 180f, z = 0f)
                 name = "Karol"
                 scale = Scale(allModelScale)
             }
@@ -201,7 +206,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         return null
     }
 
-    private fun createBlock(x: Float, y: Float, h: Float, blockType: BlockType, parent: ArNode = worldOrigin):ArModelNode? {
+    private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType, parent: ArNode = worldOrigin):ArModelNode? {
         val context = this
         val modelString = when (blockType) {
             BlockType.GRASS -> "model_grasblock/gras.glb"
@@ -225,7 +230,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 )
                 name = "Block$x$y$h"
                 scale = Scale(allModelScale)
-                position = Position(x, y, h)
+                // (hoch, rechts, vor)
+                position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
                 rotation = Rotation(y = 0f)
             }
             parent.apply {
