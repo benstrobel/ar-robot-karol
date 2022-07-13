@@ -11,7 +11,9 @@ import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisi
 abstract class Instruction: Parcelable {
     val id: Long
     var parent: Instruction? = null
+
     abstract fun accept(visitor: InstructionVisitor?)
+
     fun delete(): Boolean {
         if (parent == null) return false
         if (parent is ControlFlow) {

@@ -32,7 +32,12 @@ fun ArButton(viewModel: CodeViewModel) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Show in Room", style = MaterialTheme.typography.subtitle1, color = Color(0xFF000000), textAlign = TextAlign.Center)
+        Text(
+            text = "Show in Room",
+            style = MaterialTheme.typography.subtitle1,
+            color = Color(0xFF000000),
+            textAlign = TextAlign.Center
+        )
 
         CodeNavButton(
             onClick = {
