@@ -1,6 +1,7 @@
 package com.example.robotkarolar.uiviews.components.buttons
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +27,7 @@ import com.example.robotkarolar.karollogic.instructions.statements.*
 import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.ui.theme.InstructionText
 import com.example.robotkarolar.ui.theme.Snipit3
-import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.models.CodeViewModel
 
 @Composable
 fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
@@ -43,8 +44,13 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
     Box(
         Modifier
             .padding(5.dp)
+            .border(
+                width = 2.dp,
+                color = color.value,
+                shape = RoundedCornerShape(5.dp)
+            )
             .clip(RoundedCornerShape(5.dp))
-            .background(color.value)
+            .background(color.value.copy(alpha = if (instruction == viewModel.cursor.value) 0.1f else 0.0f))
             .clickable(onClick = {
                 //TODO: Open change window and set curser
                 viewModel.cursor.value = instructionOfButton.value
@@ -93,9 +99,8 @@ fun rowInstruction(textString: String, expression: Expression, viewModel: CodeVi
         verticalAlignment = Alignment.CenterVertically
     ) {
         textInstruction(textString = textString)
-        textInstruction(textString = " (")
+        Spacer(modifier = Modifier.padding(2.dp))
         ExpressionButton(expression = expression, viewModel = viewModel)
-        textInstruction(textString = ")")
     }
 }
 
@@ -116,6 +121,6 @@ fun InstructionButtonPreview() {
 
     Column() {
         InstructionButton(instruction = Place(), viewModel = viewModel)
-        InstructionButton(instruction = If(True(), CodeBlock(mutableListOf())), viewModel = viewModel)
+        InstructionButton(instruction = If(EmptyExpression(), CodeBlock(mutableListOf())), viewModel = viewModel)
     }
 }

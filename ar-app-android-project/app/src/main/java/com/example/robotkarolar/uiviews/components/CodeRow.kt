@@ -14,7 +14,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
-import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.models.CodeViewModel
 import com.example.robotkarolar.uiviews.components.buttons.InstructionButton
 
 @Composable

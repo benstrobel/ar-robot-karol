@@ -6,7 +6,7 @@ val Snipit1 = Color(0xFF00BCD4)
 val Snipit2 = Color(0xFF03A9F4)
 val Snipit3 = Color(0xFF3F51B5)
 
-val InstructionText = Color(0xFFFFFFFF)
+val InstructionText = Color(0xFF000000)
 val ExpressionText = Color(0xFF000000)
 
 val CursorColor = Color(0xFFFFEB3B)

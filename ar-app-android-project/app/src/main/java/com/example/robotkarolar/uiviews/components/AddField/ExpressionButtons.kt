@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import com.example.robotkarolar.karollogic.instructions.expressions.*
-import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.models.CodeViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

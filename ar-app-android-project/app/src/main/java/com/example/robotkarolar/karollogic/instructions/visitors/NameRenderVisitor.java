@@ -79,32 +79,32 @@ public class NameRenderVisitor implements InstructionVisitor {
 
     @Override
     public void accept(IsBlock isBlock) {
-        renderedName = "ISBLOCK";
+        renderedName = "isBlock";
     }
 
     @Override
     public void accept(IsEast isEast) {
-        renderedName = "ISEAST";
+        renderedName = "isEast";
     }
 
     @Override
     public void accept(IsNorth isNorth) {
-        renderedName = "ISNORTH";
+        renderedName = "isNorth";
     }
 
     @Override
     public void accept(IsSouth isSouth) {
-        renderedName = "ISSOUTH";
+        renderedName = "isSouth";
     }
 
     @Override
     public void accept(IsBorder isBorder) {
-        renderedName = "ISBORDER";
+        renderedName = "isBorder";
     }
 
     @Override
     public void accept(IsWest isWest) {
-        renderedName = "ISWEST";
+        renderedName = "isWest";
     }
 
     @Override
@@ -119,17 +119,17 @@ public class NameRenderVisitor implements InstructionVisitor {
 
     @Override
     public void accept(True expressionTrue) {
-        renderedName = "TRUE";
+        renderedName = "true";
     }
 
     @Override
     public void accept(False expressionFalse) {
-        renderedName = "FALSE";
+        renderedName = "false";
     }
 
     @Override
     public void accept(EmptyExpression emptyExpression) {
-        renderedName = "___";
+        renderedName = "Pick";
     }
 
     @Override

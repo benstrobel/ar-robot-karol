@@ -1,4 +1,4 @@
-package com.example.robotkarolar.uiviews
+package com.example.robotkarolar.uiviews.models
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +17,8 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val codeBlock: MutableState<Instruction> = mutableStateOf(root)
     var cursor: MutableState<Instruction> = mutableStateOf(first)
     var repaintHelper: MutableState<Boolean> = mutableStateOf(false)
+
+    var addFieldState: MutableState<AddFieldStates> = mutableStateOf(AddFieldStates.Statements)
 
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds

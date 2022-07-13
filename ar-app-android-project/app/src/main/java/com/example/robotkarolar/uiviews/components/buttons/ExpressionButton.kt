@@ -1,6 +1,7 @@
 package com.example.robotkarolar.uiviews.components.buttons
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,62 +20,50 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
-import com.example.robotkarolar.ui.theme.CursorColor
 import com.example.robotkarolar.ui.theme.ExpressionText
 import com.example.robotkarolar.ui.theme.Snipit1
 import com.example.robotkarolar.ui.theme.Snipit2
-import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.models.CodeViewModel
 import com.example.robotkarolar.uiviews.components.CodeCursor
 
 @Composable
 fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
-    var expressionOfButton: MutableState<Expression> = remember {
-        mutableStateOf(expression)
-    }
-
     var color: MutableState<Color> = remember {
-        when (expressionOfButton.value) {
+        when (expression) {
             is And, is Or, is Not -> mutableStateOf(Snipit2)
             else -> mutableStateOf(Snipit1)
         }
     } //TODO: PICK nicer colors
 
-    Box(
-        Modifier
-            .padding(5.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .background(color.value)
-            .clickable(onClick = {
-                //TODO: Open change window
-                viewModel.cursor.value = expressionOfButton.value
-            })
-            .padding(5.dp)
+    Row (
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        var textButton = NameRenderVisitor(expression).get()
-        /*when(expressionOfButton.value) {
-            is EmptyExpression -> "Pick"
-            is False -> "false"
-            is IsBlock -> "isBlock"
-            is IsBorder -> "isBorder"
-            is IsEast -> "isEast"
-            is IsNorth -> "isNorth"
-            is IsSouth -> "isSouth"
-            is IsWest -> "isWest"
-            is True -> "true"
-            is And -> "AND"
-            is Not -> "NOT"
-            is Or -> "OR"
-            else -> ""
-        }*/
+        if(expression == viewModel.cursor.value) {
+            CodeCursor()
+        }
 
-        Row {
-            if(expression == viewModel.cursor.value) {
-                CodeCursor()
-            }
+        Box(
+            Modifier
+                .padding(5.dp)
+                .border(
+                    width = 2.dp,
+                    color = color.value,
+                    shape = RoundedCornerShape(5.dp)
+                )
+                .clip(RoundedCornerShape(5.dp))
+                .background(color.value.copy(alpha = if (expression == viewModel.cursor.value) 0.1f else 0.0f))
+                .clickable(onClick = {
+                    //TODO: Open change window
+                    viewModel.cursor.value = expression
+                })
+                .padding(5.dp)
+        ) {
+            var textButton = NameRenderVisitor(expression).get()
 
-            when (expressionOfButton.value) {
+            when (expression) {
                 is And -> {
-                    val and = expressionOfButton.value as And
+                    val and = expression as And
 
                     rowExpression(
                         textString = textButton,
@@ -84,7 +73,7 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
                     )
                 }
                 is Or -> {
-                    val or = expressionOfButton.value as Or
+                    val or = expression as Or
 
                     rowExpression(
                         textString = textButton,
@@ -94,16 +83,14 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
                     )
                 }
                 is Not -> {
-                    val not = expressionOfButton.value as Not
+                    val not = expression as Not
 
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        textExpression(textString = "(")
                         textExpression(textString = textButton)
                         ExpressionButton(expression = not.child, viewModel = viewModel)
-                        textExpression(textString = ")")
                     }
                 }
                 else -> {
@@ -120,11 +107,9 @@ fun rowExpression(textString: String, expressionLeft: Expression, expressionRigh
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        textExpression(textString = "(")
         ExpressionButton(expression = expressionLeft, viewModel = viewModel)
         textExpression(textString = textString)
         ExpressionButton(expression = expressionRight, viewModel = viewModel)
-        textExpression(textString = ")")
     }
 }
 
