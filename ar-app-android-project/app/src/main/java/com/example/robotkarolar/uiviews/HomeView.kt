@@ -21,7 +21,7 @@ import com.example.robotkarolar.uiviews.models.CodeViewModel
 @Composable
 fun HomeView(viewModel: CodeViewModel) {
     Scaffold(
-        topBar = { Toolbar(topBarText = "ArRoboterKarol") },
+        topBar = { Toolbar(topBarText = "ArRobotKarol") },
     ) {
         CodeView(viewModel = viewModel)
     }
