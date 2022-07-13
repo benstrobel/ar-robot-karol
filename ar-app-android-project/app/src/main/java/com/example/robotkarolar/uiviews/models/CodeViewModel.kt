@@ -21,31 +21,6 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     //AddFieldStates
     var addFieldState: MutableState<AddFieldStates> = mutableStateOf(AddFieldStates.Statements)
 
-    private fun syncFieldStates(){
-        inExpression.value = isInExpression()
-
-        if (isInExpression()) {
-            when (cursor.value) {
-                is Or, is And, is Not -> addFieldState.value = AddFieldStates.Operator
-                else -> addFieldState.value = AddFieldStates.Expressions
-            }
-        } else {
-            addFieldState.value = AddFieldStates.Statements
-        }
-    }
-
-    private fun isInExpression(): Boolean {
-        when (cursor.value) {
-            is End, is LeftTurn, is Lift, is Noop, is Place, is RightTurn, is Step, is If, is While, is CodeBlock -> return false
-            else -> return true
-        }
-    }
-
-    private fun setCursor (instruction: Instruction) {
-        cursor.value = instruction
-        syncFieldStates()
-    }
-
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds
             if(afterChild != null) {
