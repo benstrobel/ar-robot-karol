@@ -159,14 +159,18 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                 }
                 is And -> {
                     if((expression.parent as And).left == expression) {
-                        val expr = nextEmptyExpressionDown(expression)
+                        var expr = nextEmptyExpressionDown(expression)
+                        if(expr != null) return expr
+                        expr = nextEmptyExpressionDown((expression.parent as And).right)
                         if(expr != null) return expr
                     }
                     return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
                 }
                 is Or -> {
                     if((expression.parent as Or).left == expression) {
-                        val expr = nextEmptyExpressionDown(expression)
+                        var expr = nextEmptyExpressionDown(expression)
+                        if(expr != null) return expr
+                        expr = nextEmptyExpressionDown((expression.parent as And).right)
                         if(expr != null) return expr
                     }
                     return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)

@@ -79,16 +79,6 @@ fun CodeAddField(viewModel: CodeViewModel){
                 AddFieldStates.Operator -> OperatorButtons(viewModel = viewModel)
             }
         }
-
-        /*Column() {
-            if(viewModel.cursor.value is EmptyExpression) {
-                ExpressionButtons(viewModel = viewModel)
-            } else {
-                StatementButtons(viewModel = viewModel)
-                ControllFlowButtons(viewModel = viewModel)
-            }
-
-        }*/
     }
 }
 
