@@ -1,12 +1,9 @@
 package com.example.robotkarolar.uiviews.components.bars
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,12 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.robotkarolar.R
-import com.example.robotkarolar.uiviews.components.buttons.ArButton
-import com.example.robotkarolar.uiviews.components.buttons.CodeNavButton
+import com.example.robotkarolar.karollogic.instructions.expressions.EmptyExpression
 import com.example.robotkarolar.uiviews.models.AddFieldStates
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
@@ -31,7 +25,11 @@ fun AddOptionsBar(viewModel: CodeViewModel) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ){
-        if (viewModel.inExpression.value) {
+        if (viewModel.cursor.value is EmptyExpression) {
+            if(viewModel.addFieldState.value == AddFieldStates.Statements || viewModel.addFieldState.value == AddFieldStates.ControllFlow) {
+                viewModel.addFieldState.value = AddFieldStates.Expressions
+            }
+
             AddOptionItem(
                 isSelected = (viewModel.addFieldState.value == AddFieldStates.Expressions),
                 onClick = { viewModel.addFieldState.value = AddFieldStates.Expressions},
@@ -44,6 +42,10 @@ fun AddOptionsBar(viewModel: CodeViewModel) {
                 text = "Operator"
             )
         } else {
+            if(viewModel.addFieldState.value == AddFieldStates.Expressions || viewModel.addFieldState.value == AddFieldStates.Operator) {
+                viewModel.addFieldState.value = AddFieldStates.Statements
+            }
+
             AddOptionItem(
                 isSelected = (viewModel.addFieldState.value == AddFieldStates.Statements),
                 onClick = { viewModel.addFieldState.value = AddFieldStates.Statements},

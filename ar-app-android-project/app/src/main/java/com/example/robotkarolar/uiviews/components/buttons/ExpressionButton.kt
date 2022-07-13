@@ -61,11 +61,9 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
                     when(expression) {
                         is And, is Or, is Not -> {
                             viewModel.addFieldState.value = AddFieldStates.Operator
-                            viewModel.inExpression.value = true
                         }
                         else -> {
                             viewModel.addFieldState.value = AddFieldStates.Expressions
-                            viewModel.inExpression.value = true
                         }
                     }
                 })

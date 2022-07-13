@@ -57,22 +57,10 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
                 viewModel.cursor.value = instructionOfButton.value
 
                 viewModel.addFieldState.value = AddFieldStates.Statements
-                viewModel.inExpression.value = false
             })
             .padding(5.dp)
     ) {
         var textButton = NameRenderVisitor(instruction).get()
-        /*when(instructionOfButton.value) {
-            is LeftTurn -> "LeftTurn"
-            is End -> "End"
-            is Lift -> "Lift"
-            is Place -> "Place"
-            is RightTurn -> "RightTurn"
-            is Step -> "Step"
-            is If -> "if"
-            is While -> "while"
-            else -> ""
-        }*/
 
         when (instructionOfButton.value) {
             is While -> {
