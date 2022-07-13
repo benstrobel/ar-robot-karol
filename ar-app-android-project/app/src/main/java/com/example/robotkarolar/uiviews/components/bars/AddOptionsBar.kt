@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.robotkarolar.karollogic.instructions.expressions.EmptyExpression
+import com.example.robotkarolar.karollogic.instructions.expressions.Expression
 import com.example.robotkarolar.uiviews.models.AddFieldStates
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
@@ -25,7 +26,7 @@ fun AddOptionsBar(viewModel: CodeViewModel) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ){
-        if (viewModel.cursor.value is EmptyExpression) {
+        if (viewModel.cursor.value is Expression) {
             if(viewModel.addFieldState.value == AddFieldStates.Statements || viewModel.addFieldState.value == AddFieldStates.ControllFlow) {
                 viewModel.addFieldState.value = AddFieldStates.Expressions
             }
