@@ -11,6 +11,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If;
 import com.example.robotkarolar.karollogic.instructions.controlflow.While;
 import com.example.robotkarolar.karollogic.instructions.visitors.ExpressionEvaulationVisitor;
 import com.example.robotkarolar.karollogic.instructions.visitors.InstructionExecuteVisitor;
+import com.example.robotkarolar.karollogic.instructions.visitors.InstructionStepperResetVisitor;
 import com.example.robotkarolar.karollogic.instructions.visitors.InstructionStepperVisitor;
 import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisitor;
 import com.example.robotkarolar.karollogic.world.World;
@@ -24,6 +25,11 @@ public class Interpreter {
     public Interpreter(CodeBlock codeBlock, World world) {
         this.currentCodeBlock = codeBlock;
         this.world = world;
+    }
+
+    public void reset() {
+        InstructionStepperResetVisitor visitor = new InstructionStepperResetVisitor();
+        currentCodeBlock.accept(visitor);
     }
 
     public ArCommand nextStep() {
