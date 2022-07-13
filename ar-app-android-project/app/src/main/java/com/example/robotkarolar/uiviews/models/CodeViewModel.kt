@@ -39,7 +39,7 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                     }
                 }
             } else {
-                if(currentCursor is EmptyExpression && instruction is Expression) {
+                if(currentCursor is Expression && instruction is Expression) {
                     val parent = currentCursor.parent
                     when(parent) {
                         is If -> {
