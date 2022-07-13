@@ -160,7 +160,7 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                 is And -> {
                     if((expression.parent as And).left == expression) {
                         var expr = nextEmptyExpressionDown(expression)
-                        if(expr != null) return expr
+                        if(expr != null && expression !is EmptyExpression) return expr
                         expr = nextEmptyExpressionDown((expression.parent as And).right)
                         if(expr != null) return expr
                     }
@@ -169,8 +169,8 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                 is Or -> {
                     if((expression.parent as Or).left == expression) {
                         var expr = nextEmptyExpressionDown(expression)
-                        if(expr != null) return expr
-                        expr = nextEmptyExpressionDown((expression.parent as And).right)
+                        if(expr != null && expression !is EmptyExpression) return expr
+                        expr = nextEmptyExpressionDown((expression.parent as Or).right)
                         if(expr != null) return expr
                     }
                     return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
@@ -245,17 +245,21 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                 }
                 is And -> {
                     if((expression.parent as And).right == expression) {
-                        val expr = previousEmptyExpressionDown(expression)
+                        var expr = previousEmptyExpressionDown(expression)
+                        if(expr != null && expression !is EmptyExpression) return expr
+                        expr = previousEmptyExpressionDown((expression.parent as And).left)
                         if(expr != null) return expr
                     }
-                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                    return previousEmptyExpressionOrParentInstruction(expression.parent as Expression)
                 }
                 is Or -> {
                     if((expression.parent as Or).right == expression) {
-                        val expr = previousEmptyExpressionDown(expression)
+                        var expr = previousEmptyExpressionDown(expression)
+                        if(expr != null && expression !is EmptyExpression) return expr
+                        expr = previousEmptyExpressionDown((expression.parent as Or).left)
                         if(expr != null) return expr
                     }
-                    return nextEmptyExpressionOrParentInstruction(expression.parent as Expression)
+                    return previousEmptyExpressionOrParentInstruction(expression.parent as Expression)
                 }
             }
         }
