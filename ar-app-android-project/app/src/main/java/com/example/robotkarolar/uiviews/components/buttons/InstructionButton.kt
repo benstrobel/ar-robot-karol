@@ -54,7 +54,12 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
             .background(color.value.copy(alpha = if (instruction == viewModel.cursor.value) 0.1f else 0.0f))
             .clickable(onClick = {
                 //TODO: Open change window and set curser
-                viewModel.cursor.value = instructionOfButton.value
+                //viewModel.cursor.value = instructionOfButton.value
+                when(instruction) {
+                    is While -> viewModel.cursor.value = instruction.codeBlock.instructions.first()
+                    is If -> viewModel.cursor.value = instruction.codeBlock.instructions.first()
+                    else -> viewModel.cursor.value = instructionOfButton.value
+                }
 
                 viewModel.addFieldState.value = AddFieldStates.Statements
             })

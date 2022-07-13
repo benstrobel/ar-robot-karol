@@ -13,7 +13,7 @@ val Snipit3 = Color(0xFF1E2547)
 val InstructionText = Color(0xFF000000)
 val ExpressionText = Color(0xFF000000)
 
-val CursorColor = Color(0xFF463F03)
+val CursorColor = Color(0xFF998900)
 
 val Teal200 = Color(0xFF03DAC5)
 val GreyLove = Color(0xFFDFDFDF)
