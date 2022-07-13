@@ -13,6 +13,8 @@ import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn
 import com.example.robotkarolar.karollogic.instructions.statements.Place
 import com.example.robotkarolar.karollogic.instructions.statements.Step
 import com.example.robotkarolar.uiviews.components.*
+import com.example.robotkarolar.uiviews.components.AddField.OperatorButtons
+import com.example.robotkarolar.uiviews.components.bars.AddOptionsBar
 import com.example.robotkarolar.uiviews.models.AddFieldStates
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
@@ -66,10 +68,16 @@ fun CodeAddField(viewModel: CodeViewModel){
         //.background(MaterialTheme.colors.primary)
         .padding(5.dp)
     ) {
-        when (viewModel.addFieldState.value) {
-            AddFieldStates.Statements -> StatementButtons(viewModel = viewModel)
-            AddFieldStates.ControllFlow -> ControllFlowButtons(viewModel = viewModel)
-            AddFieldStates.Expressions -> ExpressionButtons(viewModel = viewModel)
+
+        Column() {
+            AddOptionsBar(viewModel = viewModel)
+
+            when (viewModel.addFieldState.value) {
+                AddFieldStates.Statements -> StatementButtons(viewModel = viewModel)
+                AddFieldStates.ControllFlow -> ControllFlowButtons(viewModel = viewModel)
+                AddFieldStates.Expressions -> ExpressionButtons(viewModel = viewModel)
+                AddFieldStates.Operator -> OperatorButtons(viewModel = viewModel)
+            }
         }
 
         /*Column() {

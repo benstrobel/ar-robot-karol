@@ -18,7 +18,9 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     var cursor: MutableState<Instruction> = mutableStateOf(first)
     var repaintHelper: MutableState<Boolean> = mutableStateOf(false)
 
+    //AddFieldStates
     var addFieldState: MutableState<AddFieldStates> = mutableStateOf(AddFieldStates.Statements)
+    var inExpression: MutableState<Boolean> = mutableStateOf(false)
 
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds

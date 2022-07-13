@@ -13,29 +13,6 @@ fun ExpressionButtons(viewModel: CodeViewModel) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(4)
     ) {
-        item { AddButton(
-            {
-                val expr = EmptyExpression()
-                val not = Not(expr)
-                expr.parent = not
-                viewModel.addInstruction(not)
-            }, "NOT") }
-        item { AddButton(lambda = {
-            val left = EmptyExpression()
-            val right = EmptyExpression()
-            val and = And(left, right)
-            left.parent = and
-            right.parent = and
-            viewModel.addInstruction(and)
-        }, buttonName = "AND") }
-        item { AddButton(lambda = {
-            val left = EmptyExpression()
-            val right = EmptyExpression()
-            val or = Or(left, right)
-            left.parent = or
-            right.parent = or
-            viewModel.addInstruction(or)
-        }, buttonName = "OR") }
         item { AddButton({viewModel.addInstruction(IsBorder())}, "ISBORDER") }
         item { AddButton({viewModel.addInstruction(IsBlock())}, "ISBLOCK") }
         item { AddButton({viewModel.addInstruction(IsEast())}, "ISEAST") }

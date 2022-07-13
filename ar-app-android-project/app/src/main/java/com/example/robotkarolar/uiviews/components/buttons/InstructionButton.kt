@@ -27,6 +27,7 @@ import com.example.robotkarolar.karollogic.instructions.statements.*
 import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.ui.theme.InstructionText
 import com.example.robotkarolar.ui.theme.Snipit3
+import com.example.robotkarolar.uiviews.models.AddFieldStates
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
 @Composable
@@ -54,6 +55,9 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
             .clickable(onClick = {
                 //TODO: Open change window and set curser
                 viewModel.cursor.value = instructionOfButton.value
+
+                viewModel.addFieldState.value = AddFieldStates.Statements
+                viewModel.inExpression.value = false
             })
             .padding(5.dp)
     ) {

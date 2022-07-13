@@ -25,6 +25,7 @@ import com.example.robotkarolar.ui.theme.Snipit1
 import com.example.robotkarolar.ui.theme.Snipit2
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 import com.example.robotkarolar.uiviews.components.CodeCursor
+import com.example.robotkarolar.uiviews.models.AddFieldStates
 
 @Composable
 fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
@@ -56,6 +57,17 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
                 .clickable(onClick = {
                     //TODO: Open change window
                     viewModel.cursor.value = expression
+
+                    when(expression) {
+                        is And, is Or, is Not -> {
+                            viewModel.addFieldState.value = AddFieldStates.Operator
+                            viewModel.inExpression.value = true
+                        }
+                        else -> {
+                            viewModel.addFieldState.value = AddFieldStates.Expressions
+                            viewModel.inExpression.value = true
+                        }
+                    }
                 })
                 .padding(5.dp)
         ) {
