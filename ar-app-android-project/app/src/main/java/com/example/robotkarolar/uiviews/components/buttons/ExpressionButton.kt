@@ -18,10 +18,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.robotkarolar.karollogic.instructions.expressions.*
+import com.example.robotkarolar.ui.theme.CursorColor
 import com.example.robotkarolar.ui.theme.ExpressionText
 import com.example.robotkarolar.ui.theme.Snipit1
 import com.example.robotkarolar.ui.theme.Snipit2
 import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.components.CodeCursor
 
 @Composable
 fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
@@ -63,42 +65,48 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
             else -> ""
         }
 
-        when (expressionOfButton.value) {
-            is And -> {
-                val and = expressionOfButton.value as And
-
-                rowExpression(
-                    textString = textButton,
-                    expressionLeft = and.left,
-                    expressionRight = and.right,
-                    viewModel = viewModel
-                )
+        Row {
+            if(expression == viewModel.cursor.value) {
+                CodeCursor()
             }
-            is Or -> {
-                val or = expressionOfButton.value as Or
 
-                rowExpression(
-                    textString = textButton,
-                    expressionLeft = or.left,
-                    expressionRight = or.right,
-                    viewModel = viewModel
-                )
-            }
-            is Not -> {
-                val not = expressionOfButton.value as Not
+            when (expressionOfButton.value) {
+                is And -> {
+                    val and = expressionOfButton.value as And
 
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    textExpression(textString = "(")
-                    textExpression(textString = textButton)
-                    ExpressionButton(expression = not.child, viewModel = viewModel)
-                    textExpression(textString = ")")
+                    rowExpression(
+                        textString = textButton,
+                        expressionLeft = and.left,
+                        expressionRight = and.right,
+                        viewModel = viewModel
+                    )
                 }
-            }
-            else -> {
-                textExpression(textButton)
+                is Or -> {
+                    val or = expressionOfButton.value as Or
+
+                    rowExpression(
+                        textString = textButton,
+                        expressionLeft = or.left,
+                        expressionRight = or.right,
+                        viewModel = viewModel
+                    )
+                }
+                is Not -> {
+                    val not = expressionOfButton.value as Not
+
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        textExpression(textString = "(")
+                        textExpression(textString = textButton)
+                        ExpressionButton(expression = not.child, viewModel = viewModel)
+                        textExpression(textString = ")")
+                    }
+                }
+                else -> {
+                    textExpression(textButton)
+                }
             }
         }
     }
