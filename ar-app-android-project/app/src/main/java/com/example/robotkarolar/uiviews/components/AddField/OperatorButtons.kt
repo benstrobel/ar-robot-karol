@@ -5,14 +5,14 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import com.example.robotkarolar.karollogic.instructions.expressions.*
-import com.example.robotkarolar.uiviews.components.AddButton
+import com.example.robotkarolar.uiviews.components.buttons.AddButton
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OperatorButtons(viewModel: CodeViewModel) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(4)
+        cells = GridCells.Fixed(2)
     ) {
         item { AddButton(
             {
@@ -21,21 +21,21 @@ fun OperatorButtons(viewModel: CodeViewModel) {
                 expr.parent = not
                 viewModel.addInstruction(not)
             }, "NOT") }
-        item { AddButton(lambda = {
+        item { AddButton(onClick = {
             val left = EmptyExpression()
             val right = EmptyExpression()
             val and = And(left, right)
             left.parent = and
             right.parent = and
             viewModel.addInstruction(and)
-        }, buttonName = "AND") }
-        item { AddButton(lambda = {
+        }, text = "AND") }
+        item { AddButton(onClick = {
             val left = EmptyExpression()
             val right = EmptyExpression()
             val or = Or(left, right)
             left.parent = or
             right.parent = or
             viewModel.addInstruction(or)
-        }, buttonName = "OR") }
+        }, text = "OR") }
     }
 }

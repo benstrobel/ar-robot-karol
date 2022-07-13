@@ -7,13 +7,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.example.robotkarolar.karollogic.instructions.statements.*
+import com.example.robotkarolar.uiviews.components.buttons.AddButton
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun StatementButtons(viewModel: CodeViewModel) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(4)
+        cells = GridCells.Fixed(2)
     ) {
         item { AddButton({ viewModel.addInstruction(Step()) }, "STEP") }
         item { AddButton({ viewModel.addInstruction(Place()) }, "PLACE") }
@@ -21,13 +22,5 @@ fun StatementButtons(viewModel: CodeViewModel) {
         item { AddButton({ viewModel.addInstruction(LeftTurn()) }, "LEFTTURN") }
         item { AddButton({ viewModel.addInstruction(RightTurn()) }, "RIGHTTURN") }
         item { AddButton({ viewModel.addInstruction(End()) }, "END") }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun AddButton(lambda: () -> Unit ,buttonName: String) {
-    Button(onClick = lambda) {
-        Text(text = buttonName)
     }
 }

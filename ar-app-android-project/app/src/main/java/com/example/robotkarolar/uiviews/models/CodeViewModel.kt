@@ -9,7 +9,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.ControlFlow
 import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
-import com.example.robotkarolar.karollogic.instructions.statements.Noop
+import com.example.robotkarolar.karollogic.instructions.statements.*
 
 class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val first = Noop()
@@ -21,6 +21,31 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     //AddFieldStates
     var addFieldState: MutableState<AddFieldStates> = mutableStateOf(AddFieldStates.Statements)
     var inExpression: MutableState<Boolean> = mutableStateOf(false)
+
+    private fun syncFieldStates(){
+        inExpression.value = isInExpression()
+
+        if (isInExpression()) {
+            when (cursor.value) {
+                is Or, is And, is Not -> addFieldState.value = AddFieldStates.Operator
+                else -> addFieldState.value = AddFieldStates.Expressions
+            }
+        } else {
+            addFieldState.value = AddFieldStates.Statements
+        }
+    }
+
+    private fun isInExpression(): Boolean {
+        when (cursor.value) {
+            is End, is LeftTurn, is Lift, is Noop, is Place, is RightTurn, is Step, is If, is While, is CodeBlock -> return false
+            else -> return true
+        }
+    }
+
+    private fun setCursor (instruction: Instruction) {
+        cursor.value = instruction
+        syncFieldStates()
+    }
 
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds
