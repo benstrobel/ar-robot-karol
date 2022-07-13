@@ -15,6 +15,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
+import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.uiviews.components.buttons.AddButton
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
@@ -34,26 +35,21 @@ fun ControllFlowButtons(viewModel: CodeViewModel) {
                 val expr = EmptyExpression()
                 val cf = If(expr, block)
                 expr.parent = cf
-                viewModel.addInstruction(cf)
                 block.parent = cf
-            }, "IF")
+
+                viewModel.addInstruction(cf)
+            }, NameRenderVisitor(If(EmptyExpression(), newCodeBlock())).get())
         }
         item { AddButton({
                 val block = newCodeBlock()
                 val expr = EmptyExpression()
                 val cf = While(expr, block)
                 expr.parent = cf
-                viewModel.addInstruction(cf)
                 block.parent = cf
-            }, "WHILE")
-        }
-    }
-}
 
-@Composable
-fun ControllFlowButton(lambda: () -> Unit, buttonName: String) {
-    Button( onClick = lambda) {
-        Text(text = buttonName)
+                viewModel.addInstruction(cf)
+            }, NameRenderVisitor(While(EmptyExpression(), newCodeBlock())).get())
+        }
     }
 }
 

@@ -29,7 +29,6 @@ fun CodeNavButton(onClick: () -> Unit, icon: Int, modifier: Modifier = Modifier)
             .clickable(onClick = onClick)
             .padding(8.dp)
     ) {
-        //val ressorce = if (isUp) else R.drawable.down
         Icon(painter = painterResource(id = icon), contentDescription = null)
     }
 }

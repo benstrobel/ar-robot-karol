@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import com.example.robotkarolar.karollogic.instructions.expressions.*
+import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.uiviews.components.buttons.AddButton
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
@@ -20,7 +21,7 @@ fun OperatorButtons(viewModel: CodeViewModel) {
                 val not = Not(expr)
                 expr.parent = not
                 viewModel.addInstruction(not)
-            }, "NOT") }
+            }, NameRenderVisitor(Not(EmptyExpression())).get()) }
         item { AddButton(onClick = {
             val left = EmptyExpression()
             val right = EmptyExpression()
@@ -28,7 +29,7 @@ fun OperatorButtons(viewModel: CodeViewModel) {
             left.parent = and
             right.parent = and
             viewModel.addInstruction(and)
-        }, text = "AND") }
+        }, text = NameRenderVisitor(And(EmptyExpression(), EmptyExpression())).get()) }
         item { AddButton(onClick = {
             val left = EmptyExpression()
             val right = EmptyExpression()
@@ -36,6 +37,6 @@ fun OperatorButtons(viewModel: CodeViewModel) {
             left.parent = or
             right.parent = or
             viewModel.addInstruction(or)
-        }, text = "OR") }
+        }, text = NameRenderVisitor(Or(EmptyExpression(), EmptyExpression())).get()) }
     }
 }
