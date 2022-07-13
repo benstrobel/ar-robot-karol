@@ -72,110 +72,17 @@ fun createControllFlow(instruction: Instruction, codeBlock: CodeBlock, viewModel
     }
 }
 
-/*@Composable
-fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, expression: Boolean = false) {
-
-    var modifier = if (expression)
-        Modifier
-            .clip(RoundedCornerShape(5.dp))
-            .background(MaterialTheme.colors.primary)
-    else
-        Modifier
-            .padding(5.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(5.dp))
-            .background(MaterialTheme.colors.primary)
-            .padding(5.dp)
-
-    Box(modifier = modifier) {
-        Row(){
-            when(instruction) {
-                is If -> {
-                    Text(text = NameRenderVisitor(
-                        instruction
-                    ).get())
-                    Text(text= " ( ")
-                    if(instruction.condition == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.condition, cursor, true)
-                    Text(text= " ) ")
-                }
-                is While -> {
-                    Text(text = NameRenderVisitor(
-                        instruction
-                    ).get())
-                    Text(text= " ( ")
-                    if(instruction.condition == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.condition, cursor, true)
-                    Text(text= " ) ")
-                }
-                is And -> {
-                    Text(text= " ( ")
-                    if(instruction.left == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.left, cursor, true)
-                    Text(text= " ")
-                    Text(text = NameRenderVisitor(
-                        instruction
-                    ).get())
-                    Text(text= " ")
-                    if(instruction.right == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.right, cursor, true)
-                    Text(text= " ) ")
-                }
-                is Or -> {
-                    Text(text= " ( ")
-                    if(instruction.left == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.left, cursor, true)
-                    Text(text= " ")
-                    Text(text = NameRenderVisitor(
-                        instruction
-                    ).get())
-                    Text(text= " ")
-                    if(instruction.right == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.right, cursor, true)
-                    Text(text= " ) ")
-                }
-                is Not -> {
-                    Text(text = NameRenderVisitor(
-                        instruction
-                    ).get())
-                    Text(text= " ( ")
-                    Text(text= " ")
-                    if(instruction.child == cursor.value) {
-                        CodeCursor()
-                    }
-                    CodeSnippet(instruction = instruction.child, cursor, true)
-                    Text(text= " ")
-                    Text(text= " ) ")
-                }
-                else -> {
-                    Text(text = NameRenderVisitor(
-                        instruction
-                    ).get())
-                }
-            }
-        }
-    }
-}*/
-
 @Composable
 @ExperimentalMaterialApi
 fun DismissableCodeSnippet(instruction: Instruction, viewModel: CodeViewModel) {
     val dismissState = rememberDismissState(
         initialValue = DismissValue.Default,
         confirmStateChange =  {
-            viewModel.removeInstruction(instruction)
+            if(it == DismissValue.DismissedToStart) {
+                viewModel.removeInstruction(instruction)
+            } else {
+                false;
+            }
         }
     )
 
@@ -194,6 +101,9 @@ fun DismissableCodeSnippet(instruction: Instruction, viewModel: CodeViewModel) {
                     .fillMaxSize()
                     .background(color)
             )
+        },
+        dismissThresholds = {
+            FractionalThreshold(0.1f)
         },
         dismissContent = {
             //CodeSnippet(instruction = instruction, viewModel.cursor)
