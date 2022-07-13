@@ -23,6 +23,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
+import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.ui.theme.InstructionText
 import com.example.robotkarolar.ui.theme.Snipit3
 import com.example.robotkarolar.uiviews.CodeViewModel
@@ -50,7 +51,8 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
             })
             .padding(5.dp)
     ) {
-        var textButton = when(instructionOfButton.value) {
+        var textButton = NameRenderVisitor(instruction).get()
+        /*when(instructionOfButton.value) {
             is LeftTurn -> "LeftTurn"
             is End -> "End"
             is Lift -> "Lift"
@@ -60,7 +62,7 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
             is If -> "if"
             is While -> "while"
             else -> ""
-        }
+        }*/
 
         when (instructionOfButton.value) {
             is While -> {
@@ -91,8 +93,7 @@ fun rowInstruction(textString: String, expression: Expression, viewModel: CodeVi
         verticalAlignment = Alignment.CenterVertically
     ) {
         textInstruction(textString = textString)
-        Spacer(modifier = Modifier.padding(5.dp))
-        textInstruction(textString = "(")
+        textInstruction(textString = " (")
         ExpressionButton(expression = expression, viewModel = viewModel)
         textInstruction(textString = ")")
     }

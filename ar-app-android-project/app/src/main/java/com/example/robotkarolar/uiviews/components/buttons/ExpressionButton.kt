@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.robotkarolar.karollogic.instructions.expressions.*
+import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.ui.theme.CursorColor
 import com.example.robotkarolar.ui.theme.ExpressionText
 import com.example.robotkarolar.ui.theme.Snipit1
@@ -49,7 +50,8 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
             })
             .padding(5.dp)
     ) {
-        var textButton = when(expressionOfButton.value) {
+        var textButton = NameRenderVisitor(expression).get()
+        /*when(expressionOfButton.value) {
             is EmptyExpression -> "Pick"
             is False -> "false"
             is IsBlock -> "isBlock"
@@ -63,7 +65,7 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
             is Not -> "NOT"
             is Or -> "OR"
             else -> ""
-        }
+        }*/
 
         Row {
             if(expression == viewModel.cursor.value) {
