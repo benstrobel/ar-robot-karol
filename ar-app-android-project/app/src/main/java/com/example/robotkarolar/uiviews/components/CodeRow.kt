@@ -23,6 +23,9 @@ import com.example.robotkarolar.uiviews.CodeViewModel
 @ExperimentalMaterialApi
 fun CodeRow(codeBlock: Instruction, viewModel: CodeViewModel) {
     Column {
+        if(viewModel.repaintHelper.value){
+            // Don't remove this, this allows to forcibly repaint the UI when changing repaintHelpers value
+        }
         when(codeBlock) {
             is CodeBlock -> {
                 (codeBlock as CodeBlock).instructions.forEach {
@@ -160,14 +163,7 @@ fun DismissableCodeSnippet(instruction: Instruction, viewModel: CodeViewModel) {
     val dismissState = rememberDismissState(
         initialValue = DismissValue.Default,
         confirmStateChange =  {
-            if(instruction.parent != null) {
-                when(viewModel.cursor.value.parent) {
-                    is CodeBlock -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as CodeBlock), instruction)!!
-                    is While -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as While).codeBlock, instruction)!!
-                    is If -> viewModel.cursor.value = viewModel.getPreviousBefore((instruction.parent as If).codeBlock, instruction)!!
-                }
-            }
-            instruction.delete()
+            viewModel.removeInstruction(instruction)
         }
     )
 

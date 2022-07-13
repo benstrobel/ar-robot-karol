@@ -10,13 +10,13 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.Noop
-import kotlin.math.exp
 
 class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val first = Noop()
     val root = codeBlock ?: CodeBlock(mutableListOf(first))
     val codeBlock: MutableState<Instruction> = mutableStateOf(root)
     var cursor: MutableState<Instruction> = mutableStateOf(first)
+    var repaintHelper: MutableState<Boolean> = mutableStateOf(false)
 
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds
@@ -111,6 +111,17 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                 }
             }
         }
+    }
+
+    fun removeInstruction(instruction: Instruction): Boolean {
+        if(instruction.parent != null && instruction.parent is ControlFlow) {
+            when(instruction) {
+                is ControlFlow -> previous(instruction, instruction.codeBlock.instructions[0])
+                else -> previous(instruction)
+            }
+        }
+        forceRepaint()
+        return instruction.delete()
     }
 
     private fun nextEmptyExpressionDown(expression: Expression): Expression? {
@@ -347,5 +358,9 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
                     codeBlock.parent!!, true)
             }
         } else codeBlock.instructions[foundInstructionIndex - 1]
+    }
+
+    private fun forceRepaint() {
+        repaintHelper.value = !repaintHelper.value
     }
 }
