@@ -2,11 +2,9 @@ package com.example.robotkarolar.uiviews.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,51 +14,65 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
-import com.example.robotkarolar.karollogic.instructions.visitors.NameRenderVisitor
 import com.example.robotkarolar.uiviews.CodeViewModel
+import com.example.robotkarolar.uiviews.components.buttons.InstructionButton
 
 @Composable
 @ExperimentalMaterialApi
-fun CodeRow(codeBlock: Instruction, viewModel: CodeViewModel) {
+fun CodeRow(instruction: Instruction, viewModel: CodeViewModel) {
     Column {
         if(viewModel.repaintHelper.value){
             // Don't remove this, this allows to forcibly repaint the UI when changing repaintHelpers value
         }
-        when(codeBlock) {
+        when(instruction) {
             is CodeBlock -> {
-                (codeBlock as CodeBlock).instructions.forEach {
-                    CodeRow(it, viewModel)
-                    if(codeBlock == viewModel.cursor.value) {
-                        CodeCursor()
-                    }
+                instruction.instructions.forEach {
+                    CodeRow(instruction = it, viewModel = viewModel)
                 }
             }
             is If -> {
-                key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
-                Row {
-                    Spacer(modifier = Modifier.padding(15.dp))
-                    CodeRow(codeBlock.codeBlock, viewModel)
-                }
+                createControllFlow(
+                    instruction = instruction,
+                    codeBlock = instruction.codeBlock,
+                    viewModel = viewModel
+                )
             }
             is While -> {
-                key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
-                Row {
-                    Spacer(modifier = Modifier.padding(15.dp))
-                    CodeRow(codeBlock.codeBlock, viewModel)
-                }
+                createControllFlow(
+                    instruction = instruction,
+                    codeBlock = instruction.codeBlock,
+                    viewModel = viewModel
+                )
             }
-            is End, is LeftTurn, is Lift, is Place, is RightTurn, is Step -> {
-                key(codeBlock.id) { DismissableCodeSnippet(codeBlock, viewModel) }
+            is Noop -> {}
+            else -> {
+                createSnipet(instruction = instruction, viewModel = viewModel)
             }
         }
 
-        if(codeBlock == viewModel.cursor.value) {
+        if(instruction == viewModel.cursor.value) {
             CodeCursor()
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
+fun createSnipet(instruction: Instruction, viewModel: CodeViewModel) {
+    key(instruction.id) { DismissableCodeSnippet(instruction, viewModel)}
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun createControllFlow(instruction: Instruction, codeBlock: CodeBlock, viewModel: CodeViewModel){
+    createSnipet(instruction = instruction, viewModel = viewModel)
+    Row {
+        Spacer(modifier = Modifier.padding(15.dp))
+        CodeRow(codeBlock, viewModel)
+    }
+}
+
+/*@Composable
 fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, expression: Boolean = false) {
 
     var modifier = if (expression)
@@ -155,7 +167,7 @@ fun CodeSnippet(instruction: Instruction, cursor: MutableState<Instruction>, exp
             }
         }
     }
-}
+}*/
 
 @Composable
 @ExperimentalMaterialApi
@@ -184,17 +196,10 @@ fun DismissableCodeSnippet(instruction: Instruction, viewModel: CodeViewModel) {
             )
         },
         dismissContent = {
-            CodeSnippet(instruction = instruction, viewModel.cursor)
+            //CodeSnippet(instruction = instruction, viewModel.cursor)
+            InstructionButton(instruction = instruction, viewModel = viewModel)
         }
     )
-}
-
-
-@Preview
-@Composable
-fun SnippetPreview() {
-    val instruction = LeftTurn()
-    CodeSnippet(instruction = instruction, remember { mutableStateOf(instruction) })
 }
 
 @Preview

@@ -23,9 +23,8 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
-import com.example.robotkarolar.ui.theme.Purple200
-import com.example.robotkarolar.ui.theme.Purple500
-import com.example.robotkarolar.ui.theme.Purple700
+import com.example.robotkarolar.ui.theme.InstructionText
+import com.example.robotkarolar.ui.theme.Snipit3
 import com.example.robotkarolar.uiviews.CodeViewModel
 
 @Composable
@@ -36,7 +35,7 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
 
     var color: MutableState<Color> = remember {
         when (instructionOfButton.value) {
-            else -> mutableStateOf(Purple700)
+            else -> mutableStateOf(Snipit3)
         }
     } //TODO: PICK nicer and diffrent colors
 
@@ -65,20 +64,16 @@ fun InstructionButton(instruction: Instruction, viewModel: CodeViewModel) {
 
         when (instructionOfButton.value) {
             is While -> {
-                val instruct = instructionOfButton.value as While
-
                 rowInstruction(
                     textString = textButton,
-                    expression = instruct.condition,
+                    expression = (instructionOfButton.value as While).condition,
                     viewModel = viewModel
                 )
             }
             is If -> {
-                val instruct = instructionOfButton.value as If
-
                 rowInstruction(
                     textString = textButton,
-                    expression = instruct.condition,
+                    expression = (instructionOfButton.value as If).condition,
                     viewModel = viewModel
                 )
             }
@@ -95,11 +90,11 @@ fun rowInstruction(textString: String, expression: Expression, viewModel: CodeVi
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        textExpression(textString = textString)
+        textInstruction(textString = textString)
         Spacer(modifier = Modifier.padding(5.dp))
-        textExpression(textString = "(")
+        textInstruction(textString = "(")
         ExpressionButton(expression = expression, viewModel = viewModel)
-        textExpression(textString = ")")
+        textInstruction(textString = ")")
     }
 }
 
@@ -108,7 +103,7 @@ fun textInstruction(textString: String) {
     Text(
         text = textString,
         style = MaterialTheme.typography.subtitle1,
-        color = Color(0xFF000000),
+        color = InstructionText,
         textAlign = TextAlign.Center,
     )
 }
