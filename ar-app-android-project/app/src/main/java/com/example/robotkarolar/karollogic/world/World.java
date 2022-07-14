@@ -1,5 +1,7 @@
 package com.example.robotkarolar.karollogic.world;
 
+import com.example.robotkarolar.ar.BlockType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,13 @@ public class World {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
         facingTile.placeBlock(Block.RED);
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
+    }
+
+    public Triple<Integer, Integer, Integer> placeStone() {
+        Tile facingTile = getFacingTile(selectedEntity);
+        if (facingTile == null) return null;
+        facingTile.placeBlock(Block.BLUE);
         return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
     }
 

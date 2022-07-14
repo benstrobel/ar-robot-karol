@@ -32,6 +32,14 @@ class InstructionStepperVisitor constructor(val world: World): InstructionVisito
             stepperResult = StepperResult(placeBlock(placed.first,placed.second,placed.third, BlockType.WATER), null)
         }
     }
+
+    override fun accept(placeStone: PlaceStone?) {
+        val placedStone: Triple<Int, Int, Int>? = world.placeStone()
+        if(placedStone != null) {
+            stepperResult = StepperResult(placeBlock(placedStone.first,placedStone.second,placedStone.third, BlockType.STONE), null)
+        }
+    }
+
     override fun accept(rightTurn: RightTurn) {
         world.rightTurn()
         stepperResult = StepperResult(rotateRight(), null)

@@ -44,6 +44,11 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     }
 
     @Override
+    public void accept(PlaceStone placeStone) {
+        world.placeStone();
+    }
+
+    @Override
     public void accept(RightTurn rightTurn) {
         world.rightTurn();
     }

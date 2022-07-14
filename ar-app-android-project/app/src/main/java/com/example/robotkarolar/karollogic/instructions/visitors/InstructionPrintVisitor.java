@@ -25,7 +25,12 @@ public class InstructionPrintVisitor implements InstructionVisitor{
 
     @Override
     public void accept(Place place) {
-        System.out.println("Place");
+        System.out.println("PlaceWater");
+    }
+
+    @Override
+    public void accept(PlaceStone placeStone) {
+        System.out.println("PlaceStone");
     }
 
     @Override

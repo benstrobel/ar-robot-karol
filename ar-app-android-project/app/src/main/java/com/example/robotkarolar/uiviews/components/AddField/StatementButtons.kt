@@ -20,6 +20,7 @@ fun StatementButtons(viewModel: CodeViewModel) {
     ) {
         item { AddButton({ viewModel.addInstruction(Step()) }, NameRenderVisitor(Step()).get()) }
         item { AddButton({ viewModel.addInstruction(Place()) }, NameRenderVisitor(Place()).get()) }
+        item { AddButton({ viewModel.addInstruction(PlaceStone()) }, NameRenderVisitor(PlaceStone()).get()) }
         item { AddButton({ viewModel.addInstruction(Lift()) }, NameRenderVisitor(Lift()).get()) }
         item { AddButton({ viewModel.addInstruction(LeftTurn()) }, NameRenderVisitor(LeftTurn()).get()) }
         item { AddButton({ viewModel.addInstruction(RightTurn()) }, NameRenderVisitor(RightTurn()).get()) }
