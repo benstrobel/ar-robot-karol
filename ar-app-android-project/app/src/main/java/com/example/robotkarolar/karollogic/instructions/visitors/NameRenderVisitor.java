@@ -22,6 +22,7 @@ import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn;
 import com.example.robotkarolar.karollogic.instructions.statements.Lift;
 import com.example.robotkarolar.karollogic.instructions.statements.Noop;
 import com.example.robotkarolar.karollogic.instructions.statements.Place;
+import com.example.robotkarolar.karollogic.instructions.statements.PlaceGrass;
 import com.example.robotkarolar.karollogic.instructions.statements.PlaceStone;
 import com.example.robotkarolar.karollogic.instructions.statements.RightTurn;
 import com.example.robotkarolar.karollogic.instructions.statements.Step;
@@ -61,6 +62,11 @@ public class NameRenderVisitor implements InstructionVisitor {
     @Override
     public void accept(PlaceStone placeStone) {
         renderedName = "PLACE STONE";
+    }
+
+    @Override
+    public void accept(PlaceGrass placeGrass) {
+        renderedName = "PLACE GRASS";
     }
 
     @Override

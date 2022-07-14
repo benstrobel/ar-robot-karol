@@ -14,6 +14,7 @@ public interface InstructionVisitor {
     void accept(Lift lift);
     void accept(Place place);
     void accept(PlaceStone placeStone);
+    void accept(PlaceGrass place);
     void accept(RightTurn rightTurn);
     void accept(Step step);
     void accept(Noop noop);

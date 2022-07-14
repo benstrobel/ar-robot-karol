@@ -34,6 +34,11 @@ public class InstructionPrintVisitor implements InstructionVisitor{
     }
 
     @Override
+    public void accept(PlaceGrass placeGrass) {
+        System.out.println("PlaceGrass");
+    }
+
+    @Override
     public void accept(RightTurn rightTurn) {
         System.out.println("RightTurn");
     }

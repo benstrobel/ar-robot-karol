@@ -54,6 +54,13 @@ public class World {
         return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
     }
 
+    public Triple<Integer, Integer, Integer> placeGrass() {
+        Tile facingTile = getFacingTile(selectedEntity);
+        if (facingTile == null) return null;
+        facingTile.placeBlock(Block.GREEN);
+        return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
+    }
+
     public Triple<Integer, Integer, Integer> lift() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;

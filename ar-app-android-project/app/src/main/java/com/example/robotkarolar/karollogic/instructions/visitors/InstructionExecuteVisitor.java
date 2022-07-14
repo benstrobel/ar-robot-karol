@@ -39,14 +39,15 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     }
 
     @Override
-    public void accept(Place place) {
-        world.place();
-    }
+    public void accept(Place place) {world.place();}
 
     @Override
     public void accept(PlaceStone placeStone) {
         world.placeStone();
     }
+
+    @Override
+    public void accept(PlaceGrass placeGrass) {world.placeGrass();}
 
     @Override
     public void accept(RightTurn rightTurn) {
