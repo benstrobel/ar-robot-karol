@@ -25,6 +25,13 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     //NavigationBar
     val currentScreen = mutableStateOf<Screen>(Screen.Free)
 
+    //Challenge
+    val currentChallenge = mutableStateOf(-1)
+
+    fun changeCurrentChallenge(challengeNumber: Int) {
+        currentChallenge.value = if (currentChallenge.value == challengeNumber) -1 else challengeNumber
+    }
+
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds
             if(afterChild != null) {
