@@ -15,6 +15,7 @@ import com.example.robotkarolar.karollogic.Interpreter
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic.instructions.statements.Noop
 import com.example.robotkarolar.karollogic.world.World
+import com.example.robotkarolar.uiviews.models.Challenge
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Vector3
@@ -46,6 +47,10 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private val handler = Handler(Looper.getMainLooper())
     private var stopRunAll = false
     private var runningAll = false
+
+    //TODO: Challenge
+    private var hasChallenge = false
+    private var challengeWorld = World()
 
     override fun onBackPressed() {
         if(this::worldOrigin.isInitialized) {
@@ -97,6 +102,12 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         if (bundle != null) {
             val bundleCodeBlock = bundle.getParcelable<CodeBlock>("codeBlock")
             codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock(mutableListOf(Noop()))
+
+            val challengeNumber = bundle.getInt("challengeNumber")
+            hasChallenge = if (challengeNumber != null) (challengeNumber != -1) else false
+            if (hasChallenge) {
+                challengeWorld = Challenge().createWorld(challengeNumber)
+            }
         }
 
         val karol = world.addEntity(0,0)

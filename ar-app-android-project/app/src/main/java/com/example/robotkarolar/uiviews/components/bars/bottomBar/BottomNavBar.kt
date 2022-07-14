@@ -50,7 +50,7 @@ fun BottomNavBar(
 @Composable
 fun CustomBottomNavigationItem(item: Screen, isSelected: Boolean, onClick: () -> Unit) {
     val background = if (isSelected) MaterialTheme.colors.primaryVariant.copy(alpha = 0.1f) else Color.Transparent
-    val contentColor = if (isSelected) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.onBackground
+    val contentColor = if (!isSelected) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.onBackground
 
     Box(
         modifier = Modifier
