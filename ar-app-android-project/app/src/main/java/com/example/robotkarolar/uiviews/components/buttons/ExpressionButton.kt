@@ -56,11 +56,6 @@ fun ExpressionButton(expression: Expression, viewModel: CodeViewModel) {
                 .background(color.value.copy(alpha = if (expression == viewModel.cursor.value) 0.1f else 0.0f))
                 .clickable(onClick = {
                     //TODO: Open change window
-
-                    /*if (expression is EmptyExpression){
-                        viewModel.cursor.value = expression
-                    }*/
-
                     viewModel.cursor.value = expression
 
                     when(expression) {

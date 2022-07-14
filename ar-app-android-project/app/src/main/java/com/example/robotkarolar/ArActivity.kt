@@ -3,6 +3,7 @@ package com.example.robotkarolar
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
@@ -72,7 +73,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             findViewById(R.id.rootView),
             fullScreen = true,
             hideSystemBars = false,
-            fitsSystemWindows = false
+            fitsSystemWindows = true
         )
 
         val bundle = intent.extras
@@ -88,7 +89,9 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         sceneView = findViewById(R.id.sceneView)
 
         placeButton = findViewById<ExtendedFloatingActionButton>(R.id.placeModelButton).apply {
-            setOnClickListener{ placeBoard() }
+            setOnClickListener{
+                placeBoard()
+            }
         }
 
         sceneView.planeRenderer.isShadowReceiver = false
@@ -131,9 +134,14 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             createFloor(world, worldOrigin)
             createKarol(0,0,0, worldOrigin)
             karolCreated = true
+
+            //Hide Place Button
+            findViewById<ExtendedFloatingActionButton>(R.id.placeModelButton).visibility = View.GONE
+            findViewById<LinearLayout>(R.id.buttonRow).visibility = View.VISIBLE
         }
     }
 
+    //UIFunctions
     fun runNext(v: View) {
         var command = interpreter.nextStep()
 
@@ -150,10 +158,12 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun finishAr(v: View){
-        this.finish()
+    fun finishAr(v: View){
+        this.onBackPressed()
+        //this.finish()
     }
 
+    //Commands
     private fun executeCommand(command: ArCommand) {
         val x: Int = if (command.x != null) command.x as Int else 0
         val y: Int = if (command.y != null) command.y as Int else 0
@@ -209,6 +219,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
+    //Load Models
     private fun createKarol(x: Int, y: Int, h: Int, parent: ArNode = worldOrigin):ArModelNode? {
         //check if karol exists
         val context = this
