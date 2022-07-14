@@ -27,13 +27,8 @@ import com.example.robotkarolar.uiviews.models.CodeViewModel
 fun HomeView(navController: NavController, viewModel: CodeViewModel) {
     Scaffold(
         topBar = { Toolbar(topBarText = "ArRobotKarol") },
-        bottomBar = { BottomNavBar(
-            navController = navController,
-            currentScreenId = viewModel.currentScreen.value.id,
-            onItemSelected = {viewModel.currentScreen.value = it}
-        )}
     ) {
-        CodeView(viewModel = viewModel)
+        CodeView(viewModel = viewModel, navController = navController)
     }
 }
 

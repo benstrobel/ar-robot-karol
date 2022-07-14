@@ -1,5 +1,6 @@
 package com.example.robotkarolar.uiviews
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -10,19 +11,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn
 import com.example.robotkarolar.karollogic.instructions.statements.Place
 import com.example.robotkarolar.karollogic.instructions.statements.Step
 import com.example.robotkarolar.uiviews.components.*
 import com.example.robotkarolar.uiviews.components.AddField.OperatorButtons
 import com.example.robotkarolar.uiviews.components.bars.AddOptionsBar
+import com.example.robotkarolar.uiviews.components.bars.BottomNavBar
 import com.example.robotkarolar.uiviews.models.AddFieldStates
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 @ExperimentalMaterialApi
-fun CodeView(viewModel: CodeViewModel) {
+fun CodeView(navController: NavController, viewModel: CodeViewModel) {
     Column(modifier = Modifier.padding(5.dp)) {
+        BottomNavBar(
+            navController = navController,
+            currentScreenId = viewModel.currentScreen.value.id,
+            onItemSelected = {viewModel.currentScreen.value = it}
+        )
         CodeBlockPrev(viewModel = viewModel)
         CodeAddField(viewModel = viewModel)
     }
@@ -102,5 +112,7 @@ fun CodeViewPreview() {
     viewModel.addInstruction(Place())
     viewModel.addInstruction(Step())
 
-    CodeView(viewModel = viewModel)
+    val navController = rememberNavController()
+
+    CodeView(viewModel = viewModel, navController = navController)
 }

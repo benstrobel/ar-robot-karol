@@ -16,13 +16,12 @@ import com.example.robotkarolar.uiviews.models.CodeViewModel
 @Composable
 fun ChallengeView(navController: NavController, viewModel: CodeViewModel) {
     Scaffold(
-        topBar = { Toolbar(topBarText = "ArRobotKarol") },
-        bottomBar = { BottomNavBar(
+        topBar = { Toolbar(topBarText = "ArRobotKarol") }
+    ) {
+        BottomNavBar(
             navController = navController,
             currentScreenId = viewModel.currentScreen.value.id,
             onItemSelected = {viewModel.currentScreen.value = it}
         )
-        }
-    ) {
     }
 }

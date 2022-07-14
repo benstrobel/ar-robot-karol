@@ -11,7 +11,7 @@ sealed class Screen(
     val title: String,
     val icon: ImageVector
 ) {
-    object Free: Screen("free", "Freier Modus", Icons.Outlined.SmartToy)
+    object Free: Screen("free", "CodeEditor", Icons.Outlined.SmartToy)
     object Challenge: Screen("challenge", "Challenge", Icons.Outlined.Flag)
 
     object Items {
