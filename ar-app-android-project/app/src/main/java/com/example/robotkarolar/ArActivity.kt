@@ -203,26 +203,29 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         val karol = parent.children.first { it.name == "Karol" }
 
         when (arCommandType) {
-
             ArCommandType.ROTATERIGHT -> {
-                when(karolRotation){
-                    0 -> {karol.rotation = Rotation(y = 90f); karolRotation = 3}
-                    1 -> {karol.rotation = Rotation(y = 180f); karolRotation = 0}
-                    2 -> {karol.rotation = Rotation(y = 270f); karolRotation = 1}
-                    3 -> {karol.rotation = Rotation(y = 0f); karolRotation = 2}
+                if(karolRotation == 0) {
+                    karolRotation = 3
+                } else {
+                    karolRotation--
                 }
             }
-
             ArCommandType.ROTATELEFT -> {
-                when(karolRotation){
-                    0 -> {karol.rotation = Rotation(y = 90f); karolRotation = 1}
-                    1 -> {karol.rotation = Rotation(y = 180f); karolRotation = 2}
-                    2 -> {karol.rotation = Rotation(y = 270f); karolRotation = 3}
-                    3 -> {karol.rotation = Rotation(y = 0f); karolRotation = 0}
+                if(karolRotation == 3) {
+                    karolRotation = 0
+                } else {
+                    karolRotation++
                 }
             }
-
             else -> return
+        }
+
+        when(karolRotation){
+            0 -> {karol.rotation = Rotation(y = 0f);}
+            1 -> {karol.rotation = Rotation(y = 90f);}
+            2 -> {karol.rotation = Rotation(y = 180f);}
+            3 -> {karol.rotation = Rotation(y = 270f);}
+            else -> {}
         }
     }
 
