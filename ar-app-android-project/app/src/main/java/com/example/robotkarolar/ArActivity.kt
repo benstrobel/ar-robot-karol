@@ -39,17 +39,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private var world = World()
 
     override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        startActivity(intent)
-    }
-
-    override fun onResume() {
-        world = World()
-        val karol = world.addEntity(0,0)
-        world.selectedEntity = karol
-        interpreter = Interpreter(codeBlock, world)
-        interpreter.reset()
         if(this::worldOrigin.isInitialized) {
             val karol = worldOrigin.children.first { it.name == "Karol" }
             karol.isVisible = false
@@ -61,6 +50,24 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     worldOrigin.removeChild(it)
                 }
             }
+        }
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        startActivity(intent)
+    }
+
+    fun finishAr(v: View){
+        this.onBackPressed()
+        //this.finish()
+    }
+
+    override fun onResume() {
+        world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
+        interpreter = Interpreter(codeBlock, world)
+        interpreter.reset()
+        if(this::worldOrigin.isInitialized) {
             createKarol(0,0,0, worldOrigin)
         }
         super.onResume()
@@ -156,11 +163,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             executeCommand(command)
             command = interpreter.nextStep()
         }
-    }
-
-    fun finishAr(v: View){
-        this.onBackPressed()
-        //this.finish()
     }
 
     //Commands
