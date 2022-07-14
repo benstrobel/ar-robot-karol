@@ -9,7 +9,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.robotkarolar.ui.theme.RobotKarolArTheme
+import com.example.robotkarolar.uiviews.ChallengeView
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 import com.example.robotkarolar.uiviews.HomeView
 
@@ -27,14 +31,22 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Column {
+
+                        val navController = rememberNavController()
                         val viewModel: CodeViewModel = CodeViewModel()
-                        HomeView(viewModel = viewModel)
+                        NavHost(navController = navController, startDestination = "free") {
+                            composable("free") { HomeView(navController = navController, viewModel = viewModel) }
+                            composable("challenge") { ChallengeView(navController = navController, viewModel = viewModel)}
+                        }
+
                     }
                 }
             }
         }
     }
 }
+
+
 
 @Preview
 @Composable

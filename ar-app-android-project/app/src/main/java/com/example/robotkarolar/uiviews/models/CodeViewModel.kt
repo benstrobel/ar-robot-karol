@@ -10,6 +10,7 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If
 import com.example.robotkarolar.karollogic.instructions.controlflow.While
 import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
+import com.example.robotkarolar.uiviews.components.bars.bottomBar.Screen
 
 class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val first = Noop()
@@ -20,6 +21,9 @@ class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
 
     //AddFieldStates
     var addFieldState: MutableState<AddFieldStates> = mutableStateOf(AddFieldStates.Statements)
+
+    //NavigationBar
+    val currentScreen = mutableStateOf<Screen>(Screen.Free)
 
     fun addInstruction(instruction: Instruction, currentCursor: Instruction = cursor.value, afterChild: Instruction? = null) {
         synchronized(currentCursor) { // Prevents race conditions by spamming instruction adds

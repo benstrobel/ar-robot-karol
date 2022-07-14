@@ -1,5 +1,6 @@
 package com.example.robotkarolar.uiviews
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -11,17 +12,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.robotkarolar.R
 import com.example.robotkarolar.karollogic.instructions.statements.LeftTurn
 import com.example.robotkarolar.karollogic.instructions.statements.Place
 import com.example.robotkarolar.karollogic.instructions.statements.Step
+import com.example.robotkarolar.uiviews.components.bars.BottomNavBar
 import com.example.robotkarolar.uiviews.models.CodeViewModel
 
+@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalMaterialApi
 @Composable
-fun HomeView(viewModel: CodeViewModel) {
+fun HomeView(navController: NavController, viewModel: CodeViewModel) {
     Scaffold(
         topBar = { Toolbar(topBarText = "ArRobotKarol") },
+        bottomBar = { BottomNavBar(
+            navController = navController,
+            currentScreenId = viewModel.currentScreen.value.id,
+            onItemSelected = {viewModel.currentScreen.value = it}
+        )}
     ) {
         CodeView(viewModel = viewModel)
     }
@@ -75,5 +85,7 @@ fun HomeViewPreview() {
     viewModel.addInstruction(Place())
     viewModel.addInstruction(Step())
 
-    HomeView(viewModel = viewModel)
+    val navController = rememberNavController()
+
+    HomeView(navController = navController, viewModel = viewModel)
 }
