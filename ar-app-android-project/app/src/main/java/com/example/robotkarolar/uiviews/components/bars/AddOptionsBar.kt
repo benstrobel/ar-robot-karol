@@ -65,7 +65,8 @@ fun AddOptionsBar(viewModel: CodeViewModel) {
 @Composable
 fun AddOptionItem( isSelected: Boolean, onClick: () -> Unit, text: String) {
     val background = if (isSelected) MaterialTheme.colors.primaryVariant.copy(alpha = 0.1f) else Color.Transparent
-    val contentColor = if (isSelected) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primary
+    //val contentColor = if (isSelected) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primary
+    val contentColor = if (!isSelected) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.onBackground
 
     Box(
         modifier = Modifier

@@ -36,6 +36,10 @@ fun ArButton(viewModel: CodeViewModel) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 val bundle = Bundle()
                 bundle.putParcelable("codeBlock", viewModel.codeBlock.value)
+
+                //challenge
+                bundle.putInt("challengeNumber", viewModel.currentChallenge.value)
+
                 intent.putExtras(bundle)
                 context.startActivity(intent)
             },

@@ -80,6 +80,9 @@ fun ChallengeButton(challengeInt: Int, onClick: () -> Unit, isSelected: Boolean)
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ){
             Text(text = "Challenge $challengeInt", color = contentColor)
+            
+            Spacer(modifier = Modifier.weight(1.0f))
+            
             Box(modifier = Modifier
                 .size(30.dp)
                 .clip(RoundedCornerShape(5.dp))
