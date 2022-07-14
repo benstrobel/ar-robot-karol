@@ -68,6 +68,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         world = World()
         val karol = world.addEntity(0,0)
         world.selectedEntity = karol
+        karolRotation = 2
         interpreter = Interpreter(codeBlock, world)
         interpreter.reset()
         if(this::worldOrigin.isInitialized) {
