@@ -2,6 +2,7 @@ package com.example.robotkarolar.uiviews
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -34,8 +35,13 @@ fun CodeBlockPrev(viewModel: CodeViewModel){
         .fillMaxWidth()
         .fillMaxHeight(0.6f)
         .padding(5.dp)
+        .border(
+            width = 1.dp,
+            color = MaterialTheme.colors.primaryVariant,
+            shape = RoundedCornerShape(5.dp)
+        )
         .clip(RoundedCornerShape(5.dp))
-        .background(MaterialTheme.colors.primaryVariant)
+        .background(MaterialTheme.colors.primaryVariant.copy(0.5f))
         .padding(5.dp)
     ) {
         Column() {
@@ -43,8 +49,13 @@ fun CodeBlockPrev(viewModel: CodeViewModel){
                 .fillMaxWidth()
                 .weight(1.0f)
                 .padding(5.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colors.primaryVariant,
+                    shape = RoundedCornerShape(5.dp)
+                )
                 .clip(RoundedCornerShape(5.dp))
-                .background(MaterialTheme.colors.primary)
+                .background(MaterialTheme.colors.primary.copy(1.0f))
                 .padding(5.dp)
                 .verticalScroll(rememberScrollState())
                 .horizontalScroll(rememberScrollState())
