@@ -2,6 +2,8 @@ package com.example.robotkarolar
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,7 @@ import io.github.sceneview.math.Position
 import io.github.sceneview.math.Rotation
 import io.github.sceneview.math.Scale
 import io.github.sceneview.utils.setFullScreen
+import java.lang.Thread.sleep
 import kotlin.math.sqrt
 
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
@@ -40,6 +43,9 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private var blockSize: Vector3 = Vector3(0.37712634f*baseModelScale, 0.37712651f*baseModelScale, 0.37712651f*baseModelScale)
     lateinit var cursorNode: ArModelNode
     private var world = World()
+    private val handler = Handler(Looper.getMainLooper())
+    private var stopRunAll = false
+    private var runningAll = false
 
     override fun onBackPressed() {
         if(this::worldOrigin.isInitialized) {
@@ -164,10 +170,24 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     fun runAll(v: View) {
-        var command = interpreter.nextStep()
-        while (command != null && command.commandType != ArCommandType.END) {
+        val command = interpreter.nextStep()
+        if(command != null && command.commandType != ArCommandType.END) {
+            runningAll = true
             executeCommand(command)
-            command = interpreter.nextStep()
+            if(stopRunAll) {
+                stopRunAll = false
+                runningAll = false
+                return
+            }
+            handler.postDelayed({runAll(v)}, 300)
+        } else {
+            runningAll = false
+        }
+    }
+
+    fun pause(v: View) {
+        if(runningAll) {
+            stopRunAll = true
         }
     }
 

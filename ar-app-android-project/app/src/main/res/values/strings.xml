@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">RobotKarolAr</string>
     <string name="place_button">Debug</string>
+    <string name="back_button">Back</string>
+    <string name="next_button">Next</string>
+    <string name="play_pause_button">Play / Pause</string>
 </resources>
