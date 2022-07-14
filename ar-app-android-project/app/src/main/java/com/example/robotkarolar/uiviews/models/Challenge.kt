@@ -12,10 +12,31 @@ class Challenge {
     }
 
     fun challenge1(): World {
-        return World()
+        var worldChallenge1 = World()
+        val karol = worldChallenge1.addEntity(0,0)
+        worldChallenge1.selectedEntity = karol
+
+        worldChallenge1.step()
+        worldChallenge1.step()
+        worldChallenge1.place()
+        worldChallenge1.place()
+        worldChallenge1.step()
+
+        return worldChallenge1
     }
 
     fun challenge2(): World {
-        return World()
+        var worldChallenge2 = World()
+        val karol = worldChallenge2.addEntity(0,0)
+        worldChallenge2.selectedEntity = karol
+
+        worldChallenge2.place()
+        worldChallenge2.step()
+        worldChallenge2.place()
+        worldChallenge2.rightTurn()
+        worldChallenge2.step()
+        worldChallenge2.step()
+
+        return worldChallenge2
     }
 }
