@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.robotkarolar.ar.ArCommand
@@ -26,7 +27,6 @@ import io.github.sceneview.math.Position
 import io.github.sceneview.math.Rotation
 import io.github.sceneview.math.Scale
 import io.github.sceneview.utils.setFullScreen
-import java.lang.Thread.sleep
 import kotlin.math.sqrt
 
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
@@ -169,26 +169,35 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    fun runAll(v: View) {
-        val command = interpreter.nextStep()
-        if(command != null && command.commandType != ArCommandType.END) {
-            runningAll = true
-            executeCommand(command)
-            if(stopRunAll) {
-                stopRunAll = false
-                runningAll = false
-                return
-            }
-            handler.postDelayed({runAll(v)}, 300)
+    fun runAllOrPause(v: View) {
+        if(runningAll) {
+            pause()
         } else {
-            runningAll = false
+            runAll()
         }
     }
 
-    fun pause(v: View) {
-        if(runningAll) {
-            stopRunAll = true
+    private fun runAll() {
+        val command = interpreter.nextStep()
+        if(command != null && command.commandType != ArCommandType.END) {
+            runningAll = true
+            findViewById<ImageButton>(R.id.buttonAllOrPause).setImageResource(R.drawable.pause)
+            if(stopRunAll) {
+                stopRunAll = false
+                runningAll = false
+                findViewById<ImageButton>(R.id.buttonAllOrPause).setImageResource(R.drawable.run_all)
+                return
+            }
+            executeCommand(command)
+            handler.postDelayed({runAll()}, 300)
+        } else {
+            runningAll = false
+            findViewById<ImageButton>(R.id.buttonAllOrPause).setImageResource(R.drawable.run_all)
         }
+    }
+
+    private fun pause() {
+        stopRunAll = true
     }
 
     //Commands

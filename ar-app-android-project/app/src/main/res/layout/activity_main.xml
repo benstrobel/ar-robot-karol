@@ -13,14 +13,14 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/translucent"
         android:gravity="center"
-        android:text="Place"
+        android:text="@string/place_button"
         android:textColor="@android:color/white"
         app:iconGravity="textStart"
         app:iconTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <io.github.sceneview.ar.ArSceneView
         android:id="@+id/sceneView"
@@ -54,35 +54,19 @@
             android:contentDescription="@string/next_button"
             android:onClick="runNext"
             android:src="@drawable/run_next"
-            android:text="Next"
             android:visibility="visible"
             app:tint="@color/white" />
 
         <ImageButton
-            android:id="@+id/buttonAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/round_backround"
-            android:clickable="true"
-            android:contentDescription="@string/place_button"
-            android:onClick="runAll"
-            android:src="@drawable/run_all"
-            android:text="All"
-            android:visibility="visible"
-            app:tint="@color/white" />
-
-        <ImageButton
-            android:id="@+id/buttonPause"
+            android:id="@+id/buttonAllOrPause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:background="@drawable/round_backround"
             android:clickable="true"
             android:contentDescription="@string/play_pause_button"
-            android:onClick="pause"
-            android:src="@drawable/pause"
-            android:text="Pause"
+            android:onClick="runAllOrPause"
+            android:src="@drawable/run_all"
             android:visibility="visible"
             app:tint="@color/white" />
 
