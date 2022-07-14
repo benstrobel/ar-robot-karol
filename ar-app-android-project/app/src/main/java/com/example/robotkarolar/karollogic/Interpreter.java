@@ -65,7 +65,7 @@ public class Interpreter {
                 currentCodeBlock = result.getNextCodeBlock();
                 return nextStep();
             } else {
-                // Only happens when skipping over if / while blocks because condition isn't met
+                // Only happens when skipping over if / while blocks because condition isn't met or when skipping over first noop of codeblocks
                 return nextStep();
             }
         }
