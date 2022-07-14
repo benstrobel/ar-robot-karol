@@ -30,13 +30,16 @@ fun ChallengeView(navController: NavController, viewModel: CodeViewModel) {
     Scaffold(
         topBar = { Toolbar(topBarText = "ArRobotKarol") }
     ) {
-        BottomNavBar(
-            navController = navController,
-            currentScreenId = viewModel.currentScreen.value.id,
-            onItemSelected = {viewModel.currentScreen.value = it}
-        )
 
-        ChallengeColum(viewModel = viewModel)
+        Column() {
+            BottomNavBar(
+                navController = navController,
+                currentScreenId = viewModel.currentScreen.value.id,
+                onItemSelected = {viewModel.currentScreen.value = it}
+            )
+
+            ChallengeColum(viewModel = viewModel)
+        }
     }
 }
 
@@ -49,7 +52,7 @@ fun ChallengeColum(viewModel: CodeViewModel) {
             .padding(5.dp)
     ){
         ChallengeButton(challengeInt = 1, onClick = {viewModel.changeCurrentChallenge(1)}, isSelected = viewModel.currentChallenge.value == 1)
-        ChallengeButton(challengeInt = 2, onClick = {viewModel.changeCurrentChallenge(2)}, isSelected = viewModel.currentChallenge.value == 1)
+        ChallengeButton(challengeInt = 2, onClick = {viewModel.changeCurrentChallenge(2)}, isSelected = viewModel.currentChallenge.value == 2)
     }
 }
 
@@ -61,6 +64,7 @@ fun ChallengeButton(challengeInt: Int, onClick: () -> Unit, isSelected: Boolean)
     Box(
         modifier = Modifier
             .padding(5.dp)
+            .fillMaxWidth()
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colors.primaryVariant,
