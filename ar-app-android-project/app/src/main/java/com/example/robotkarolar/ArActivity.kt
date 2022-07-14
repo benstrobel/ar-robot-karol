@@ -53,18 +53,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private var challengeWorld = World()
 
     override fun onBackPressed() {
-        if(this::worldOrigin.isInitialized) {
-            val karol = worldOrigin.children.first { it.name == "Karol" }
-            karol.isVisible = false
-            worldOrigin.removeChild(karol)
-            karolCreated = false
-            worldOrigin.children.forEach {
-                if(it.name?.startsWith("Block") == true) {
-                    it.isVisible = false
-                    worldOrigin.removeChild(it)
-                }
-            }
-        }
+        removeBoard(false)
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivity(intent)
@@ -76,12 +65,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     override fun onResume() {
-        world = World()
-        val karol = world.addEntity(0,0)
-        world.selectedEntity = karol
-        karolRotation = 2
-        interpreter = Interpreter(codeBlock, world)
-        interpreter.reset()
+        resetWorldAndInterpreter()
         if(this::worldOrigin.isInitialized) {
             createKarol(0,0,0, worldOrigin)
         }
@@ -142,6 +126,33 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         sceneView.addChild(cursorNode)
     }
 
+    private fun resetWorldAndInterpreter() {
+        world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
+        karolRotation = 2
+        interpreter = Interpreter(codeBlock, world)
+        interpreter.reset()
+    }
+
+    private fun removeBoard(removeFloor: Boolean) {
+        if(this::worldOrigin.isInitialized) {
+            val karol = worldOrigin.children.first { it.name == "Karol" }
+            karol.isVisible = false
+            worldOrigin.removeChild(karol)
+            karolCreated = false
+            worldOrigin.children.forEach {
+                if(it.name?.startsWith("Block") == true) {
+                    it.isVisible = false
+                    worldOrigin.removeChild(it)
+                } else if (removeFloor && it.name?.equals("FloorTile") == true) {
+                    it.isVisible = false
+                    worldOrigin.removeChild(it)
+                }
+            }
+        }
+    }
+
     private fun placeBoard() {
         if(!karolCreated) {
             worldOrigin = ArModelNode(
@@ -160,6 +171,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             }
             cursorNode.isVisible = false
             sceneView.removeChild(cursorNode)
+            cursorNode.destroy()
             sceneView.addChild(worldOrigin)
             createFloor(world, worldOrigin)
             createKarol(0,0,0, worldOrigin)
@@ -168,6 +180,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             //Hide Place Button
             findViewById<ExtendedFloatingActionButton>(R.id.placeModelButton).visibility = View.GONE
             findViewById<LinearLayout>(R.id.buttonRow).visibility = View.VISIBLE
+            findViewById<ImageButton>(R.id.moveBoardButton).visibility = View.VISIBLE
         }
     }
 
@@ -178,6 +191,24 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         if (command != null) {
             executeCommand(command)
         }
+    }
+
+    fun moveBoard(v: View) {
+        val context = this
+        findViewById<LinearLayout>(R.id.buttonRow).visibility = View.GONE
+        findViewById<ImageButton>(R.id.moveBoardButton).visibility = View.GONE
+        removeBoard(true)
+        resetWorldAndInterpreter()
+        cursorNode = ArModelNode(PlacementMode.PLANE_HORIZONTAL, followHitPosition = true).apply {
+            loadModelAsync(
+                context = context,
+                lifecycle = lifecycle,
+                glbFileLocation = "sceneview/models/cursor.glb",
+                autoScale = false
+            )
+        }
+        sceneView.addChild(cursorNode)
+        findViewById<ExtendedFloatingActionButton>(R.id.placeModelButton).visibility = View.VISIBLE
     }
 
     fun runAllOrPause(v: View) {
@@ -314,6 +345,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                         autoScale = false,
                         centerOrigin = Position(0f,1f,0f)
                     )
+                    name = "FloorTile"
                     scale = Scale(currentModelScale)
                     position = Position(blockSize.x*x, 0f, -blockSize.z*y)
                     rotation = Rotation(y = 0f)
