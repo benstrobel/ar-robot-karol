@@ -15,6 +15,7 @@ import com.example.robotkarolar.karollogic.world.World
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Vector3
+import dev.romainguy.kotlin.math.pow
 import io.github.sceneview.ar.ArSceneView
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.ArNode
@@ -23,6 +24,7 @@ import io.github.sceneview.math.Position
 import io.github.sceneview.math.Rotation
 import io.github.sceneview.math.Scale
 import io.github.sceneview.utils.setFullScreen
+import kotlin.math.sqrt
 
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -32,9 +34,10 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var interpreter: Interpreter
     private lateinit var worldOrigin: ArNode
     private lateinit var placeButton: ExtendedFloatingActionButton
-    private val allModelScale = 0.25f
+    private val baseModelScale = 0.15f
+    private var currentModelScale = baseModelScale
     private var karolRotation = 2
-    private val blockSize: Vector3 = Vector3(0.37712634f*allModelScale, 0.37712651f*allModelScale, 0.37712651f*allModelScale)
+    private var blockSize: Vector3 = Vector3(0.37712634f*baseModelScale, 0.37712651f*baseModelScale, 0.37712651f*baseModelScale)
     lateinit var cursorNode: ArModelNode
     private var world = World()
 
@@ -129,7 +132,9 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 instantAnchor = true,
             )
             worldOrigin.apply {
-
+                val distanceInM = sqrt(pow((cursorNode.position.x - sceneView.camera.position.x), 2F) + pow((cursorNode.position.y - sceneView.camera.position.y), 2F) + pow((cursorNode.position.z - sceneView.camera.position.z), 2F))
+                currentModelScale = baseModelScale * distanceInM
+                blockSize = Vector3(0.37712634f*currentModelScale, 0.37712651f*currentModelScale, 0.37712651f*currentModelScale)
                 val xOffSet = if (sceneView.camera.position.x > cursorNode.position.x) cursorNode.position.x + (world.xSize * blockSize.x / 2) else cursorNode.position.x - (world.xSize * blockSize.x / 2)
                 val zOffSet = if (sceneView.camera.position.z > cursorNode.position.z) cursorNode.position.z + (world.ySize * blockSize.z / 2) else cursorNode.position.z - (world.ySize * blockSize.z / 2)
                 position = Position(xOffSet, cursorNode.position.y, zOffSet)
@@ -241,7 +246,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
                 rotation = Rotation(x= 0f, y = 180f, z = 0f)
                 name = "Karol"
-                scale = Scale(allModelScale)
+                scale = Scale(currentModelScale)
             }
             parent.addChild(karolNode)
             return karolNode
@@ -265,7 +270,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                         autoScale = false,
                         centerOrigin = Position(0f,1f,0f)
                     )
-                    scale = Scale(allModelScale)
+                    scale = Scale(currentModelScale)
                     position = Position(blockSize.x*x, 0f, -blockSize.z*y)
                     rotation = Rotation(y = 0f)
                 }
@@ -297,7 +302,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     centerOrigin = Position(0f,-1f,0f)
                 )
                 name = "Block$x$y$h"
-                scale = Scale(allModelScale)
+                scale = Scale(currentModelScale)
                 position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
                 rotation = Rotation(y = 0f)
             }
