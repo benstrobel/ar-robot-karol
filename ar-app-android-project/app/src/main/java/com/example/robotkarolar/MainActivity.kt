@@ -14,6 +14,11 @@ import com.example.robotkarolar.uiviews.models.CodeViewModel
 import com.example.robotkarolar.uiviews.HomeView
 
 class MainActivity : ComponentActivity() {
+
+    override fun onBackPressed() {
+        this.moveTaskToBack(true);
+    }
+
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
