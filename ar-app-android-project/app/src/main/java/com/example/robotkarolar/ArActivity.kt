@@ -300,8 +300,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun createFloor(world: World, parent: ArNode = worldOrigin) {
         var context = this
-        for(y in 0..world.ySize) {
-            for(x in 0..world.xSize) {
+        for(y in 0 until world.ySize) {
+            for(x in 0 until world.xSize) {
                 val node = ArModelNode(
                     PlacementMode.DISABLED,
                     followHitPosition = false,
