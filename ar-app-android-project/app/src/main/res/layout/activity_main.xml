@@ -53,23 +53,53 @@
         android:id="@+id/buttonRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@id/sceneView"
         app:layout_constraintBottom_toBottomOf="@id/sceneView"
-        android:layout_marginBottom="10dp">
+        app:layout_constraintStart_toStartOf="@id/sceneView">
 
-        <Button
+        <ImageButton
             android:id="@+id/buttonNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/round_backround"
+            android:clickable="true"
             android:onClick="runNext"
+            android:src="@drawable/run_next"
             android:text="Next"
             android:visibility="visible"
-            />
+            app:tint="@color/white" />
 
-        <Button
+        <ImageButton
+            android:id="@+id/buttonAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/round_backround"
+            android:clickable="true"
+            android:onClick="runAll"
+            android:src="@drawable/run_all"
+            android:text="All"
+            android:visibility="visible"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/buttonPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/round_backround"
+            android:clickable="true"
+            android:onClick="finishAr"
+            android:src="@drawable/pause"
+            android:text="Pause"
+            android:visibility="visible"
+            app:tint="@color/white" />
+
+        <!--Button
             android:id="@+id/buttonAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +115,7 @@
             android:layout_marginStart="8dp"
             android:onClick="finishAr"
             android:text="Pause"
-            android:visibility="visible" />
+            android:visibility="visible" /-->
 
     </LinearLayout>
 
