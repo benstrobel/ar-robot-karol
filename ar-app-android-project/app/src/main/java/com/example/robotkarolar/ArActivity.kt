@@ -18,6 +18,7 @@ import com.example.robotkarolar.karollogic.world.World
 import com.example.robotkarolar.uiviews.models.Challenge
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.ar.core.Config
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import dev.romainguy.kotlin.math.pow
 import io.github.sceneview.ar.ArSceneView
@@ -164,9 +165,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                 val distanceInM = sqrt(pow((cursorNode.position.x - sceneView.camera.position.x), 2F) + pow((cursorNode.position.y - sceneView.camera.position.y), 2F) + pow((cursorNode.position.z - sceneView.camera.position.z), 2F))
                 currentModelScale = baseModelScale * distanceInM
                 blockSize = Vector3(0.37712634f*currentModelScale, 0.37712651f*currentModelScale, 0.37712651f*currentModelScale)
-                val xOffSet = if (sceneView.camera.position.x > cursorNode.position.x) cursorNode.position.x + (world.xSize * blockSize.x / 2) else cursorNode.position.x - (world.xSize * blockSize.x / 2)
-                val zOffSet = if (sceneView.camera.position.z > cursorNode.position.z) cursorNode.position.z + (world.ySize * blockSize.z / 2) else cursorNode.position.z - (world.ySize * blockSize.z / 2)
-                position = Position(xOffSet, cursorNode.position.y, zOffSet)
+                // TODO Center on cursor, Maybe use Quaternion.rotateVector()
+                position = Position(cursorNode.position.x, cursorNode.position.y, cursorNode.position.z)
                 rotation = Rotation(y = sceneView.camera.rotation.y)
             }
             cursorNode.isVisible = false
