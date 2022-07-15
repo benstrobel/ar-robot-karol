@@ -5,6 +5,6 @@
     <string name="next_button">Next</string>
     <string name="play_pause_button">Play / Pause</string>
     <string name="move_board_button">Move Board</string>
-    <string name="challange_success">Challange Completed</string>
-    <string name="challange_failed">Challange Failed</string>
+    <string name="challenge_success">Challenge Completed</string>
+    <string name="challenge_failed">Challenge Failed</string>
 </resources>
