@@ -172,10 +172,12 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun removeChallenge() {
-        worldOrigin.children.forEach {
-             if (it.name?.startsWith("Challenge") == true) {
-                it.isVisible = false
-                worldOrigin.removeChild(it)
+        if(this::worldOrigin.isInitialized) {
+            worldOrigin.children.forEach {
+                if (it.name?.startsWith("Challenge") == true) {
+                    it.isVisible = false
+                    worldOrigin.removeChild(it)
+                }
             }
         }
     }
