@@ -253,13 +253,13 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         if(command != null && command.commandType != ArCommandType.END) {
             runningAll = true
             findViewById<ImageButton>(R.id.buttonAllOrPause).setImageResource(R.drawable.pause)
+            executeCommand(command)
             if(stopRunAll) {
                 stopRunAll = false
                 runningAll = false
                 findViewById<ImageButton>(R.id.buttonAllOrPause).setImageResource(R.drawable.run_all)
                 return
             }
-            executeCommand(command)
             handler.postDelayed({runAll()}, 300)
         } else {
             executeCommand(command)
