@@ -50,8 +50,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private var runningAll = false
 
     //TODO: Challenge
-    private var hasChallenge = false
-    private var challengeWorld = World()
+    private var challengeWorld: World? = null
 
     override fun onBackPressed() {
         removeBoard(false)
@@ -65,7 +64,23 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         //this.finish()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if(intent != null) {
+            val newCodeBlock = intent.getParcelableExtra<CodeBlock>("codeBlock")
+            if(newCodeBlock != null) {
+                codeBlock = newCodeBlock
+            }
+            val newChallengeNumber = intent.getIntExtra("codeBlock", -1)
+            if(newChallengeNumber != -1) {
+                challengeWorld = Challenge().createWorld(newChallengeNumber)
+            }
+        }
+    }
+
     override fun onResume() {
+
         resetWorldAndInterpreter()
         if(this::worldOrigin.isInitialized) {
             createKarol(0,0,0, worldOrigin)
@@ -89,8 +104,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             codeBlock = if (bundleCodeBlock != null) bundleCodeBlock as CodeBlock else CodeBlock(mutableListOf(Noop()))
 
             val challengeNumber = bundle.getInt("challengeNumber")
-            hasChallenge = if (challengeNumber != null) (challengeNumber != -1) else false
-            if (hasChallenge) {
+            if (challengeNumber != -1) {
                 challengeWorld = Challenge().createWorld(challengeNumber)
             }
         }
