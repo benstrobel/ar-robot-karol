@@ -34,7 +34,6 @@ fun ArButton(viewModel: CodeViewModel) {
 
         CodeNavButton(
             onClick = {
-
                 val sanityVisitor = ExpressionSanityVisitor()
                 viewModel.codeBlock.value.accept(sanityVisitor)
                 if(sanityVisitor.isSane) {
@@ -49,7 +48,7 @@ fun ArButton(viewModel: CodeViewModel) {
                     intent.putExtras(bundle)
                     context.startActivity(intent)
                 } else {
-                    Toast.makeText(context, "Please select expressions for all conditions", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Please select expressions for all \"PICK\" blocks", Toast.LENGTH_LONG).show()
                 }
             },
             icon = R.drawable.playbutton

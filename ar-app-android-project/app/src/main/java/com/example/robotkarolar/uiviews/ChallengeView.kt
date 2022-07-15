@@ -1,5 +1,7 @@
 package com.example.robotkarolar.uiviews
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -46,14 +49,19 @@ fun ChallengeView(navController: NavController, viewModel: CodeViewModel) {
 @Composable
 fun ChallengeColum(viewModel: CodeViewModel) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
     Column(
         Modifier
             .verticalScroll(scrollState)
             .padding(5.dp)
     ){
-        ChallengeButton(challengeInt = 1, onClick = {viewModel.changeCurrentChallenge(1)}, isSelected = viewModel.currentChallenge.value == 1)
-        ChallengeButton(challengeInt = 2, onClick = {viewModel.changeCurrentChallenge(2)}, isSelected = viewModel.currentChallenge.value == 2)
+        ChallengeButton(challengeInt = 1, onClick = {viewModel.changeCurrentChallenge(1); showChallengeSelectionHint(context)}, isSelected = viewModel.currentChallenge.value == 1)
+        ChallengeButton(challengeInt = 2, onClick = {viewModel.changeCurrentChallenge(2); showChallengeSelectionHint(context)}, isSelected = viewModel.currentChallenge.value == 2)
     }
+}
+
+private fun showChallengeSelectionHint(context: Context) {
+    Toast.makeText(context, "Click \"Show in room\" to see the challenge objective", Toast.LENGTH_SHORT).show()
 }
 
 @Composable
