@@ -1,6 +1,5 @@
 package com.example.robotkarolar.ar
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -22,10 +21,6 @@ fun rotateLeft(): ArCommand {
 
 fun rotateRight(): ArCommand {
     return ArCommand(ArCommandType.ROTATERIGHT, null, null, null, null)
-}
-
-fun lift(): ArCommand {
-    return ArCommand(ArCommandType.LIFT,null, null, null, null)
 }
 
 fun end(): ArCommand {

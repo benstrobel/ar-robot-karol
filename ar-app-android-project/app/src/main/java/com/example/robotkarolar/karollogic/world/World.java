@@ -3,6 +3,7 @@ package com.example.robotkarolar.karollogic.world;
 import com.example.robotkarolar.ar.BlockType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -173,5 +174,25 @@ public class World {
             stringBuilder.append(str);
         }
         return stringBuilder.toString();
+    }
+
+    public boolean compareWith(World otherWorld) {
+        if(tiles.length != otherWorld.tiles.length || tiles[0].length != otherWorld.tiles[0].length) return false;
+        for(int y = 0; y < tiles[0].length; y++) {
+            for(int x = 0; x < tiles.length; x++) {
+                Tile tile = tiles[x][y];
+                Tile otherTile = otherWorld.tiles[x][y];
+                if(!tile.getGround().equals(otherTile.getGround())) return false;
+                if(tile.getBlocks().size() != otherTile.getBlocks().size()) return false;
+                Block[] blocks = tile.getBlocks().toArray(new Block[] {});
+                Block[] otherBlocks = otherTile.getBlocks().toArray(new Block[] {});
+                for(int i = 0; i < blocks.length; i++) {
+                    if(blocks[i] != otherBlocks[i]){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

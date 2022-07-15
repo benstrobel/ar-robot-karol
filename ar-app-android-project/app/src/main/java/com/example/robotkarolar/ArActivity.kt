@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.robotkarolar.ar.ArCommand
 import com.example.robotkarolar.ar.ArCommandType
 import com.example.robotkarolar.ar.BlockType
@@ -49,7 +50,6 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private var stopRunAll = false
     private var runningAll = false
 
-    //TODO: Challenge
     private var challengeWorld: World? = null
 
     override fun onBackPressed() {
@@ -142,6 +142,8 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun resetWorldAndInterpreter() {
+        findViewById<ConstraintLayout>(R.id.successOverlay).visibility = View.GONE
+        findViewById<ConstraintLayout>(R.id.errorOverlay).visibility = View.GONE
         world = World()
         val karol = world.addEntity(0,0)
         world.selectedEntity = karol
@@ -247,6 +249,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             executeCommand(command)
             handler.postDelayed({runAll()}, 300)
         } else {
+            executeCommand(command)
             runningAll = false
             findViewById<ImageButton>(R.id.buttonAllOrPause).setImageResource(R.drawable.run_all)
         }
@@ -269,7 +272,19 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             ArCommandType.PLACEBLOCK -> createBlock(x, y, h, blockType)
             ArCommandType.ROTATELEFT -> rotateKarol(command.commandType)
             ArCommandType.ROTATERIGHT -> rotateKarol(command.commandType)
-            else -> return
+            ArCommandType.END -> {checkChallenge()}
+            else -> {}
+        }
+    }
+
+    private fun checkChallenge() {
+        if(challengeWorld != null) {
+            val challengeCompleted = world.compareWith(challengeWorld)
+            if(challengeCompleted) {
+                findViewById<ConstraintLayout>(R.id.successOverlay).visibility = View.VISIBLE
+            } else {
+                findViewById<ConstraintLayout>(R.id.errorOverlay).visibility = View.VISIBLE
+            }
         }
     }
 
