@@ -297,11 +297,11 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     val blocks = worldToShow.tiles[x][y].blocks.toTypedArray()
                     for(h in blocks.indices) {
                         if(blocks[h] == Block.WATER) {
-                            createBlock(x,y,h, BlockType.WATER, namePrefix = "Challenge")
+                            createBlock(x,y,h, BlockType.WATER, namePrefix = "Challenge", alpha = true)
                         } else if(blocks[h] == Block.STONE) {
-                            createBlock(x,y,h, BlockType.STONE, namePrefix = "Challenge")
+                            createBlock(x,y,h, BlockType.STONE, namePrefix = "Challenge", alpha = true)
                         } else if(blocks[h] == Block.GRASS) {
-                            createBlock(x,y,h, BlockType.GRASS, namePrefix = "Challenge")
+                            createBlock(x,y,h, BlockType.GRASS, namePrefix = "Challenge", alpha = true)
                         }
                     }
                 }
@@ -416,16 +416,21 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType, parent: ArNode = worldOrigin, namePrefix: String = "Block"):ArModelNode? {
+    private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType, parent: ArNode = worldOrigin, namePrefix: String = "Block", alpha: Boolean = false):ArModelNode? {
         val context = this
         val modelString = when (blockType) {
-            BlockType.GRASS -> "model_grasblock/gras.glb"
-            BlockType.STONE -> "model_stoneblock/stone.glb"
-            BlockType.WATER -> "model_waterblock/water.glb"
+            BlockType.GRASS -> if(alpha) "model_grasblock/gras_alpha.glb" else "model_grasblock/gras.glb"
+            BlockType.STONE -> if(alpha) "model_stoneblock/stone_alpha.glb" else "model_stoneblock/stone.glb"
+            BlockType.WATER -> if(alpha) "model_waterblock/water_alpha.glb" else "model_waterblock/water.glb"
         }
 
         //if no block at this coords exists
         if (parent.children.firstOrNull() { it.name == "Block$x$y$h" } == null) {
+            val challengeBlock = parent.children.firstOrNull() { it.name == "Block$x$y$h" }
+            if(challengeBlock != null) {
+                challengeBlock.isVisible = false
+                parent.removeChild(challengeBlock)
+            }
             var blockNode = ArModelNode(
                 PlacementMode.DISABLED,
                 followHitPosition = false,
