@@ -6,7 +6,6 @@ import com.example.robotkarolar.karollogic.instructions.controlflow.If;
 import com.example.robotkarolar.karollogic.instructions.controlflow.While;
 import com.example.robotkarolar.karollogic.instructions.expressions.*;
 import com.example.robotkarolar.karollogic.instructions.statements.*;
-import com.example.robotkarolar.karollogic.Interpreter;
 import com.example.robotkarolar.karollogic.world.World;
 
 public class InstructionExecuteVisitor implements InstructionVisitor{
@@ -39,7 +38,7 @@ public class InstructionExecuteVisitor implements InstructionVisitor{
     }
 
     @Override
-    public void accept(Place place) {world.place();}
+    public void accept(Place place) {world.placeDiamond();}
 
     @Override
     public void accept(PlaceStone placeStone) {

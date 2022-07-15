@@ -56,7 +56,7 @@ public class NameRenderVisitor implements InstructionVisitor {
 
     @Override
     public void accept(Place place) {
-        renderedName = "PLACE WATER";
+        renderedName = "PLACE DIAMOND";
     }
 
     @Override

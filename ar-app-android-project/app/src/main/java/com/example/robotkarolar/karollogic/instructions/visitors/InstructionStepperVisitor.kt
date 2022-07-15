@@ -27,7 +27,7 @@ class InstructionStepperVisitor constructor(val world: World): InstructionVisito
         }
     }
     override fun accept(place: Place) {
-        val placed: Triple<Int, Int, Int>? = world.place()
+        val placed: Triple<Int, Int, Int>? = world.placeDiamond()
         if(placed != null) {
             stepperResult = StepperResult(placeBlock(placed.first,placed.second,placed.third, BlockType.WATER), null)
         }
