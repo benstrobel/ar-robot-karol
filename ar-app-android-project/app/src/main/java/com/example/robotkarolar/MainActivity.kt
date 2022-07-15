@@ -19,8 +19,12 @@ import com.example.robotkarolar.uiviews.HomeView
 
 class MainActivity : ComponentActivity() {
 
+    private var inChallangeView = false
+
     override fun onBackPressed() {
-        this.moveTaskToBack(true);
+        if(!inChallangeView) {
+            this.moveTaskToBack(true)
+        }
     }
 
     @ExperimentalMaterialApi
@@ -35,8 +39,8 @@ class MainActivity : ComponentActivity() {
                         val navController = rememberNavController()
                         val viewModel: CodeViewModel = CodeViewModel()
                         NavHost(navController = navController, startDestination = "free") {
-                            composable("free") { HomeView(navController = navController, viewModel = viewModel) }
-                            composable("challenge") { ChallengeView(navController = navController, viewModel = viewModel)}
+                            composable("free") { HomeView(navController = navController, viewModel = viewModel); inChallangeView = false }
+                            composable("challenge") { ChallengeView(navController = navController, viewModel = viewModel); inChallangeView = true}
                         }
 
                     }
