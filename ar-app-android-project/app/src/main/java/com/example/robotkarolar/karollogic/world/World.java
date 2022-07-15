@@ -1,9 +1,6 @@
 package com.example.robotkarolar.karollogic.world;
 
-import com.example.robotkarolar.ar.BlockType;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,21 +41,21 @@ public class World {
     public Triple<Integer, Integer, Integer> place() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
-        facingTile.placeBlock(Block.RED);
+        facingTile.placeBlock(Block.WATER);
         return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
     }
 
     public Triple<Integer, Integer, Integer> placeStone() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
-        facingTile.placeBlock(Block.BLUE);
+        facingTile.placeBlock(Block.STONE);
         return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
     }
 
     public Triple<Integer, Integer, Integer> placeGrass() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
-        facingTile.placeBlock(Block.GREEN);
+        facingTile.placeBlock(Block.GRASS);
         return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size()-1);
     }
 
@@ -166,6 +163,10 @@ public class World {
             System.out.println("|");
         }
         System.out.println(" " + repeat("-", tiles.length*3-1));
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
     }
 
     private String repeat(String str, int times) {

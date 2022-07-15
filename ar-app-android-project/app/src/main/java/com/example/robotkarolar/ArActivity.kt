@@ -15,11 +15,11 @@ import com.example.robotkarolar.ar.BlockType
 import com.example.robotkarolar.karollogic.Interpreter
 import com.example.robotkarolar.karollogic.instructions.controlflow.CodeBlock
 import com.example.robotkarolar.karollogic.instructions.statements.Noop
+import com.example.robotkarolar.karollogic.world.Block
 import com.example.robotkarolar.karollogic.world.World
 import com.example.robotkarolar.uiviews.models.Challenge
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.ar.core.Config
-import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import dev.romainguy.kotlin.math.pow
 import io.github.sceneview.ar.ArSceneView
@@ -72,10 +72,10 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             if(newCodeBlock != null) {
                 codeBlock = newCodeBlock
             }
-            val newChallengeNumber = intent.getIntExtra("codeBlock", -1)
-            if(newChallengeNumber != -1) {
-                challengeWorld = Challenge().createWorld(newChallengeNumber)
-            }
+            removeChallenge()
+            val newChallengeNumber = intent.getIntExtra("challengeNumber", -1)
+            challengeWorld = Challenge().createWorld(newChallengeNumber)
+            showChallenge()
         }
     }
 
@@ -167,6 +167,16 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     worldOrigin.removeChild(it)
                 }
             }
+            removeChallenge()
+        }
+    }
+
+    private fun removeChallenge() {
+        worldOrigin.children.forEach {
+             if (it.name?.startsWith("Challenge") == true) {
+                it.isVisible = false
+                worldOrigin.removeChild(it)
+            }
         }
     }
 
@@ -190,6 +200,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             cursorNode.destroy()
             sceneView.addChild(worldOrigin)
             createFloor(world, worldOrigin)
+            showChallenge()
             createKarol(0,0,0, worldOrigin)
             karolCreated = true
 
@@ -274,6 +285,27 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
             ArCommandType.ROTATERIGHT -> rotateKarol(command.commandType)
             ArCommandType.END -> {checkChallenge()}
             else -> {}
+        }
+    }
+
+    private fun showChallenge() {
+        val worldToShow = challengeWorld
+
+        if(worldToShow != null) {
+            for(y in 0 until worldToShow.tiles.size) {
+                for(x in 0 until worldToShow.tiles[0].size) {
+                    val blocks = worldToShow.tiles[x][y].blocks.toTypedArray()
+                    for(h in blocks.indices) {
+                        if(blocks[h] == Block.WATER) {
+                            createBlock(x,y,h, BlockType.WATER, namePrefix = "Challenge")
+                        } else if(blocks[h] == Block.STONE) {
+                            createBlock(x,y,h, BlockType.STONE, namePrefix = "Challenge")
+                        } else if(blocks[h] == Block.GRASS) {
+                            createBlock(x,y,h, BlockType.GRASS, namePrefix = "Challenge")
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -384,7 +416,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType, parent: ArNode = worldOrigin):ArModelNode? {
+    private fun createBlock(x: Int, y: Int, h: Int, blockType: BlockType, parent: ArNode = worldOrigin, namePrefix: String = "Block"):ArModelNode? {
         val context = this
         val modelString = when (blockType) {
             BlockType.GRASS -> "model_grasblock/gras.glb"
@@ -406,7 +438,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
                     autoScale = false,
                     centerOrigin = Position(0f,-1f,0f)
                 )
-                name = "Block$x$y$h"
+                name = namePrefix+"$x$y$h"
                 scale = Scale(currentModelScale)
                 position = Position(blockSize.x*x, blockSize.y*h, -blockSize.z*y)
                 rotation = Rotation(y = 0f)
