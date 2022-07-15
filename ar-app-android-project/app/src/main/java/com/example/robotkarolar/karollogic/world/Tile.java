@@ -3,6 +3,10 @@ package com.example.robotkarolar.karollogic.world;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+/**
+ * Holdes information of a single tile of the world
+ */
+
 public class Tile {
     private Ground ground = Ground.FLOOR;
     private final Deque<Block> blocks = new ArrayDeque<>();

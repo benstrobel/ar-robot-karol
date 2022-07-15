@@ -12,6 +12,10 @@ import com.example.robotkarolar.karollogic.instructions.expressions.*
 import com.example.robotkarolar.karollogic.instructions.statements.*
 import com.example.robotkarolar.uiviews.components.bars.bottomBar.Screen
 
+/**
+ * Stores all nessesary data that needs to be shared between the Views and handles the creation of programm code
+ */
+
 class CodeViewModel(codeBlock: CodeBlock? = null): ViewModel(){
     val first = Noop()
     val root = codeBlock ?: CodeBlock(mutableListOf(first))

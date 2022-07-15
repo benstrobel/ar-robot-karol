@@ -6,6 +6,10 @@ import java.util.Map;
 
 import kotlin.Triple;
 
+
+/**
+ * Holdes all Information of the Board Logic
+ */
 public class World {
 
     private final Tile[][] tiles = new Tile[10][10];

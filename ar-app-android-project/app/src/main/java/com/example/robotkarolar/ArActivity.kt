@@ -32,6 +32,12 @@ import io.github.sceneview.math.Scale
 import io.github.sceneview.utils.setFullScreen
 import kotlin.math.sqrt
 
+
+/**
+ * ArActivity starts a ArView where a field gets placed and programm code can be run
+ * Also challenges can be previewed
+ */
+
 class ArActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var sceneView: ArSceneView

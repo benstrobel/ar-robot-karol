@@ -8,6 +8,10 @@ import com.example.robotkarolar.karollogic.instructions.expressions.Not
 import com.example.robotkarolar.karollogic.instructions.expressions.Or
 import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisitor
 
+/**
+ * Executable in the programm code needs to confirm to this class
+ */
+
 abstract class Instruction: Parcelable {
     val id: Long
     var parent: Instruction? = null

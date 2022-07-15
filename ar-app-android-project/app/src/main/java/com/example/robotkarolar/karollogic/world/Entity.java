@@ -1,5 +1,9 @@
 package com.example.robotkarolar.karollogic.world;
 
+/**
+ * Actors on the Board
+ */
+
 public class Entity {
     private Direction facing = Direction.NORTH;
     private Tile tile;

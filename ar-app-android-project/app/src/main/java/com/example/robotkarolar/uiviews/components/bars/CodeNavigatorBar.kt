@@ -9,7 +9,6 @@ import com.example.robotkarolar.uiviews.models.CodeViewModel
 import com.example.robotkarolar.uiviews.components.buttons.ArButton
 import com.example.robotkarolar.uiviews.components.buttons.CodeNavButton
 
-
 @Composable
 fun CodeNavigatorBar(viewModel: CodeViewModel) {
     Row (

@@ -16,6 +16,9 @@ import com.example.robotkarolar.karollogic.instructions.visitors.InstructionStep
 import com.example.robotkarolar.karollogic.instructions.visitors.InstructionVisitor;
 import com.example.robotkarolar.karollogic.world.World;
 
+/**
+ * Interprets a given codeblock to actuall statements and runs them in world
+ */
 public class Interpreter {
 
     private World world;
