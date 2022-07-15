@@ -18,4 +18,4 @@ To install this project use the "releases" section of this github page
 
 ## Link to demonstration video
 
-https://www.youtube.com/watch?v=07orgy5ga9VA
+https://www.youtube.com/watch?v=07orgy5g9VA
