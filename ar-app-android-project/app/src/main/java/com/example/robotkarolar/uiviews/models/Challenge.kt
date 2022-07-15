@@ -7,36 +7,89 @@ class Challenge {
         return when(challengeId){
             1 -> challenge1()
             2 -> challenge2()
+            3 -> challenge3()
+            4 -> challenge4()
             else -> World()
         }
     }
 
-    fun challenge1(): World {
-        var worldChallenge1 = World()
-        val karol = worldChallenge1.addEntity(0,0)
-        worldChallenge1.selectedEntity = karol
+    private fun challenge1(): World {
+        var world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
 
-        worldChallenge1.step()
-        worldChallenge1.step()
-        worldChallenge1.place()
-        worldChallenge1.place()
-        worldChallenge1.step()
+        world.placeStone()
+        world.step()
+        world.placeStone()
+        world.placeStone()
+        world.step()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
 
-        return worldChallenge1
+        return world
     }
 
-    fun challenge2(): World {
-        var worldChallenge2 = World()
-        val karol = worldChallenge2.addEntity(0,0)
-        worldChallenge2.selectedEntity = karol
+    private fun challenge2(): World {
+        var world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
 
-        worldChallenge2.place()
-        worldChallenge2.step()
-        worldChallenge2.place()
-        worldChallenge2.rightTurn()
-        worldChallenge2.step()
-        worldChallenge2.step()
+        world.step()
+        world.step()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
+        world.rightTurn()
+        world.step()
+        world.leftTurn()
+        world.placeStone()
+        world.rightTurn()
+        world.step()
+        world.leftTurn()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
+        world.rightTurn()
+        world.step()
+        world.step()
+        world.leftTurn()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
+        world.placeStone()
 
-        return worldChallenge2
+        return world
+    }
+
+    private fun challenge3(): World {
+        var world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
+
+        while(!world.isBorder) {
+            world.placeStone()
+            world.step()
+        }
+
+        return world
+    }
+
+    private fun challenge4(): World {
+        var world = World()
+        val karol = world.addEntity(0,0)
+        world.selectedEntity = karol
+
+        while(!world.isBlock) {
+            while(!world.isBorder) {
+                world.placeStone()
+                world.step()
+            }
+            world.rightTurn()
+        }
+
+        return world
     }
 }

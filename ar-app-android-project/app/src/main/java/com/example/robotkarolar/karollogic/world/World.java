@@ -38,7 +38,7 @@ public class World {
         return new Triple<>(facingTile.getX(), facingTile.getY(), facingTile.getBlocks().size());
     }
 
-    public Triple<Integer, Integer, Integer> place() {
+    public Triple<Integer, Integer, Integer> placeDiamond() {
         Tile facingTile = getFacingTile(selectedEntity);
         if (facingTile == null) return null;
         facingTile.placeBlock(Block.WATER);
@@ -185,13 +185,14 @@ public class World {
                 Tile otherTile = otherWorld.tiles[x][y];
                 if(!tile.getGround().equals(otherTile.getGround())) return false;
                 if(tile.getBlocks().size() != otherTile.getBlocks().size()) return false;
-                Block[] blocks = tile.getBlocks().toArray(new Block[] {});
+                // Only check if blocks exist, not what kind of block
+                /*Block[] blocks = tile.getBlocks().toArray(new Block[] {});
                 Block[] otherBlocks = otherTile.getBlocks().toArray(new Block[] {});
                 for(int i = 0; i < blocks.length; i++) {
                     if(blocks[i] != otherBlocks[i]){
                         return false;
                     }
-                }
+                }*/
             }
         }
         return true;

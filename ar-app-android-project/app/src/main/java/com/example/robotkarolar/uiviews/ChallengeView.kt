@@ -57,6 +57,8 @@ fun ChallengeColum(viewModel: CodeViewModel) {
     ){
         ChallengeButton(challengeInt = 1, onClick = {viewModel.changeCurrentChallenge(1); showChallengeSelectionHint(context)}, isSelected = viewModel.currentChallenge.value == 1)
         ChallengeButton(challengeInt = 2, onClick = {viewModel.changeCurrentChallenge(2); showChallengeSelectionHint(context)}, isSelected = viewModel.currentChallenge.value == 2)
+        ChallengeButton(challengeInt = 3, onClick = {viewModel.changeCurrentChallenge(3); showChallengeSelectionHint(context)}, isSelected = viewModel.currentChallenge.value == 3)
+        ChallengeButton(challengeInt = 4, onClick = {viewModel.changeCurrentChallenge(4); showChallengeSelectionHint(context)}, isSelected = viewModel.currentChallenge.value == 4)
     }
 }
 
