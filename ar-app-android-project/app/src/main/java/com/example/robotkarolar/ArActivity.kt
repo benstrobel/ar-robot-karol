@@ -46,7 +46,7 @@ class ArActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var interpreter: Interpreter
     private lateinit var worldOrigin: ArNode
     private lateinit var placeButton: ExtendedFloatingActionButton
-    private val baseModelScale = 0.15f
+    private val baseModelScale = 0.25f
     private var currentModelScale = baseModelScale
     private var karolRotation = 2
     private var blockSize: Vector3 = Vector3(0.37712634f*baseModelScale, 0.37712651f*baseModelScale, 0.37712651f*baseModelScale)
