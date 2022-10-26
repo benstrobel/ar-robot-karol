@@ -9,7 +9,7 @@ Ramona Eckert
 
 This project is an app for android which allows its users to write a program for a virutal robot, watch him execute the programm in AR and solve challenges by programming the robot.
 It is heavily inspired by the programming learning software "Robot Karol".
-We based our project on Sceneview, which uses Arcore for tracking and Google Filament for rendering.
+We based our project on Sceneform, which uses Arcore for tracking and Google Filament for rendering.
 The non AR part of the UI was implemented using Jetpack Compose.
 
 ## Installation
