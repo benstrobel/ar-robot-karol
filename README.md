@@ -16,7 +16,7 @@ The non AR part of the UI was implemented using Jetpack Compose.
 
 To install this project use the "releases" section of this github page<br>
 Note: *To be able to use this application via the apk, you need "Google Play Services for AR". 
-Sadly we are legally not allowed for to offer it for download without uploading the app to the play store.*
+Sadly we are legally not allowed to offer it for download without uploading the app to the play store.*
 
 ## Link to demonstration video
 
